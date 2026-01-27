@@ -12,13 +12,13 @@ import { next } from '@vercel/edge';
 
 // Configuración
 const CONFIG = {
-  apiUrl: 'https://web-scuticompany-back.onrender.com',
-  siteUrl: 'https://scuticompany.com',
-  siteName: 'SCUTI Company Blog',
-  defaultImage: 'https://scuticompany.com/Logo.png',
-  twitterHandle: '@scuticompany',
+  apiUrl: 'https://thadoconsulting-back.onrender.com',
+  siteUrl: 'https://www.thadoconsulting.com',
+  siteName: 'THADO Consulting Blog',
+  defaultImage: 'https://www.thadoconsulting.com/FAVICON.png',
+  twitterHandle: '@thadoconsulting',
   // Imagen para Google Search Results (favicon grande)
-  googleFavicon: 'https://scuticompany.com/logoiconoresultadosgoogle.jpeg'
+  googleFavicon: 'https://www.thadoconsulting.com/FAVICON.png'
 };
 
 /**
@@ -167,12 +167,12 @@ function getImageUrl(image: any): string {
  * Obtener nombre del autor
  */
 function getAuthorName(author: any): string {
-  if (!author) return 'SCUTI Company';
+  if (!author) return 'THADO Consulting';
   if (typeof author === 'string') return author;
   if (author.displayName) return author.displayName;
   if (author.firstName && author.lastName) return `${author.firstName} ${author.lastName}`;
   if (author.firstName) return author.firstName;
-  return 'SCUTI Company';
+  return 'THADO Consulting';
 }
 
 /**
@@ -205,7 +205,7 @@ function generateBlogListMetaTags(): string {
     <meta name="title" content="${title} | ${CONFIG.siteName}" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="blog tecnología, desarrollo software, inteligencia artificial, IA para PYMES, transformación digital, automatización empresarial, software a medida, artículos tecnología, noticias digitales Perú, tutoriales desarrollo, guías programación, tendencias tech" />
-    <meta name="author" content="SCUTI Company" />
+    <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${blogUrl}" />
     
     <!-- Open Graph / Facebook -->
@@ -237,7 +237,7 @@ function generateBlogListMetaTags(): string {
       "url": "${blogUrl}",
       "publisher": {
         "@type": "Organization",
-        "name": "SCUTI Company",
+        "name": "THADO Consulting",
         "logo": {
           "@type": "ImageObject",
           "url": "${CONFIG.defaultImage}"
@@ -264,28 +264,28 @@ function generateHomeMetaTags(): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Home - Generado por Edge Middleware -->
-    <title>${title} | SCUTI Company Perú</title>
-    <meta name="title" content="${title} | SCUTI Company Perú" />
+    <title>${title} | THADO Consulting Perú</title>
+    <meta name="title" content="${title} | THADO Consulting Perú" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="desarrollo software, inteligencia artificial, IA, PYMES, automatización, software a medida, Perú, transformación digital, empresa tecnología Lima, sistemas empresariales, soluciones digitales Perú, desarrollo web Lima, apps empresariales" />
-    <meta name="author" content="SCUTI Company" />
+    <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${homeUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${homeUrl}" />
-    <meta property="og:title" content="${title} | SCUTI Company Perú" />
+    <meta property="og:title" content="${title} | THADO Consulting Perú" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="SCUTI Company" />
+    <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${homeUrl}" />
-    <meta name="twitter:title" content="${title} | SCUTI Company Perú" />
+    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
@@ -295,8 +295,8 @@ function generateHomeMetaTags(): string {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "SCUTI Company",
-      "alternateName": "Scuti",
+      "name": "THADO Consulting",
+      "alternateName": "THADO",
       "url": "${homeUrl}",
       "logo": {
         "@type": "ImageObject",
@@ -309,8 +309,8 @@ function generateHomeMetaTags(): string {
         "name": "Perú"
       },
       "sameAs": [
-        "https://www.linkedin.com/company/scuticompany",
-        "https://twitter.com/scuticompany"
+        "https://www.linkedin.com/company/thadoconsulting",
+        "https://twitter.com/thadoconsulting"
       ]
     }
     </script>
@@ -329,28 +329,28 @@ function generateServiciosMetaTags(): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Servicios - Generado por Edge Middleware -->
-    <title>${title} | SCUTI Company Perú</title>
-    <meta name="title" content="${title} | SCUTI Company Perú" />
+    <title>${title} | THADO Consulting Perú</title>
+    <meta name="title" content="${title} | THADO Consulting Perú" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="servicios software, desarrollo a medida, inteligencia artificial, automatización, integración sistemas, consultoría tecnológica, PYMES Perú, cotización software, apps empresariales Lima, sistemas web Perú, desarrollo aplicaciones, soluciones cloud" />
-    <meta name="author" content="SCUTI Company" />
+    <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${serviciosUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${serviciosUrl}" />
-    <meta property="og:title" content="${title} | SCUTI Company Perú" />
+    <meta property="og:title" content="${title} | THADO Consulting Perú" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="SCUTI Company" />
+    <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${serviciosUrl}" />
-    <meta name="twitter:title" content="${title} | SCUTI Company Perú" />
+    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
@@ -365,7 +365,7 @@ function generateServiciosMetaTags(): string {
       "url": "${serviciosUrl}",
       "provider": {
         "@type": "Organization",
-        "name": "SCUTI Company",
+        "name": "THADO Consulting",
         "url": "${CONFIG.siteUrl}"
       },
       "areaServed": {
@@ -382,7 +382,7 @@ function generateServiciosMetaTags(): string {
  * Generar meta tags para la página Nosotros
  */
 function generateNosotrosMetaTags(): string {
-  const title = 'Sobre Nosotros - Conoce a SCUTI Company';
+  const title = 'Sobre Nosotros - Conoce a THADO Consulting';
   const description = 'Somos una empresa peruana especializada en desarrollo de software e inteligencia artificial para PYMES. Conoce nuestra misión, visión y equipo de expertos.';
   const nosotrosUrl = `${CONFIG.siteUrl}/nosotros`;
   const imageUrl = `${CONFIG.siteUrl}/logohorizontal.jpeg`;
@@ -390,28 +390,28 @@ function generateNosotrosMetaTags(): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Nosotros - Generado por Edge Middleware -->
-    <title>${title} | SCUTI Company Perú</title>
-    <meta name="title" content="${title} | SCUTI Company Perú" />
+    <title>${title} | THADO Consulting Perú</title>
+    <meta name="title" content="${title} | THADO Consulting Perú" />
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="SCUTI Company, empresa software Perú, equipo desarrollo, IA PYMES, quiénes somos, misión visión, startup tecnología Lima, desarrolladores peruanos, empresa innovación digital, equipo tech Perú" />
-    <meta name="author" content="SCUTI Company" />
+    <meta name="keywords" content="THADO Consulting, empresa software Perú, equipo desarrollo, IA PYMES, quiénes somos, misión visión, startup tecnología Lima, desarrolladores peruanos, empresa innovación digital, equipo tech Perú" />
+    <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${nosotrosUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${nosotrosUrl}" />
-    <meta property="og:title" content="${title} | SCUTI Company Perú" />
+    <meta property="og:title" content="${title} | THADO Consulting Perú" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="SCUTI Company" />
+    <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${nosotrosUrl}" />
-    <meta name="twitter:title" content="${title} | SCUTI Company Perú" />
+    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
@@ -426,7 +426,7 @@ function generateNosotrosMetaTags(): string {
       "url": "${nosotrosUrl}",
       "mainEntity": {
         "@type": "Organization",
-        "name": "SCUTI Company",
+        "name": "THADO Consulting",
         "url": "${CONFIG.siteUrl}",
         "foundingDate": "2024",
         "areaServed": "Perú"
@@ -453,7 +453,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
     servicio.seo?.descripcion || 
     servicio.metaDescription || 
     servicio.descripcionCorta || 
-    (servicio.descripcion ? servicio.descripcion.substring(0, 160) : 'Servicio profesional de SCUTI Company')
+    (servicio.descripcion ? servicio.descripcion.substring(0, 160) : 'Servicio profesional de THADO Consulting')
   );
   
   const servicioUrl = `${CONFIG.siteUrl}/servicios/${servicio.slug}`;
@@ -479,22 +479,22 @@ function generateServicioDetailMetaTags(servicio: any): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Servicio Detail - Generado por Edge Middleware -->
-    <title>${title} | SCUTI Company Perú</title>
-    <meta name="title" content="${title} | SCUTI Company Perú" />
+    <title>${title} | THADO Consulting Perú</title>
+    <meta name="title" content="${title} | THADO Consulting Perú" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="${escapeHtml(keywords)}" />
-    <meta name="author" content="SCUTI Company" />
+    <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${servicioUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="product" />
     <meta property="og:url" content="${servicioUrl}" />
-    <meta property="og:title" content="${title} | SCUTI Company Perú" />
+    <meta property="og:title" content="${title} | THADO Consulting Perú" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="SCUTI Company" />
+    <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     ${servicio.precio ? `<meta property="product:price:amount" content="${servicio.precio}" />` : ''}
     ${servicio.moneda ? `<meta property="product:price:currency" content="${servicio.moneda}" />` : ''}
@@ -502,7 +502,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${servicioUrl}" />
-    <meta name="twitter:title" content="${title} | SCUTI Company Perú" />
+    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
@@ -518,7 +518,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
       "image": "${imageUrl}",
       "provider": {
         "@type": "Organization",
-        "name": "SCUTI Company",
+        "name": "THADO Consulting",
         "url": "${CONFIG.siteUrl}",
         "logo": "${CONFIG.siteUrl}/logohorizontal.jpeg"
       },
@@ -614,7 +614,7 @@ function generateMetaTags(post: any): string {
       },
       "publisher": {
         "@type": "Organization",
-        "name": "SCUTI Company",
+        "name": "THADO Consulting",
         "logo": {
           "@type": "ImageObject",
           "url": "${CONFIG.defaultImage}"

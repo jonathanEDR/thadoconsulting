@@ -47,7 +47,7 @@ export const AIOptimizedContent: React.FC<AIOptimizedContentProps> = ({ post }) 
           // Autor estructurado
           author: {
             '@type': 'Person',
-            name: post.author ? `${post.author.firstName || ''} ${post.author.lastName || ''}`.trim() : 'SCUTI Company Team',
+            name: post.author ? `${post.author.firstName || ''} ${post.author.lastName || ''}`.trim() : 'THADO Consulting Team',
             jobTitle: post.author?.expertise?.[0] || 'Expert',
             description: post.author?.bio || 'Technology expert'
           },
@@ -55,10 +55,10 @@ export const AIOptimizedContent: React.FC<AIOptimizedContentProps> = ({ post }) 
           // Publisher info
           publisher: {
             '@type': 'Organization',
-            name: 'SCUTI Company',
+            name: 'THADO Consulting',
             logo: {
               '@type': 'ImageObject',
-              url: 'https://scuticompany.com/logo.png'
+              url: 'https://www.thadoconsulting.com/logo.png'
             }
           },
           
@@ -67,7 +67,7 @@ export const AIOptimizedContent: React.FC<AIOptimizedContentProps> = ({ post }) 
           dateModified: post.updatedAt,
           
           // Imagen principal
-          image: post.featuredImage ? getImageUrl(post.featuredImage) : 'https://scuticompany.com/default-image.jpg',
+          image: post.featuredImage ? getImageUrl(post.featuredImage) : 'https://www.thadoconsulting.com/default-image.jpg',
           
           // Palabras clave
           keywords: post.tags.map(tag => typeof tag === 'string' ? tag : tag.name).join(', '),
@@ -131,19 +131,19 @@ export const AIOptimizedContent: React.FC<AIOptimizedContentProps> = ({ post }) 
               '@type': 'ListItem',
               position: 1,
               name: 'Inicio',
-              item: 'https://scuticompany.com'
+              item: 'https://www.thadoconsulting.com'
             },
             {
               '@type': 'ListItem',
               position: 2,
               name: 'Blog',
-              item: 'https://scuticompany.com/blog'
+              item: 'https://www.thadoconsulting.com/blog'
             },
             {
               '@type': 'ListItem',
               position: 3,
               name: post.title,
-              item: `https://scuticompany.com/blog/${post.slug}`
+              item: `https://www.thadoconsulting.com/blog/${post.slug}`
             }
           ]
         })}

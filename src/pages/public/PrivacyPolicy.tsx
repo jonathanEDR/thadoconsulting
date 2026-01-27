@@ -6,7 +6,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 
 /**
  * Pagina de Politica de Privacidad
- * Contiene informacion sobre como SCUTI Company maneja los datos personales
+ * Contiene informacion sobre como THADO Consulting maneja los datos personales
  */
 const PrivacyPolicy = () => {
   const { theme } = useTheme();
@@ -14,31 +14,31 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Helmet>
-        <title>Politica de Privacidad - SCUTI Company</title>
-        <meta name="description" content="Conoce nuestra politica de privacidad y como protegemos tus datos personales en SCUTI Company." />
-        <meta name="keywords" content="politica de privacidad, proteccion de datos, SCUTI Company, privacidad" />
+        <title>Politica de Privacidad - THADO Consulting</title>
+        <meta name="description" content="Conoce nuestra politica de privacidad y como protegemos tus datos personales en THADO Consulting." />
+        <meta name="keywords" content="politica de privacidad, proteccion de datos, THADO Consulting, privacidad" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Politica de Privacidad - SCUTI Company" />
+        <meta property="og:title" content="Politica de Privacidad - THADO Consulting" />
         <meta property="og:description" content="Conoce nuestra politica de privacidad y como protegemos tus datos personales" />
-        <meta property="og:image" content="https://scuticompany.com/logofondonegro.jpeg" />
+        <meta property="og:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="SCUTI Company - Política de Privacidad" />
+        <meta property="og:image:alt" content="THADO Consulting - Política de Privacidad" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://scuticompany.com/privacidad" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:url" content="https://www.thadoconsulting.com/privacidad" />
+        <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Politica de Privacidad - SCUTI Company" />
+        <meta name="twitter:title" content="Politica de Privacidad - THADO Consulting" />
         <meta name="twitter:description" content="Conoce nuestra politica de privacidad" />
-        <meta name="twitter:image" content="https://scuticompany.com/logofondonegro.jpeg" />
-        <meta name="twitter:image:alt" content="SCUTI Company - Política de Privacidad" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
+        <meta name="twitter:image:alt" content="THADO Consulting - Política de Privacidad" />
 
         {/* Canonical */}
-        <link rel="canonical" href="https://scuticompany.com/privacidad" />
+        <link rel="canonical" href="https://www.thadoconsulting.com/privacidad" />
       </Helmet>
 
       <div className={`min-h-screen w-full overflow-x-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -88,7 +88,7 @@ const PrivacyPolicy = () => {
                 </h2>
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
-                    En SCUTI Company recopilamos informacion que nos proporcionas directamente cuando:
+                    En THADO Consulting recopilamos informacion que nos proporcionas directamente cuando:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Creas una cuenta en nuestra plataforma</li>
@@ -250,19 +250,10 @@ const PrivacyPolicy = () => {
                     <li>
                       <strong>Email:</strong>{' '}
                       <a
-                        href="mailto:gscutic@gmail.com"
+                        href="mailto:contacto@thadoconsulting.pe"
                         className="text-purple-500 hover:text-purple-400 transition-colors"
                       >
-                        gscutic@gmail.com
-                      </a>
-                    </li>
-                    <li>
-                      <strong>Telefono:</strong>{' '}
-                      <a
-                        href="tel:+51973397306"
-                        className="text-purple-500 hover:text-purple-400 transition-colors"
-                      >
-                        +51 973 397 306
+                        contacto@thadoconsulting.pe
                       </a>
                     </li>
                     <li>

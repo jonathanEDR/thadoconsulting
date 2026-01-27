@@ -75,8 +75,8 @@ const Contact = () => {
   // 🎯 SEO dinámico
   const { SeoHelmet } = useSeo({
     pageName: 'contact',
-    fallbackTitle: 'Contacto - SCUTI Company',
-    fallbackDescription: 'Contáctanos para discutir tu proyecto. Desarrollo web, apps móviles y soluciones digitales personalizadas.'
+    fallbackTitle: 'Contacto - THADO Consulting',
+    fallbackDescription: 'Contáctanos para servicios contables, tributarios y financieros para MYPES en Perú.'
   });
 
   // Cargar datos del CMS (sin caché para obtener siempre datos frescos)
@@ -199,27 +199,25 @@ const Contact = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Contacto - SCUTI Company",
-            "description": "Contáctanos para tu proyecto tecnológico. Desarrollo web, apps móviles y soluciones digitales en Perú.",
-            "url": "https://scuticompany.com/contacto",
+            "name": "Contacto - THADO Consulting",
+            "description": "Contáctanos para servicios contables, tributarios y financieros para MYPES en Perú.",
+            "url": "https://www.thadoconsulting.com/contacto",
             "mainEntity": {
               "@type": "Organization",
-              "name": "SCUTI Company",
-              "url": "https://scuticompany.com",
-              "logo": "https://scuticompany.com/logofondonegro.jpeg",
-              "email": "gscutic@gmail.com",
-              "telephone": "+51973397306",
+              "name": "THADO Consulting",
+              "url": "https://www.thadoconsulting.com",
+              "logo": "https://www.thadoconsulting.com/FAVICON.png",
+              "email": "contacto@thadoconsulting.pe",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "Calles Los Molles Lt-02",
-                "addressLocality": "Huánuco",
+                "addressLocality": "Lima",
                 "addressCountry": "PE"
               },
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+51973397306",
+                "email": "contacto@thadoconsulting.pe",
                 "contactType": "customer service",
-                "availableLanguage": ["Spanish", "English"]
+                "availableLanguage": ["Spanish"]
               }
             }
           })}
@@ -498,7 +496,7 @@ const Contact = () => {
               className="text-3xl font-bold mb-4"
               style={{ color: featuresTitleColor }}
             >
-              {featuresConfig.title || '¿Por qué elegir Scuti Company?'}
+              {featuresConfig.title || '¿Por qué elegir THADO Consulting?'}
             </h2>
           </div>
 

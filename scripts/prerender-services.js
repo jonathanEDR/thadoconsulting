@@ -32,7 +32,7 @@ console.log(`   VERCEL: ${process.env.VERCEL || '(not set)'}`);
 console.log(`   VERCEL_ENV: ${process.env.VERCEL_ENV || '(not set)'}`);
 
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://web-scuticompany-back.onrender.com';
+let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 console.log(`   Base URL (normalized): ${baseApiUrl}`);
 console.log(`   Full API path will be: ${baseApiUrl}/api/...`);
@@ -42,10 +42,10 @@ console.log('═'.repeat(60));
 const CONFIG = {
   // URL de la API - normalizada sin /api al final
   apiUrl: baseApiUrl,
-  siteUrl: process.env.VITE_SITE_URL || 'https://scuticompany.com',
-  siteName: process.env.VITE_SITE_NAME || 'SCUTI Company',
-  defaultImage: `${process.env.VITE_SITE_URL || 'https://scuticompany.com'}/logofondonegro.jpeg`,
-  twitterHandle: '@scuticompany',
+  siteUrl: process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com',
+  siteName: process.env.VITE_SITE_NAME || 'THADO Consulting',
+  defaultImage: `${process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com'}/logofondonegro.jpeg`,
+  twitterHandle: '@thadoconsulting',
   locale: 'es_PE',
   country: 'Peru',
   defaultCurrency: 'PEN',
@@ -228,7 +228,7 @@ function generateServiceSchema(servicio) {
     "image": imageUrl,
     "provider": {
       "@type": "Organization",
-      "name": "SCUTI Company",
+      "name": "THADO Consulting",
       "url": CONFIG.siteUrl,
       "logo": CONFIG.defaultImage,
       "address": {
@@ -415,7 +415,7 @@ function generateVisibleContent(servicio) {
       </div>
 
       <meta itemprop="url" content="${CONFIG.siteUrl}/servicios/${servicio.slug}" />
-      <meta itemprop="provider" content="SCUTI Company" />
+      <meta itemprop="provider" content="THADO Consulting" />
     </article>
 
     <style>
@@ -561,7 +561,7 @@ function generateServiceHtml(indexHtml, servicio) {
   // ✅ PRIORIZAR campos SEO configurados sobre los genéricos
   const seoTitle = servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo} - ${CONFIG.siteName}`;
   const seoDescription = servicio.seo?.descripcion || servicio.metaDescription || servicio.descripcionCorta || truncate(stripHtml(servicio.descripcion), 160);
-  const seoKeywords = servicio.seo?.palabrasClave || servicio.etiquetas?.join(', ') || `${servicio.titulo}, servicios, ${getCategoryName(servicio.categoria)}, SCUTI Company`;
+  const seoKeywords = servicio.seo?.palabrasClave || servicio.etiquetas?.join(', ') || `${servicio.titulo}, servicios, ${getCategoryName(servicio.categoria)}, THADO Consulting`;
   
   const title = escapeHtml(seoTitle);
   const description = escapeHtml(seoDescription);
@@ -727,7 +727,7 @@ async function main() {
       fs.writeFileSync(htmlPath, serviceHtml);
 
       // ✅ Log detallado del SEO usado
-      const usedSeoTitle = servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo} - SCUTI Company`;
+      const usedSeoTitle = servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo} - THADO Consulting`;
       const usedSeoDesc = (servicio.seo?.descripcion || servicio.metaDescription || servicio.descripcionCorta || '').substring(0, 60);
       console.log(`   ✅ /servicios/${slug}/index.html`);
       console.log(`      📄 SEO: "${usedSeoTitle.substring(0, 50)}${usedSeoTitle.length > 50 ? '...' : ''}"`);

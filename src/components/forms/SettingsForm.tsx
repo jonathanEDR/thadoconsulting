@@ -111,7 +111,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/50 rounded-lg p-3">
                   <div className="font-medium text-purple-600 dark:text-purple-400 mb-1">URL completa:</div>
                   <div className="font-mono text-gray-700 dark:text-gray-300">
-                    https://scuticompany.com/servicios/{watch('slug') || generateSlug(watch('titulo') || 'titulo-del-servicio')}
+                    https://www.thadoconsulting.com/servicios/{watch('slug') || generateSlug(watch('titulo') || 'titulo-del-servicio')}
                   </div>
                 </div>
               </div>

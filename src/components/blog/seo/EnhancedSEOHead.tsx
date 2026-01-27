@@ -89,14 +89,14 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
       if (aiMetadata?.suggestedKeywords?.length > 0) {
         const mainKeyword = aiMetadata.suggestedKeywords[0];
         if (!baseTitle.toLowerCase().includes(mainKeyword.toLowerCase())) {
-          return `${baseTitle} - ${mainKeyword} | Web Scuti`;
+          return `${baseTitle} - ${mainKeyword} | THADO Consulting`;
         }
       }
       
-      return `${baseTitle} | Blog Web Scuti`;
+      return `${baseTitle} | Blog THADO Consulting`;
     }
     
-    return 'Blog Web Scuti - Desarrollo Web y Tecnología';
+    return 'Blog THADO Consulting - Desarrollo Web y Tecnología';
   };
 
   // Construir descripción optimizada
@@ -166,14 +166,14 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
     
     // Keywords base para el sitio
     keywords.push(
-      'desarrollo web',
-      'programación',
-      'tecnología',
-      'javascript',
-      'react',
-      'node.js',
-      'web scuti',
-      'blog tecnológico'
+      'contabilidad',
+      'tributación',
+      'SUNAT',
+      'MYPES',
+      'gestión financiera',
+      'Perú',
+      'THADO Consulting',
+      'servicios contables'
     );
     
     // Remover duplicados y limitar
@@ -207,7 +207,7 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
       image: buildImage(),
       publisher: {
         '@type': 'Organization',
-        name: 'Web Scuti',
+        name: 'THADO Consulting',
         logo: {
           '@type': 'ImageObject',
           url: `${window.location.origin}/logo.png`
@@ -223,7 +223,7 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
         dateModified: post.updatedAt,
         author: {
           '@type': 'Person',
-          name: post.author ? `${post.author.firstName} ${post.author.lastName}` : 'Web Scuti Team'
+          name: post.author ? `${post.author.firstName} ${post.author.lastName}` : 'THADO Consulting Team'
         },
         articleSection: post.category?.name || 'Tecnología',
         keywords: buildKeywords().join(', '),
@@ -251,7 +251,7 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
       {/* Meta tags básicos */}
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords.join(', ')} />
-      <meta name="author" content="Web Scuti" />
+      <meta name="author" content="THADO Consulting" />
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Meta tags de robots mejorados */}
@@ -264,7 +264,7 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
       <meta property="og:description" content={optimizedMeta?.openGraph?.description || description} />
       <meta property="og:image" content={optimizedMeta?.openGraph?.image || image} />
       <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:site_name" content="SCUTI Company Blog" />
+      <meta property="og:site_name" content="THADO Consulting Blog" />
       <meta property="og:locale" content="es_ES" />
 
       {/* Twitter Cards optimizado */}
@@ -272,14 +272,14 @@ export const EnhancedSEOHead: React.FC<EnhancedSEOHeadProps> = ({
       <meta name="twitter:title" content={optimizedMeta?.twitter?.title || title} />
       <meta name="twitter:description" content={optimizedMeta?.twitter?.description || description} />
       <meta name="twitter:image" content={optimizedMeta?.twitter?.image || image} />
-      <meta name="twitter:site" content="@scuticompany" />
+      <meta name="twitter:site" content="@thadoconsulting" />
 
       {/* Meta tags adicionales para artículos */}
       {post && type === 'article' && (
         <>
           <meta property="article:published_time" content={post.publishedAt} />
           <meta property="article:modified_time" content={post.updatedAt} />
-          <meta property="article:author" content={post.author ? `${post.author.firstName} ${post.author.lastName}` : 'SCUTI Company Team'} />
+          <meta property="article:author" content={post.author ? `${post.author.firstName} ${post.author.lastName}` : 'THADO Consulting Team'} />
           <meta property="article:section" content={post.category?.name || 'Tecnología'} />
           {post.tags?.map((tag, index) => (
             <meta key={index} property="article:tag" content={typeof tag === 'string' ? tag : tag.name} />

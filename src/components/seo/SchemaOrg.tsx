@@ -18,30 +18,29 @@ export const OrganizationSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "SCUTI Company",
-    "alternateName": "Scuti",
-    "url": "https://scuticompany.com",
-    "logo": "https://scuticompany.com/favicon-512x512.png",
-    "description": "Empresa líder en desarrollo de software, inteligencia artificial y automatización para PYMES en Perú",
-    "foundingDate": "2023",
+    "name": "THADO Consulting",
+    "alternateName": "THADO",
+    "url": "https://www.thadoconsulting.com",
+    "logo": "https://www.thadoconsulting.com/FAVICON.png",
+    "description": "Estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Expertos en SUNAT, PDT y libros electrónicos.",
+    "foundingDate": "2024",
     "sameAs": [
-      "https://www.linkedin.com/company/scuti-company",
-      "https://www.facebook.com/SCUTIcompany/",
-      "https://twitter.com/scuticompany",
-      "https://www.instagram.com/scuticompany"
+      "https://www.linkedin.com/company/thadoconsulting",
+      "https://www.facebook.com/thadoconsulting/",
+      "https://twitter.com/thadoconsulting",
+      "https://www.instagram.com/thadoconsulting"
     ],
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Calles Los Molles Lt-02",
       "addressCountry": "PE",
-      "addressLocality": "Huánuco",
-      "addressRegion": "Huánuco"
+      "addressLocality": "Lima",
+      "addressRegion": "Lima"
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+51-973 397 306",
+      "email": "contacto@thadoconsulting.pe",
       "contactType": "customer service",
-      "availableLanguage": ["Spanish", "English"]
+      "availableLanguage": ["Spanish"]
     },
     "areaServed": {
       "@type": "Country",
@@ -65,18 +64,18 @@ export const WebsiteSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "SCUTI Company",
-    "url": "https://scuticompany.com",
-    "description": "Desarrollo de Software e IA para PYMES en Perú",
+    "name": "THADO Consulting",
+    "url": "https://www.thadoconsulting.com",
+    "description": "Servicios contables, tributarios y financieros para MYPES en Perú",
     "publisher": {
       "@type": "Organization",
-      "name": "SCUTI Company"
+      "name": "THADO Consulting"
     },
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://scuticompany.com/blog?search={search_term_string}"
+        "urlTemplate": "https://www.thadoconsulting.com/blog?search={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }
@@ -98,51 +97,50 @@ export const LocalBusinessSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "@id": "https://scuticompany.com/#organization",
-    "name": "SCUTI Company",
-    "alternateName": ["Scuti", "SCUTI Software", "SCUTI IA"],
-    "image": "https://scuticompany.com/logofondonegro.jpeg",
-    "url": "https://scuticompany.com",
-    "telephone": "+51-973 397 306",
-    "email": "gscutic@gmail.com",
-    "description": "Empresa de desarrollo de software a medida, inteligencia artificial y automatización de procesos para PYMES en Perú. Especialistas en ERP, CRM y soluciones tecnológicas personalizadas.",
-    "slogan": "Impulsa tu PYME con Software a Medida e Inteligencia Artificial",
+    "@id": "https://www.thadoconsulting.com/#organization",
+    "name": "THADO Consulting",
+    "alternateName": ["THADO", "THADO Contadores", "THADO Consultoría"],
+    "image": "https://www.thadoconsulting.com/FAVICON.png",
+    "url": "https://www.thadoconsulting.com",
+    "email": "contacto@thadoconsulting.pe",
+    "description": "Estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Expertos en declaraciones SUNAT, PDT, libros electrónicos y planificación fiscal.",
+    "slogan": "Tu socio contable y tributario de confianza para MYPES en Perú",
     "knowsAbout": [
-      "Desarrollo de Software a Medida",
-      "Inteligencia Artificial",
-      "Automatización de Procesos",
-      "Sistemas ERP para PYMES",
-      "CRM Personalizado",
-      "Transformación Digital",
-      "Machine Learning",
-      "Chatbots Inteligentes"
+      "Contabilidad para MYPES",
+      "Declaraciones SUNAT",
+      "Tributación Empresarial",
+      "Libros Electrónicos PLE",
+      "Planificación Fiscal",
+      "Gestión Financiera",
+      "Auditoría Contable",
+      "Consultoría Empresarial"
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Servicios de Desarrollo de Software",
+      "name": "Servicios Contables y Tributarios",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Desarrollo de Software a Medida",
-            "description": "Sistemas ERP y CRM personalizados para PYMES"
+            "name": "Contabilidad para MYPES",
+            "description": "Registro contable, libros electrónicos y estados financieros para micro y pequeñas empresas"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Soluciones de Inteligencia Artificial",
-            "description": "Análisis predictivo, chatbots y automatización con IA"
+            "name": "Asesoría Tributaria SUNAT",
+            "description": "Declaraciones PDT, planificación fiscal y cumplimiento tributario ante SUNAT"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Consultoría de Transformación Digital",
-            "description": "Estrategia tecnológica para el crecimiento empresarial"
+            "name": "Consultoría Financiera",
+            "description": "Análisis financiero, presupuestos y estrategia de crecimiento empresarial"
           }
         }
       ]
@@ -150,13 +148,13 @@ export const LocalBusinessSchema = () => {
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "PE",
-      "addressLocality": "Huánuco",
-      "addressRegion": "Huánuco"
+      "addressLocality": "Lima",
+      "addressRegion": "Lima"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": -9.9306,
-      "longitude": -76.2422
+      "latitude": -12.0464,
+      "longitude": -77.0428
     },
     "areaServed": [
       {
@@ -264,20 +262,20 @@ export const BlogArticleSchema = ({
     "@type": "BlogPosting",
     "headline": title,
     "description": description,
-    "image": image || "https://scuticompany.com/favicon-512x512.png",
+    "image": image || "https://www.thadoconsulting.com/favicon-512x512.png",
     "datePublished": datePublished,
     "dateModified": dateModified || datePublished,
     "author": {
       "@type": "Person",
       "name": authorName,
-      "url": "https://scuticompany.com"
+      "url": "https://www.thadoconsulting.com"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "SCUTI Company",
+      "name": "THADO Consulting",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://scuticompany.com/favicon-512x512.png"
+        "url": "https://www.thadoconsulting.com/favicon-512x512.png"
       }
     },
     "mainEntityOfPage": {
@@ -328,11 +326,11 @@ export const ServiceSchema = ({
     "name": name,
     "description": description,
     "url": url,
-    "image": image || "https://scuticompany.com/favicon-512x512.png",
+    "image": image || "https://www.thadoconsulting.com/favicon-512x512.png",
     "provider": {
       "@type": "Organization",
-      "name": "SCUTI Company",
-      "url": "https://scuticompany.com"
+      "name": "THADO Consulting",
+      "url": "https://www.thadoconsulting.com"
     },
     "areaServed": {
       "@type": "Country",

@@ -21,16 +21,16 @@ const distPath = path.join(__dirname, '../dist');
 
 // Configuración
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-const rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://web-scuticompany-back.onrender.com';
+const rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
 // Remover /api del final si existe para evitar duplicación
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 
 const CONFIG = {
   apiUrl: baseApiUrl,
-  siteUrl: 'https://scuticompany.com',
-  siteName: 'SCUTI Company Blog',
-  defaultImage: 'https://scuticompany.com/Logo.png',
-  twitterHandle: '@scuticompany'
+  siteUrl: 'https://www.thadoconsulting.com',
+  siteName: 'THADO Consulting Blog',
+  defaultImage: 'https://www.thadoconsulting.com/Logo.png',
+  twitterHandle: '@thadoconsulting'
 };
 
 // Debug: mostrar qué URL se está usando
@@ -188,13 +188,13 @@ function getImageUrl(image) {
  * Obtener nombre del autor
  */
 function getAuthorName(author) {
-  if (!author) return 'SCUTI Company';
+  if (!author) return 'THADO Consulting';
   if (typeof author === 'string') return author;
   if (author.displayName) return author.displayName;
   if (author.firstName && author.lastName) return `${author.firstName} ${author.lastName}`;
   if (author.firstName) return author.firstName;
   if (author.username) return author.username;
-  return 'SCUTI Company';
+  return 'THADO Consulting';
 }
 
 /**
@@ -225,7 +225,7 @@ function generateArticleSchema(post) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "SCUTI Company",
+      "name": "THADO Consulting",
       "logo": {
         "@type": "ImageObject",
         "url": CONFIG.defaultImage

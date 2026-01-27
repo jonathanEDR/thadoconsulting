@@ -6,7 +6,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 
 /**
  * Pagina de Terminos y Condiciones
- * Contiene los terminos legales de uso de los servicios de SCUTI Company
+ * Contiene los terminos legales de uso de los servicios de THADO Consulting
  */
 const TermsOfService = () => {
   const { theme } = useTheme();
@@ -14,31 +14,31 @@ const TermsOfService = () => {
   return (
     <>
       <Helmet>
-        <title>Terminos y Condiciones - SCUTI Company</title>
-        <meta name="description" content="Lee nuestros terminos y condiciones de uso de servicios de SCUTI Company." />
-        <meta name="keywords" content="terminos y condiciones, terminos de servicio, SCUTI Company, condiciones de uso" />
+        <title>Terminos y Condiciones - THADO Consulting</title>
+        <meta name="description" content="Lee nuestros terminos y condiciones de uso de servicios de THADO Consulting." />
+        <meta name="keywords" content="terminos y condiciones, terminos de servicio, THADO Consulting, condiciones de uso" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Terminos y Condiciones - SCUTI Company" />
+        <meta property="og:title" content="Terminos y Condiciones - THADO Consulting" />
         <meta property="og:description" content="Lee nuestros terminos y condiciones de uso de servicios" />
-        <meta property="og:image" content="https://scuticompany.com/logofondonegro.jpeg" />
+        <meta property="og:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="SCUTI Company - Términos y Condiciones" />
+        <meta property="og:image:alt" content="THADO Consulting - Términos y Condiciones" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://scuticompany.com/terminos" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:url" content="https://www.thadoconsulting.com/terminos" />
+        <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Terminos y Condiciones - SCUTI Company" />
+        <meta name="twitter:title" content="Terminos y Condiciones - THADO Consulting" />
         <meta name="twitter:description" content="Lee nuestros terminos y condiciones" />
-        <meta name="twitter:image" content="https://scuticompany.com/logofondonegro.jpeg" />
-        <meta name="twitter:image:alt" content="SCUTI Company - Términos y Condiciones" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
+        <meta name="twitter:image:alt" content="THADO Consulting - Términos y Condiciones" />
 
         {/* Canonical */}
-        <link rel="canonical" href="https://scuticompany.com/terminos" />
+        <link rel="canonical" href="https://www.thadoconsulting.com/terminos" />
       </Helmet>
 
       <div className={`min-h-screen w-full overflow-x-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -87,7 +87,7 @@ const TermsOfService = () => {
                 </h2>
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
-                    Al acceder y utilizar los servicios de SCUTI Company, aceptas estar
+                    Al acceder y utilizar los servicios de THADO Consulting, aceptas estar
                     vinculado por estos Terminos y Condiciones. Si no estas de acuerdo
                     con alguna parte de estos terminos, no podras acceder al servicio.
                   </p>
@@ -107,17 +107,17 @@ const TermsOfService = () => {
                 </h2>
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
-                    SCUTI Company proporciona servicios de desarrollo de software,
-                    consultoria tecnologica, y soluciones digitales personalizadas.
+                    THADO Consulting proporciona servicios contables, tributarios,
+                    financieros y de consultoría empresarial.
                     Nuestros servicios incluyen pero no se limitan a:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
-                    <li>Desarrollo de aplicaciones web y moviles</li>
-                    <li>Integracion de inteligencia artificial</li>
-                    <li>Consultoria en transformacion digital</li>
-                    <li>Automatizacion de procesos empresariales</li>
-                    <li>Desarrollo de sistemas a medida</li>
-                    <li>Soporte y mantenimiento de software</li>
+                    <li>Contabilidad general y registros contables</li>
+                    <li>Declaraciones tributarias ante SUNAT</li>
+                    <li>Libros electrónicos y PDT</li>
+                    <li>Asesoría financiera y planificación fiscal</li>
+                    <li>Consultoría empresarial para MYPES</li>
+                    <li>Auditoría y revisión contable</li>
                   </ul>
                 </div>
               </div>
@@ -157,7 +157,7 @@ const TermsOfService = () => {
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
                     El servicio y su contenido original, caracteristicas y funcionalidades
-                    son y seguiran siendo propiedad exclusiva de SCUTI Company y sus
+                    son y seguiran siendo propiedad exclusiva de THADO Consulting y sus
                     licenciantes. El servicio esta protegido por derechos de autor,
                     marcas registradas y otras leyes.
                   </p>
@@ -222,7 +222,7 @@ const TermsOfService = () => {
                 </h2>
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
-                    En ningún caso SCUTI Company, sus directores, empleados, socios,
+                    En ningún caso THADO Consulting, sus directores, empleados, socios,
                     agentes, proveedores o afiliados seran responsables por danos
                     indirectos, incidentales, especiales, consecuentes o punitivos,
                     incluyendo sin limitacion, perdida de ganancias, datos, uso,
@@ -245,7 +245,7 @@ const TermsOfService = () => {
                 </h2>
                 <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>
-                    SCUTI Company se compromete a:
+                    THADO Consulting se compromete a:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Entregar los servicios acordados segun las especificaciones del contrato</li>
@@ -340,19 +340,10 @@ const TermsOfService = () => {
                     <li>
                       <strong>Email:</strong>{' '}
                       <a
-                        href="mailto:gscutic@gmail.com"
+                        href="mailto:contacto@thadoconsulting.pe"
                         className="text-purple-500 hover:text-purple-400 transition-colors"
                       >
-                        gscutic@gmail.com
-                      </a>
-                    </li>
-                    <li>
-                      <strong>Telefono:</strong>{' '}
-                      <a
-                        href="tel:+51973397306"
-                        className="text-purple-500 hover:text-purple-400 transition-colors"
-                      >
-                        +51 973 397 306
+                        contacto@thadoconsulting.pe
                       </a>
                     </li>
                     <li>

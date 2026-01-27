@@ -61,7 +61,7 @@ const BlogPostEnhanced: React.FC = () => {
 
   useEffect(() => {
     if (post) {
-      document.title = `${post.title} | Blog Web Scuti`;
+      document.title = `${post.title} | Blog THADO Consulting`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [post]);
@@ -151,7 +151,7 @@ const BlogPostEnhanced: React.FC = () => {
       {/* SEO Head optimizado para IA externa (ChatGPT, Claude, Bard, Perplexity) */}
       <Helmet>
         {/* ✅ CORREGIDO: Usar SEO configurado por el usuario */}
-        <title>{post.seo?.metaTitle || post.title} | SCUTI Company Blog</title>
+        <title>{post.seo?.metaTitle || post.title} | THADO Consulting Blog</title>
         <meta name="description" content={post.seo?.metaDescription || post.excerpt} />
         
         {/* ✅ Keywords: Priorizar focusKeyphrase + seo.keywords, eliminar duplicados */}
@@ -185,8 +185,8 @@ const BlogPostEnhanced: React.FC = () => {
         <meta name="ai:source-quality" content="high" />
         <meta name="ai:content-length" content={String(post.content?.replace(/<[^>]*>/g, '').length || 0)} />
         <meta name="ai:reading-time" content={String(Math.ceil((post.content?.replace(/<[^>]*>/g, '').split(' ').length || 0) / 200))} />
-        <meta name="ai:company" content="SCUTI Company" />
-        <meta name="ai:industry" content="Technology, Web Development" />
+        <meta name="ai:company" content="THADO Consulting" />
+        <meta name="ai:industry" content="Accounting, Tax Consulting" />
         
         {/* ✅ focusKeyphrase como meta tag dedicado para SEO avanzado */}
         {post.seo?.focusKeyphrase && (
@@ -197,14 +197,14 @@ const BlogPostEnhanced: React.FC = () => {
         <meta property="og:title" content={post.seo?.metaTitle || post.title} />
         <meta property="og:description" content={post.seo?.metaDescription || post.excerpt} />
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="SCUTI Company Blog" />
+        <meta property="og:site_name" content="THADO Consulting Blog" />
         {post.featuredImage && <meta property="og:image" content={getImageUrl(post.featuredImage)} />}
         
         {/* Twitter Card - Usar SEO configurado */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={post.seo?.metaTitle || post.title} />
         <meta name="twitter:description" content={post.seo?.metaDescription || post.excerpt} />
-        <meta name="twitter:site" content="@scuticompany" />
+        <meta name="twitter:site" content="@thadoconsulting" />
         {post.featuredImage && <meta name="twitter:image" content={getImageUrl(post.featuredImage)} />}
         
         {/* Para GPT y otros crawlers */}
@@ -212,10 +212,10 @@ const BlogPostEnhanced: React.FC = () => {
         <meta name="googlebot" content="index, follow" />
         
         {/* ✅ CORREGIDO: canonical usa href, no content */}
-        <link rel="canonical" href={`https://scuticompany.com/blog/${post.slug}`} />
+        <link rel="canonical" href={`https://www.thadoconsulting.com/blog/${post.slug}`} />
         
         {/* ✅ AÑADIDO: og:url obligatorio para SEO */}
-        <meta property="og:url" content={`https://scuticompany.com/blog/${post.slug}`} />
+        <meta property="og:url" content={`https://www.thadoconsulting.com/blog/${post.slug}`} />
       </Helmet>
       
       {/* ✅ Schema.org - Datos estructurados para Google Rich Results */}
@@ -225,16 +225,16 @@ const BlogPostEnhanced: React.FC = () => {
         image={post.featuredImage ? getImageUrl(post.featuredImage) : undefined}
         datePublished={post.publishedAt || post.createdAt}
         dateModified={post.updatedAt}
-        authorName={typeof post.author === 'string' ? post.author : (post.author?.displayName || post.author?.firstName || 'SCUTI Company')}
-        url={`https://scuticompany.com/blog/${post.slug}`}
+        authorName={typeof post.author === 'string' ? post.author : (post.author?.displayName || post.author?.firstName || 'THADO Consulting')}
+        url={`https://www.thadoconsulting.com/blog/${post.slug}`}
         keywords={post.seo?.keywords}
         focusKeyphrase={post.seo?.focusKeyphrase}
       />
       <BreadcrumbSchema
         items={[
-          { name: 'Inicio', url: 'https://scuticompany.com/' },
-          { name: 'Blog', url: 'https://scuticompany.com/blog' },
-          { name: post.title, url: `https://scuticompany.com/blog/${post.slug}` }
+          { name: 'Inicio', url: 'https://www.thadoconsulting.com/' },
+          { name: 'Blog', url: 'https://www.thadoconsulting.com/blog' },
+          { name: post.title, url: `https://www.thadoconsulting.com/blog/${post.slug}` }
         ]}
       />
       

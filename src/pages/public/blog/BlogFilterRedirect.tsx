@@ -35,8 +35,8 @@ const BlogFilterRedirect: React.FC<BlogFilterRedirectProps> = ({ filterType }) =
       {/* Meta noindex para que Google no indexe estas URLs */}
       <Helmet>
         <meta name="robots" content="noindex, nofollow" />
-        <link rel="canonical" href="https://scuticompany.com/blog" />
-        <title>Redirigiendo... | SCUTI Company</title>
+        <link rel="canonical" href="https://www.thadoconsulting.com/blog" />
+        <title>Redirigiendo... | THADO Consulting</title>
       </Helmet>
       
       {/* Contenido mínimo mientras redirige */}

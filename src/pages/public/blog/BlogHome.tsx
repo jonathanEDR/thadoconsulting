@@ -111,20 +111,20 @@ const BlogHome: React.FC = () => {
   const jsonLdData = useMemo(() => JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Blog SCUTI Company - Tech News',
-    description: 'Mantente informado con las últimas noticias y tendencias del sector tecnológico',
-    url: 'https://scuticompany.com/blog',
+    name: 'Blog THADO Consulting - Contabilidad y Tributación',
+    description: 'Artículos sobre contabilidad, tributación SUNAT, gestión financiera y consejos para MYPES en Perú',
+    url: 'https://www.thadoconsulting.com/blog',
     publisher: {
       '@type': 'Organization',
-      name: 'SCUTI Company',
-      url: 'https://scuticompany.com',
+      name: 'THADO Consulting',
+      url: 'https://www.thadoconsulting.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://scuticompany.com/logo.png'
+        url: 'https://www.thadoconsulting.com/FAVICON.png'
       }
     },
     inLanguage: 'es-ES',
-    keywords: 'noticias tecnológicas, tendencias tech, desarrollo web, programación, AI, cloud computing, cybersecurity'
+    keywords: 'contabilidad, tributación, SUNAT, MYPES, gestión financiera, libros electrónicos, PDT, Perú'
   }), []);
 
   // ⚡ Memoizar estilos de la sección featured posts
@@ -168,31 +168,31 @@ const BlogHome: React.FC = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* ✅ SEO Hardcoded directo (para indexación inmediata de Google) */}
       <Helmet>
-        <title>Blog SCUTI Company - Noticias y Tendencias Tecnológicas</title>
-        <meta name="description" content="Mantente informado con las últimas noticias y tendencias del sector tecnológico. Contenido curado por expertos en desarrollo web, programación y tecnología." />
-        <meta name="keywords" content="blog, noticias tecnológicas, tendencias tech, desarrollo web, programación, AI, cloud computing, cybersecurity" />
+        <title>Blog THADO Consulting - Contabilidad y Tributación para MYPES</title>
+        <meta name="description" content="Artículos sobre contabilidad, tributación SUNAT, gestión financiera y consejos prácticos para MYPES en Perú. Blog de expertos contables." />
+        <meta name="keywords" content="blog contabilidad, tributación SUNAT, MYPES Perú, gestión financiera, libros electrónicos, PDT, planificación fiscal" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Blog SCUTI Company - Noticias Tecnológicas" />
-        <meta property="og:description" content="Las últimas noticias y tendencias del sector tecnológico. Contenido curado por expertos." />
-        <meta property="og:image" content="https://scuticompany.com/logofondonegro.jpeg" />
+        <meta property="og:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
+        <meta property="og:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú." />
+        <meta property="og:image" content="https://www.thadoconsulting.com/FAVICON.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="SCUTI Company - Blog de Tecnología e Innovación" />
+        <meta property="og:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://scuticompany.com/blog" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:url" content="https://www.thadoconsulting.com/blog" />
+        <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Blog SCUTI Company - Noticias Tecnológicas" />
-        <meta name="twitter:description" content="Las últimas noticias y tendencias del sector tecnológico" />
-        <meta name="twitter:image" content="https://scuticompany.com/logofondonegro.jpeg" />
-        <meta name="twitter:image:alt" content="SCUTI Company - Blog de Tecnología e Innovación" />
+        <meta name="twitter:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
+        <meta name="twitter:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/FAVICON.png" />
+        <meta name="twitter:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
 
         {/* Canonical */}
-        <link rel="canonical" href="https://scuticompany.com/blog" />
+        <link rel="canonical" href="https://www.thadoconsulting.com/blog" />
       </Helmet>
 
       {/* JSON-LD para el sitio del blog - Memoizado */}

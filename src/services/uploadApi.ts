@@ -70,7 +70,7 @@ export const uploadImage = async (file: File): Promise<{
   error?: string;
 }> => {
   console.warn('⚠️ uploadApi.uploadImage() está DEPRECATED. Usa imageService.uploadImage() en su lugar.');
-  console.warn('📚 Guía de migración: https://github.com/jonathanEDR/web-scuticompany/blob/main/DIAGNOSTICO_SERVICIOS.md');
+  console.warn('📚 Guía de migración: https://github.com/jonathanEDR/thado-consulting/blob/main/DIAGNOSTICO_SERVICIOS.md');
   
   try {
     // Redirigir al nuevo sistema

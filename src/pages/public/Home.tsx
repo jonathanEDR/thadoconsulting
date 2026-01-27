@@ -309,7 +309,7 @@ const HomeOptimized = () => {
     if (cmsImage && isValidOgImage(cmsImage)) {
       // Si es una ruta relativa, convertir a absoluta
       if (cmsImage.startsWith('/')) {
-        return `https://scuticompany.com${cmsImage}`;
+        return `https://www.thadoconsulting.com${cmsImage}`;
       }
       return cmsImage;
     }
@@ -332,10 +332,10 @@ const HomeOptimized = () => {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="SCUTI Company - Desarrollo de Software e IA para PYMES" />
+        <meta property="og:image:alt" content="THADO Consulting - Desarrollo de Software e IA para PYMES" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://scuticompany.com/" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:url" content="https://www.thadoconsulting.com/" />
+        <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
         
         {/* Twitter Card */}
@@ -345,7 +345,7 @@ const HomeOptimized = () => {
         <meta name="twitter:image" content={ogImage} />
         
         {/* Canonical */}
-        <link rel="canonical" href="https://scuticompany.com/" />
+        <link rel="canonical" href="https://www.thadoconsulting.com/" />
       </Helmet>
       
       {/* ✅ Schema.org - Datos estructurados para Google Rich Results */}

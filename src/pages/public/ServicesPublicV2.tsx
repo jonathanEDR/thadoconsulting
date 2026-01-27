@@ -259,9 +259,9 @@ const ServicesPublicV2 = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            "name": "Servicios de Desarrollo de Software - SCUTI Company",
+            "name": "Servicios de Desarrollo de Software - THADO Consulting",
             "description": "Catálogo de servicios de desarrollo de software, consultoría IT e inteligencia artificial para empresas PYMES en Perú",
-            "url": "https://scuticompany.com/servicios",
+            "url": "https://www.thadoconsulting.com/servicios",
             "numberOfItems": servicios?.length || 24,
             "itemListElement": servicios?.slice(0, 10).map((servicio: Servicio, index: number) => ({
               "@type": "ListItem",
@@ -270,11 +270,11 @@ const ServicesPublicV2 = () => {
                 "@type": "Service",
                 "name": servicio.titulo,
                 "description": servicio.descripcionCorta || servicio.descripcion?.substring(0, 160),
-                "url": `https://scuticompany.com/servicios/${servicio.slug}`,
+                "url": `https://www.thadoconsulting.com/servicios/${servicio.slug}`,
                 "provider": {
                   "@type": "Organization",
-                  "name": "SCUTI Company",
-                  "url": "https://scuticompany.com"
+                  "name": "THADO Consulting",
+                  "url": "https://www.thadoconsulting.com"
                 },
                 "areaServed": {
                   "@type": "Country",

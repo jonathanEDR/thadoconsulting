@@ -89,7 +89,7 @@ export const SITE_CONFIG: SiteConfig = {
   // INFORMACIÓN DEL SITIO
   // ─────────────────────────────────────────
   siteName: 'THADO Consulting',
-  siteUrl: import.meta.env.VITE_SITE_URL || 'https://thadoconsulting.vercel.app',
+  siteUrl: import.meta.env.VITE_SITE_URL || 'https://www.thadoconsulting.com',
   siteDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú. Evita multas SUNAT, ordena tu contabilidad y crece con confianza.',
 
   // ─────────────────────────────────────────
@@ -172,8 +172,8 @@ export const SITE_CONFIG: SiteConfig = {
   organization: {
     name: 'THADO Consulting',
     legalName: 'THADO Consulting',
-    url: 'https://thadoconsulting.vercel.app',
-    logo: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    url: 'https://www.thadoconsulting.com',
+    logo: 'https://www.thadoconsulting.com/FAVICON.png',
     foundingDate: '2024',
   },
 };

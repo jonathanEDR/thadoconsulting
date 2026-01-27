@@ -36,7 +36,7 @@ export default function SEOHead({
 
     // Si es un post
     if (post) {
-      seoTitle = post.seo?.metaTitle || `${post.title} | Blog Web Scuti`;
+      seoTitle = post.seo?.metaTitle || `${post.title} | Blog THADO Consulting`;
       seoDescription = post.seo?.metaDescription || post.excerpt || `Descubre ${post.title} en nuestro blog de desarrollo web y tecnología.`;
       seoImage = post.featuredImage || '/images/blog-default.jpg';
       seoType = 'article';
@@ -65,33 +65,33 @@ export default function SEOHead({
 
     // Si es una categoría
     if (category) {
-      seoTitle = `${category.name} | Blog Web Scuti`;
+      seoTitle = `${category.name} | Blog THADO Consulting`;
       seoDescription = category.description || `Explora todos los artículos sobre ${category.name} en nuestro blog.`;
       seoImage = category.image?.url || '/images/blog-default.jpg';
     }
 
     // Actualizar título
-    document.title = seoTitle || 'Blog Web Scuti';
+    document.title = seoTitle || 'Blog THADO Consulting';
 
     // Meta tags básicos
     updateMetaTag('description', seoDescription || 'Blog de desarrollo web, diseño y tecnología');
     
     // Open Graph
-    updateMetaProperty('og:title', seoTitle || 'Blog SCUTI Company');
+    updateMetaProperty('og:title', seoTitle || 'Blog THADO Consulting');
     updateMetaProperty('og:description', seoDescription || 'Blog de desarrollo web, diseño y tecnología');
     updateMetaProperty('og:type', seoType);
     updateMetaProperty('og:url', seoUrl);
     updateMetaProperty('og:image', seoImage || '/images/blog-default.jpg');
-    updateMetaProperty('og:site_name', 'SCUTI Company');
+    updateMetaProperty('og:site_name', 'THADO Consulting');
     updateMetaProperty('og:locale', 'es_ES');
 
     // Twitter Cards
     updateMetaProperty('twitter:card', 'summary_large_image');
-    updateMetaProperty('twitter:title', seoTitle || 'Blog SCUTI Company');
+    updateMetaProperty('twitter:title', seoTitle || 'Blog THADO Consulting');
     updateMetaProperty('twitter:description', seoDescription || 'Blog de desarrollo web, diseño y tecnología');
     updateMetaProperty('twitter:image', seoImage || '/images/blog-default.jpg');
-    updateMetaProperty('twitter:site', '@scuticompany');
-    updateMetaProperty('twitter:creator', '@scuticompany');
+    updateMetaProperty('twitter:site', '@thadoconsulting');
+    updateMetaProperty('twitter:creator', '@thadoconsulting');
 
     // Canonical URL
     updateLinkTag('canonical', seoUrl);
@@ -113,7 +113,7 @@ export default function SEOHead({
         },
         publisher: {
           '@type': 'Organization',
-          name: 'SCUTI Company',
+          name: 'THADO Consulting',
           logo: {
             '@type': 'ImageObject',
             url: '/logo.png'

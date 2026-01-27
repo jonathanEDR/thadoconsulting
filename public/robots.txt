@@ -1,5 +1,5 @@
-# Robots.txt para Scuti Company
-# https://scuticompany.com
+# Robots.txt para THADO Consulting
+# https://www.thadoconsulting.com
 
 User-agent: *
 Allow: /
@@ -20,7 +20,7 @@ Disallow: /*?tag=
 Disallow: /*?search=
 
 # Sitemaps
-Sitemap: https://scuticompany.com/sitemap.xml
+Sitemap: https://www.thadoconsulting.com/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 1

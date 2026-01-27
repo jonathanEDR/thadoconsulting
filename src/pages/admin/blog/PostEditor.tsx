@@ -1037,7 +1037,7 @@ export default function PostEditor() {
                       {formData.seo.metaTitle || formData.title || 'Título del artículo'}
                     </p>
                     <p className="text-green-700 dark:text-green-500 text-sm truncate">
-                      scuticompany.com/blog/{formData.slug || 'url-del-articulo'}
+                      www.thadoconsulting.com/blog/{formData.slug || 'url-del-articulo'}
                     </p>
                     <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
                       {formData.seo.metaDescription || formData.excerpt || 'Descripción del artículo que aparecerá en los resultados de búsqueda de Google...'}

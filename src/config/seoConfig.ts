@@ -62,12 +62,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Blog THADO Consulting - Contabilidad y Tributación',
     ogDescription: 'Guías y artículos sobre contabilidad y tributación para MYPES en Perú',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Blog de Contabilidad y Tributación',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/blog'
+    canonical: 'https://www.thadoconsulting.com/blog'
   },
 
   // 💼 PÁGINA SERVICIOS
@@ -86,12 +86,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
     ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Servicios Contables',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/servicios'
+    canonical: 'https://www.thadoconsulting.com/servicios'
   },
 
   // Alias para servicios
@@ -110,12 +110,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
     ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Servicios Contables',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/servicios'
+    canonical: 'https://www.thadoconsulting.com/servicios'
   },
 
   // 👥 PÁGINA NOSOTROS/ABOUT
@@ -134,12 +134,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
     ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Estudio Contable en Perú',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/nosotros'
+    canonical: 'https://www.thadoconsulting.com/nosotros'
   },
 
   // Alias para nosotros
@@ -158,12 +158,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
     ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Estudio Contable en Perú',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/nosotros'
+    canonical: 'https://www.thadoconsulting.com/nosotros'
   },
 
   // 📞 PÁGINA CONTACTO
@@ -182,12 +182,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
     ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Contáctanos',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/contacto'
+    canonical: 'https://www.thadoconsulting.com/contacto'
   },
 
   // Alias para contacto
@@ -206,12 +206,12 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ],
     ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
     ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
-    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
+    ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
     ogImageAlt: 'THADO Consulting - Contáctanos',
     twitterCard: 'summary_large_image',
-    canonical: 'https://thadoconsulting.vercel.app/contacto'
+    canonical: 'https://www.thadoconsulting.com/contacto'
   }
 };
 

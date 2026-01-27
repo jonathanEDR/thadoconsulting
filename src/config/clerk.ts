@@ -12,20 +12,20 @@ export const clerkConfig = {
   publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_test_bGlnaHQtZG9scGhpbi00Mi5jbGVyay5hY2NvdW50cy5kZXYk',
   
   // Configuración específica por entorno
-  afterSignInUrl: isProduction 
-    ? 'https://web-scuticompany.vercel.app/dashboard'
+  afterSignInUrl: isProduction
+    ? 'https://www.thadoconsulting.com/dashboard'
     : 'http://localhost:5173/dashboard',
-    
-  afterSignUpUrl: isProduction 
-    ? 'https://web-scuticompany.vercel.app/dashboard' 
+
+  afterSignUpUrl: isProduction
+    ? 'https://www.thadoconsulting.com/dashboard'
     : 'http://localhost:5173/dashboard',
-    
-  signInUrl: isProduction 
-    ? 'https://web-scuticompany.vercel.app/login'
+
+  signInUrl: isProduction
+    ? 'https://www.thadoconsulting.com/login'
     : 'http://localhost:5173/login',
-    
-  signUpUrl: isProduction 
-    ? 'https://web-scuticompany.vercel.app/signup'
+
+  signUpUrl: isProduction
+    ? 'https://www.thadoconsulting.com/signup'
     : 'http://localhost:5173/signup',
 
   // Configuraciones avanzadas para producción

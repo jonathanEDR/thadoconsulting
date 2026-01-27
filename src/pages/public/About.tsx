@@ -236,7 +236,7 @@ const About = () => {
             hero: {
               title: 'Sobre Nosotros',
               subtitle: 'Conoce nuestra historia y misión',
-              description: 'SCUTI Company es una empresa líder en desarrollo de software y soluciones tecnológicas innovadoras en Perú.',
+              description: 'THADO Consulting es un estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú.',
               backgroundImage: {
                 light: '',
                 dark: ''
@@ -344,54 +344,54 @@ const About = () => {
     <>
       {/* ✅ SEO Hardcoded directo (para indexación inmediata de Google) */}
       <Helmet>
-        <title>Sobre Nosotros - SCUTI Company | Empresa de Software en Perú</title>
-        <meta name="description" content="Conoce SCUTI Company: empresa líder en desarrollo de software e IA para PYMES en Perú. Nuestra misión es transformar negocios con tecnología inteligente." />
-        <meta name="keywords" content="sobre nosotros, equipo SCUTI, empresa de software Perú, desarrollo tecnológico, misión, visión, transformación digital PYMES" />
+        <title>Sobre Nosotros - THADO Consulting | Estudio Contable en Perú</title>
+        <meta name="description" content="Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Tu socio de confianza." />
+        <meta name="keywords" content="sobre nosotros, equipo THADO, estudio contable Perú, servicios contables, misión, visión, consultoría empresarial MYPES" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Sobre Nosotros - SCUTI Company | Empresa de Software en Perú" />
-        <meta property="og:description" content="Conoce SCUTI Company: empresa líder en desarrollo de software e IA para PYMES en Perú. Transformamos negocios con tecnología inteligente." />
-        <meta property="og:image" content="https://scuticompany.com/logofondonegro.jpeg" />
+        <meta property="og:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
+        <meta property="og:description" content="Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú." />
+        <meta property="og:image" content="https://www.thadoconsulting.com/FAVICON.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="SCUTI Company - Empresa de Desarrollo de Software en Perú" />
+        <meta property="og:image:alt" content="THADO Consulting - Estudio Contable en Perú" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://scuticompany.com/nosotros" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:url" content="https://www.thadoconsulting.com/nosotros" />
+        <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sobre Nosotros - SCUTI Company | Empresa de Software en Perú" />
-        <meta name="twitter:description" content="Empresa líder en desarrollo de software e IA para PYMES en Perú" />
-        <meta name="twitter:image" content="https://scuticompany.com/logofondonegro.jpeg" />
+        <meta name="twitter:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
+        <meta name="twitter:description" content="Estudio contable especializado en servicios para MYPES en Perú" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/FAVICON.png" />
 
         {/* Canonical */}
-        <link rel="canonical" href="https://scuticompany.com/nosotros" />
+        <link rel="canonical" href="https://www.thadoconsulting.com/nosotros" />
 
         {/* Schema.org - AboutPage */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            "name": "Sobre Nosotros - SCUTI Company",
-            "description": "Conoce SCUTI Company: empresa líder en desarrollo de software e IA para PYMES en Perú",
-            "url": "https://scuticompany.com/nosotros",
+            "name": "Sobre Nosotros - THADO Consulting",
+            "description": "Conoce THADO Consulting: estudio contable especializado en servicios para MYPES en Perú",
+            "url": "https://www.thadoconsulting.com/nosotros",
             "mainEntity": {
               "@type": "Organization",
-              "name": "SCUTI Company",
-              "description": "Empresa de desarrollo de software a medida, inteligencia artificial y automatización para PYMES en Perú",
-              "foundingDate": "2023",
+              "name": "THADO Consulting",
+              "description": "Estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú",
+              "foundingDate": "2024",
               "foundingLocation": {
                 "@type": "Place",
-                "name": "Huánuco, Perú"
+                "name": "Lima, Perú"
               },
-              "slogan": "Impulsa tu PYME con Software a Medida e Inteligencia Artificial",
+              "slogan": "Tu socio contable y tributario de confianza para MYPES en Perú",
               "knowsAbout": [
-                "Desarrollo de Software a Medida",
-                "Inteligencia Artificial",
-                "Automatización de Procesos",
-                "Transformación Digital"
+                "Contabilidad para MYPES",
+                "Asesoría Tributaria SUNAT",
+                "Gestión Financiera",
+                "Consultoría Empresarial"
               ]
             }
           })}

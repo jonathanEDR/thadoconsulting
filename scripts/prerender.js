@@ -15,34 +15,34 @@ const routes = [
   {
     path: '/servicios',
     seo: {
-      title: 'Nuestros Servicios - SCUTI Company',
-      description: 'Consultoría IT, Proyectos Tecnológicos e Inteligencia Artificial para impulsar tu negocio',
-      keywords: 'servicios, consultoría, tecnología, software, inteligencia artificial',
-      ogTitle: 'Servicios - SCUTI Company',
-      ogDescription: 'Descubre nuestras soluciones tecnológicas diseñadas para transformar tu empresa',
-      url: 'https://scuticompany.com/servicios'
+      title: 'Servicios Contables y Tributarios - THADO Consulting',
+      description: 'Servicios contables, tributarios y financieros para MYPES en Perú. Declaraciones SUNAT, libros electrónicos, PDT y asesoría fiscal.',
+      keywords: 'servicios contables, tributación, SUNAT, libros electrónicos, PDT, MYPES, Perú',
+      ogTitle: 'Servicios - THADO Consulting',
+      ogDescription: 'Servicios contables, tributarios y financieros para MYPES en Perú',
+      url: 'https://www.thadoconsulting.com/servicios'
     }
   },
   {
     path: '/blog',
     seo: {
-      title: 'Blog SCUTI Company - Noticias y Tendencias Tecnológicas',
-      description: 'Mantente informado con las últimas noticias y tendencias del sector tecnológico. Contenido curado por expertos.',
-      keywords: 'blog, noticias tecnológicas, tendencias tech, desarrollo web, programación, AI',
-      ogTitle: 'Blog SCUTI Company - Noticias Tecnológicas',
-      ogDescription: 'Las últimas noticias y tendencias del sector tecnológico',
-      url: 'https://scuticompany.com/blog'
+      title: 'Blog THADO Consulting - Contabilidad y Tributación para MYPES',
+      description: 'Artículos sobre contabilidad, tributación SUNAT, gestión financiera y consejos prácticos para MYPES en Perú.',
+      keywords: 'blog contabilidad, tributación SUNAT, MYPES Perú, gestión financiera, libros electrónicos',
+      ogTitle: 'Blog THADO Consulting - Contabilidad y Tributación',
+      ogDescription: 'Artículos sobre contabilidad, tributación y gestión financiera para MYPES en Perú',
+      url: 'https://www.thadoconsulting.com/blog'
     }
   },
   {
     path: '/nosotros',
     seo: {
-      title: 'Sobre Nosotros - SCUTI Company',
-      description: 'Conoce más sobre SCUTI Company, nuestra misión, visión y el equipo de expertos en tecnología',
-      keywords: 'sobre nosotros, equipo, misión, visión, SCUTI',
-      ogTitle: 'Sobre Nosotros - SCUTI Company',
-      ogDescription: 'Conoce más sobre SCUTI Company y nuestro equipo',
-      url: 'https://scuticompany.com/nosotros'
+      title: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+      description: 'Conoce THADO Consulting: estudio contable especializado en servicios para MYPES en Perú. Nuestro equipo de contadores expertos.',
+      keywords: 'sobre nosotros, equipo THADO, estudio contable Perú, contadores, MYPES',
+      ogTitle: 'Sobre Nosotros - THADO Consulting',
+      ogDescription: 'Conoce THADO Consulting y nuestro equipo de contadores expertos',
+      url: 'https://www.thadoconsulting.com/nosotros'
     }
   }
 ];
