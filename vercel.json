@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/sitemap-blog.xml",
-      "destination": "https://web-scuticompany-back.onrender.com/api/blog/sitemap.xml"
+      "destination": "https://thadoconsulting-back.onrender.com/api/blog/sitemap.xml"
     },
     {
       "source": "/sitemap-services.xml",
@@ -14,7 +14,7 @@
     },
     {
       "source": "/api/blog/(.*)",
-      "destination": "https://web-scuticompany-back.onrender.com/api/blog/$1"
+      "destination": "https://thadoconsulting-back.onrender.com/api/blog/$1"
     },
     {
       "source": "/blog/:slug",

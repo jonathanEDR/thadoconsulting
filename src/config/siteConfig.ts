@@ -88,10 +88,10 @@ export const SITE_CONFIG: SiteConfig = {
   // ─────────────────────────────────────────
   // INFORMACIÓN DEL SITIO
   // ─────────────────────────────────────────
-  siteName: 'SCUTI Company',
-  siteUrl: import.meta.env.VITE_SITE_URL || 'https://scuticompany.com',
-  siteDescription: 'Transformamos tu empresa con tecnología inteligente. Soluciones digitales, desarrollo de software y modelos de IA personalizados.',
-  
+  siteName: 'THADO Consulting',
+  siteUrl: import.meta.env.VITE_SITE_URL || 'https://thadoconsulting.vercel.app',
+  siteDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú. Evita multas SUNAT, ordena tu contabilidad y crece con confianza.',
+
   // ─────────────────────────────────────────
   // LOCALIZACIÓN
   // ─────────────────────────────────────────
@@ -99,7 +99,7 @@ export const SITE_CONFIG: SiteConfig = {
   language: 'es',
   country: 'Peru',
   countryCode: 'PE',
-  region: 'Huánuco',
+  region: 'Lima',
   timezone: 'America/Lima',
   
   // ─────────────────────────────────────────
@@ -130,48 +130,50 @@ export const SITE_CONFIG: SiteConfig = {
   // REDES SOCIALES
   // ─────────────────────────────────────────
   social: {
-    facebook: 'https://www.facebook.com/profile.php?id=61564318740689',
+    facebook: '#',
     whatsapp: 'https://wa.me/51973397306',
-    twitter: 'https://twitter.com/scuticompany',
-    instagram: 'https://instagram.com/scuticompany',
-    linkedin: 'https://linkedin.com/company/scuticompany',
+    twitter: '#',
+    instagram: '#',
+    linkedin: '#',
   },
-  
+
   // ─────────────────────────────────────────
   // CONTACTO
   // ─────────────────────────────────────────
   contact: {
-    email: 'gscutic@gmail.com',
+    email: 'contacto@thadoconsulting.pe',
     phone: '+51 973 397 306',
     phoneClean: '+51973397306',
-    address: 'Huánuco, Perú',
+    address: 'Lima, Perú',
     openingHours: 'Mo-Fr 09:00-18:00',
   },
-  
+
   // ─────────────────────────────────────────
   // SEO
   // ─────────────────────────────────────────
   seo: {
-    titleSuffix: ' - SCUTI Company',
+    titleSuffix: ' - THADO Consulting',
     defaultKeywords: [
-      'tecnología',
-      'software',
-      'desarrollo web',
-      'inteligencia artificial',
-      'transformación digital',
-      'consultoría IT',
-      'Peru',
+      'contador Perú',
+      'estudio contable Lima',
+      'contador para MYPE',
+      'servicios contables Perú',
+      'asesoría tributaria SUNAT',
+      'outsourcing contable',
+      'constitución de empresas Perú',
+      'declaración jurada anual',
+      'régimen MYPE tributario',
     ],
   },
-  
+
   // ─────────────────────────────────────────
   // ORGANIZACIÓN (SCHEMA.ORG)
   // ─────────────────────────────────────────
   organization: {
-    name: 'SCUTI Company',
-    legalName: 'SCUTI Company S.A.C.',
-    url: 'https://scuticompany.com',
-    logo: 'https://scuticompany.com/FAVICON.png',
+    name: 'THADO Consulting',
+    legalName: 'THADO Consulting',
+    url: 'https://thadoconsulting.vercel.app',
+    logo: 'https://thadoconsulting.vercel.app/FAVICON.png',
     foundingDate: '2024',
   },
 };

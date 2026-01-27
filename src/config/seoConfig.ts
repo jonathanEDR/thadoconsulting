@@ -1,18 +1,18 @@
 /**
  * 🎯 CONFIGURACIÓN SEO HARDCODEADA POR PÁGINA
- * 
+ *
  * Este archivo contiene los metadatos SEO por defecto para cada página.
- * 
+ *
  * SISTEMA DE PRIORIDAD:
  * 1. ✅ Datos del CMS (MongoDB) - PRIORIDAD MÁXIMA
  * 2. ✅ Configuración hardcodeada (este archivo)
  * 3. ✅ Fallbacks genéricos
- * 
+ *
  * ⚠️ IMPORTANTE:
  * - Los datos del CMS SIEMPRE tienen prioridad
  * - Esta configuración se usa solo cuando NO hay datos en el CMS
  * - Facilita debugging y proporciona defaults profesionales
- * 
+ *
  * 🖼️ IMÁGENES OPEN GRAPH (ogImage):
  * - Dimensiones ideales: 1200x630px
  * - Formatos: PNG, JPG (< 1MB)
@@ -41,181 +41,177 @@ export interface SeoConfigMap {
 
 /**
  * 📋 Configuración SEO por defecto para cada página
- * 
+ *
  * ⚠️ NOTA: La página HOME no está aquí porque tiene su propio sistema
  * de gestión SEO que funciona perfectamente (ver: Home.tsx)
  */
 export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
   // 📰 PÁGINA BLOG
   blog: {
-    metaTitle: 'Blog SCUTI Company - Noticias y Tendencias Tecnológicas | Contenido Curado',
-    metaDescription: 'Mantente informado con las últimas noticias y tendencias del sector tecnológico. Contenido curado y validado por expertos en desarrollo y tecnología.',
+    metaTitle: 'Blog THADO Consulting - Guías Contables y Tributarias para MYPES',
+    metaDescription: 'Artículos sobre contabilidad, tributación SUNAT, planillas y gestión empresarial. Guías prácticas para MYPES y emprendedores en Perú.',
     keywords: [
-      'blog tecnologia',
-      'noticias tech',
-      'desarrollo web',
-      'inteligencia artificial',
-      'cloud computing',
-      'tendencias tecnologicas',
-      'programacion',
-      'innovacion digital'
+      'blog contabilidad',
+      'guías tributarias SUNAT',
+      'contabilidad MYPES',
+      'declaraciones SUNAT',
+      'régimen tributario Perú',
+      'planillas PLAME',
+      'facturación electrónica',
+      'libros electrónicos SIRE'
     ],
-    ogTitle: 'Blog SCUTI - Innovación y Tecnología',
-    ogDescription: 'Lee las últimas noticias del mundo tecnológico y mantente actualizado',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Blog THADO Consulting - Contabilidad y Tributación',
+    ogDescription: 'Guías y artículos sobre contabilidad y tributación para MYPES en Perú',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Blog de Tecnología e Innovación',
+    ogImageAlt: 'THADO Consulting - Blog de Contabilidad y Tributación',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/blog'
+    canonical: 'https://thadoconsulting.vercel.app/blog'
   },
 
   // 💼 PÁGINA SERVICIOS
   services: {
-    metaTitle: 'Servicios de Desarrollo Software en Perú - SCUTI Company',
-    metaDescription: 'Desarrollo de aplicaciones web y móviles, soluciones de IA, cloud computing, consultoría tecnológica. Servicios profesionales para empresas PYMES en Perú.',
+    metaTitle: 'Servicios Contables y Tributarios en Perú - THADO Consulting',
+    metaDescription: 'Servicios de contabilidad, asesoría tributaria SUNAT, planillas PLAME, constitución de empresas y facturación electrónica para MYPES en todo Perú.',
     keywords: [
-      'servicios desarrollo software',
-      'aplicaciones web peru',
-      'desarrollo movil',
-      'consultoria tecnologica',
-      'soluciones ia',
-      'cloud computing',
-      'desarrollo backend',
-      'desarrollo frontend',
-      'empresa software huanuco'
+      'servicios contables Perú',
+      'asesoría tributaria SUNAT',
+      'contador para MYPE',
+      'planillas PLAME',
+      'constitución de empresas',
+      'facturación electrónica',
+      'libros electrónicos',
+      'outsourcing contable Lima'
     ],
-    ogTitle: 'Servicios de Desarrollo Software - SCUTI Company',
-    ogDescription: 'Servicios tecnológicos profesionales diseñados para impulsar tu empresa en Perú',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
+    ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Servicios de Desarrollo de Software',
+    ogImageAlt: 'THADO Consulting - Servicios Contables',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/servicios'
+    canonical: 'https://thadoconsulting.vercel.app/servicios'
   },
 
   // Alias para servicios
   servicios: {
-    metaTitle: 'Servicios de Desarrollo Software en Perú - SCUTI Company',
-    metaDescription: 'Desarrollo de aplicaciones web y móviles, soluciones de IA, cloud computing, consultoría tecnológica. Servicios profesionales para empresas PYMES en Perú.',
+    metaTitle: 'Servicios Contables y Tributarios en Perú - THADO Consulting',
+    metaDescription: 'Servicios de contabilidad, asesoría tributaria SUNAT, planillas PLAME, constitución de empresas y facturación electrónica para MYPES en todo Perú.',
     keywords: [
-      'servicios desarrollo software',
-      'aplicaciones web peru',
-      'desarrollo movil',
-      'consultoria tecnologica',
-      'soluciones ia',
-      'cloud computing',
-      'desarrollo backend',
-      'desarrollo frontend',
-      'empresa software huanuco'
+      'servicios contables Perú',
+      'asesoría tributaria SUNAT',
+      'contador para MYPE',
+      'planillas PLAME',
+      'constitución de empresas',
+      'facturación electrónica',
+      'libros electrónicos',
+      'outsourcing contable Lima'
     ],
-    ogTitle: 'Servicios de Desarrollo Software - SCUTI Company',
-    ogDescription: 'Servicios tecnológicos profesionales diseñados para impulsar tu empresa en Perú',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
+    ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Servicios de Desarrollo de Software',
+    ogImageAlt: 'THADO Consulting - Servicios Contables',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/servicios'
+    canonical: 'https://thadoconsulting.vercel.app/servicios'
   },
 
   // 👥 PÁGINA NOSOTROS/ABOUT
   about: {
-    metaTitle: 'Sobre Nosotros - SCUTI Company | Empresa de Software en Perú',
-    metaDescription: 'Conoce a SCUTI Company: equipo de expertos en tecnología en Huánuco, Perú. Transformamos negocios PYMES con soluciones tecnológicas innovadoras.',
+    metaTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    metaDescription: 'Conoce a THADO Consulting: estudio contable especializado en MYPES y emprendedores. Más de 10 años de experiencia en contabilidad y tributación en Perú.',
     keywords: [
-      'scuti company',
-      'empresa tecnologia peru',
-      'equipo desarrollo huanuco',
-      'nosotros scuti',
-      'vision mision',
-      'valores empresa',
-      'historia scuti',
-      'equipo tech peru',
-      'transformacion digital pymes'
+      'THADO Consulting',
+      'estudio contable Perú',
+      'contador Lima',
+      'nosotros THADO',
+      'contadores colegiados',
+      'experiencia tributaria',
+      'equipo contable',
+      'asesoría contable MYPES'
     ],
-    ogTitle: 'Sobre Nosotros - SCUTI Company | Empresa de Software en Perú',
-    ogDescription: 'Conoce quiénes somos, nuestra visión y cómo transformamos negocios en Perú',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Empresa de Desarrollo de Software en Perú',
+    ogImageAlt: 'THADO Consulting - Estudio Contable en Perú',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/nosotros'
+    canonical: 'https://thadoconsulting.vercel.app/nosotros'
   },
 
   // Alias para nosotros
   nosotros: {
-    metaTitle: 'Sobre Nosotros - SCUTI Company | Empresa de Software en Perú',
-    metaDescription: 'Conoce a SCUTI Company: equipo de expertos en tecnología en Huánuco, Perú. Transformamos negocios PYMES con soluciones tecnológicas innovadoras.',
+    metaTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    metaDescription: 'Conoce a THADO Consulting: estudio contable especializado en MYPES y emprendedores. Más de 10 años de experiencia en contabilidad y tributación en Perú.',
     keywords: [
-      'scuti company',
-      'empresa tecnologia peru',
-      'equipo desarrollo huanuco',
-      'nosotros scuti',
-      'vision mision',
-      'valores empresa',
-      'historia scuti',
-      'equipo tech peru',
-      'transformacion digital pymes'
+      'THADO Consulting',
+      'estudio contable Perú',
+      'contador Lima',
+      'nosotros THADO',
+      'contadores colegiados',
+      'experiencia tributaria',
+      'equipo contable',
+      'asesoría contable MYPES'
     ],
-    ogTitle: 'Sobre Nosotros - SCUTI Company | Empresa de Software en Perú',
-    ogDescription: 'Conoce quiénes somos, nuestra visión y cómo transformamos negocios en Perú',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Empresa de Desarrollo de Software en Perú',
+    ogImageAlt: 'THADO Consulting - Estudio Contable en Perú',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/nosotros'
+    canonical: 'https://thadoconsulting.vercel.app/nosotros'
   },
 
   // 📞 PÁGINA CONTACTO
   contact: {
-    metaTitle: 'Contacto - SCUTI Company | Agenda tu Consulta Gratuita',
-    metaDescription: 'Contáctanos para tu proyecto tecnológico. Desarrollo web, apps móviles y soluciones digitales en Huánuco, Perú. Agenda una consulta gratuita.',
+    metaTitle: 'Contacto - THADO Consulting | Consultoría Contable Gratuita',
+    metaDescription: 'Contáctanos para asesoría contable y tributaria. Primera consultoría gratuita para MYPES y emprendedores en todo Perú. Respuesta en 24 horas.',
     keywords: [
-      'contacto scuti',
-      'consultoria tecnologica peru',
-      'agenda reunion',
-      'contacto empresa tech huanuco',
-      'solicitar servicio',
-      'presupuesto desarrollo',
-      'desarrollo web peru',
-      'apps moviles peru'
+      'contacto THADO',
+      'consultoría contable Perú',
+      'asesoría tributaria gratuita',
+      'contador Lima contacto',
+      'solicitar servicio contable',
+      'presupuesto contabilidad',
+      'consulta SUNAT',
+      'agendar consultoría'
     ],
-    ogTitle: 'Contacto - SCUTI Company | Hablemos de tu Proyecto',
-    ogDescription: 'Agenda una consulta gratuita y llevemos tu proyecto tecnológico al siguiente nivel',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
+    ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Contáctanos para tu Proyecto',
+    ogImageAlt: 'THADO Consulting - Contáctanos',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/contacto'
+    canonical: 'https://thadoconsulting.vercel.app/contacto'
   },
 
   // Alias para contacto
   contacto: {
-    metaTitle: 'Contacto - SCUTI Company | Agenda tu Consulta Gratuita',
-    metaDescription: 'Contáctanos para tu proyecto tecnológico. Desarrollo web, apps móviles y soluciones digitales en Huánuco, Perú. Agenda una consulta gratuita.',
+    metaTitle: 'Contacto - THADO Consulting | Consultoría Contable Gratuita',
+    metaDescription: 'Contáctanos para asesoría contable y tributaria. Primera consultoría gratuita para MYPES y emprendedores en todo Perú. Respuesta en 24 horas.',
     keywords: [
-      'contacto scuti',
-      'consultoria tecnologica peru',
-      'agenda reunion',
-      'contacto empresa tech huanuco',
-      'solicitar servicio',
-      'presupuesto desarrollo',
-      'desarrollo web peru',
-      'apps moviles peru'
+      'contacto THADO',
+      'consultoría contable Perú',
+      'asesoría tributaria gratuita',
+      'contador Lima contacto',
+      'solicitar servicio contable',
+      'presupuesto contabilidad',
+      'consulta SUNAT',
+      'agendar consultoría'
     ],
-    ogTitle: 'Contacto - SCUTI Company | Hablemos de tu Proyecto',
-    ogDescription: 'Agenda una consulta gratuita y llevemos tu proyecto tecnológico al siguiente nivel',
-    ogImage: 'https://scuticompany.com/logofondonegro.jpeg',
+    ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
+    ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
+    ogImage: 'https://thadoconsulting.vercel.app/FAVICON.png',
     ogImageWidth: '1200',
     ogImageHeight: '630',
-    ogImageAlt: 'SCUTI Company - Contáctanos para tu Proyecto',
+    ogImageAlt: 'THADO Consulting - Contáctanos',
     twitterCard: 'summary_large_image',
-    canonical: 'https://scuticompany.com/contacto'
+    canonical: 'https://thadoconsulting.vercel.app/contacto'
   }
 };
 
