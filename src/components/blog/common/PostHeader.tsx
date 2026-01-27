@@ -1,6 +1,7 @@
 /**
  * 📄 PostHeader Component
  * Header profesional para posts del blog con meta información
+ * 🏢 Siempre muestra marca Thado Consulting como autor
  */
 
 import { Link } from 'react-router-dom';
@@ -9,6 +10,7 @@ import { CategoryBadge, ReadingTimeIndicator, LikeButton, FavoriteButton } from 
 import { getImageUrl } from '../../../utils/imageUtils';
 import LazyImage from './LazyImage';
 import type { BlogPost } from '../../../types/blog';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 interface PostHeaderProps {
   post: BlogPost;
@@ -52,39 +54,21 @@ export default function PostHeader({ post, className = '' }: PostHeaderProps) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Author and Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-              {/* Author - Clickeable si el perfil es público */}
-              {post.author && (() => {
-                const hasUsername = post.author.username || post.author.publicUsername;
-                const isPublicProfile = hasUsername && post.author.blogProfile?.isPublicProfile !== false;
-                const profileUrl = isPublicProfile && hasUsername ? `/perfil/${hasUsername}` : null;
-                
-                const authorContent = (
-                  <div className="flex items-center gap-2">
-                    {post.author.avatar ? (
-                      <LazyImage
-                        src={getImageUrl(post.author.avatar)}
-                        alt={`${post.author.firstName || ''} ${post.author.lastName || ''}`}
-                        className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
-                        width={32}
-                        height={32}
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <User className="text-blue-600 dark:text-blue-400" size={16} />
-                      </div>
-                    )}
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {post.author.firstName || ''} {post.author.lastName || ''}
-                    </span>
-                  </div>
-                );
-
-                return profileUrl ? (
-                  <Link to={profileUrl} className="hover:opacity-80 transition-opacity">
-                    {authorContent}
-                  </Link>
-                ) : authorContent;
-              })()}
+              {/* Author - Siempre marca Thado Consulting */}
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border-2 border-gray-200 dark:border-gray-700">
+                  <img
+                    src={BRAND_AUTHOR.logo}
+                    alt={BRAND_AUTHOR.name}
+                    className="w-full h-full object-contain"
+                    width={32}
+                    height={32}
+                  />
+                </div>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {BRAND_AUTHOR.name}
+                </span>
+              </div>
 
               {/* Separator */}
               <span className="hidden sm:inline text-gray-300 dark:text-gray-600">•</span>

@@ -2,6 +2,7 @@
  * 🎯 All News Card
  * Tarjeta para la sección "Todas las Noticias" - Estilo Maqueta
  * Soporta 3 variantes: image-overlay, text-only, compact
+ * 🏢 Siempre muestra marca Thado Consulting como autor
  */
 
 import React from 'react';
@@ -9,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, Newspaper } from 'lucide-react';
 import { extractFirstImage } from '../../../utils/blog';
 import type { BlogPost } from '../../../types/blog';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 export interface AllNewsCardConfig {
   // Variante de la tarjeta
@@ -94,19 +96,14 @@ export const AllNewsCard: React.FC<AllNewsCardProps> = ({
 
   const fontFamily = config.fontFamily || 'Montserrat';
 
-  // Helper para obtener el nombre del autor
-  const getAuthorName = (author: BlogPost['author']) => {
-    if (!author) return 'Anónimo';
-    return author.displayName || author.blogProfile?.displayName || 
-           `${author.firstName || ''} ${author.lastName || ''}`.trim() || 
-           author.username || 'Autor';
+  // 🏢 Helper para obtener el nombre del autor - Siempre marca
+  const getAuthorName = () => {
+    return BRAND_AUTHOR.name;
   };
 
-  // Helper para obtener el avatar del autor (misma lógica que AuthorCard)
-  const getAuthorAvatar = (author: BlogPost['author']) => {
-    if (!author) return null;
-    // Priorizar blogProfile.avatar (igual que AuthorCard)
-    return author.blogProfile?.avatar || author.avatar || author.profileImage || null;
+  // 🏢 Helper para obtener el avatar del autor - Siempre logo
+  const getAuthorAvatar = () => {
+    return BRAND_AUTHOR.logo;
   };
 
   // Variante: Imagen con overlay (tarjetas laterales de la maqueta)
@@ -236,29 +233,22 @@ export const AllNewsCard: React.FC<AllNewsCardProps> = ({
             </Link>
           </h3>
 
-          {/* Autor y fecha */}
-          {config.showAuthor !== false && post.author && (
+          {/* Autor y fecha - Siempre marca Thado Consulting */}
+          {config.showAuthor !== false && (
             <div className="flex items-center gap-3">
-              {getAuthorAvatar(post.author) ? (
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-white/30">
                 <img 
-                  src={getAuthorAvatar(post.author)!} 
-                  alt={getAuthorName(post.author)}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
+                  src={getAuthorAvatar()} 
+                  alt={getAuthorName()}
+                  className="w-full h-full object-contain"
                 />
-              ) : (
-                <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-white/30 text-white font-semibold text-sm"
-                  style={{ backgroundColor: config.categoryBgColor || '#8b5cf6' }}
-                >
-                  {getAuthorName(post.author).charAt(0).toUpperCase()}
-                </div>
-              )}
+              </div>
               <div>
                 <p 
                   className="text-sm font-medium"
                   style={{ color: config.authorNameColor || '#ffffff' }}
                 >
-                  {getAuthorName(post.author)}
+                  {getAuthorName()}
                 </p>
                 <p 
                   className="text-xs"

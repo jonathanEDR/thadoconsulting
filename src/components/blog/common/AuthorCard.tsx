@@ -1,11 +1,12 @@
 /**
  * 👤 AuthorCard Component - Enhanced
  * Tarjeta profesional del autor con perfil completo del blog
- * ✨ Clickeable cuando el perfil es público
+ * 🏢 Siempre muestra información de marca Thado Consulting
  */
 
 import { User, Globe, Linkedin, Github, Mail, MapPin, Award, Facebook, Music } from 'lucide-react';
 import type { BlogAuthor } from '../../../types/blog';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 // Estilos configurables desde CMS
 export interface AuthorCardStyles {
@@ -79,44 +80,32 @@ export default function AuthorCard({
       : styles?.bioColor?.light,
   };
 
-  // Priorizar datos del blogProfile sobre datos base
-  const displayName = author?.blogProfile?.displayName || 
-                      (author?.firstName && author?.lastName ? `${author.firstName} ${author.lastName}` : null) ||
-                      author?.email?.split('@')[0] || 
-                      'Autor Anónimo';
+  // 🏢 Siempre usar datos de marca Thado Consulting
+  const displayName = BRAND_AUTHOR.displayName;
+  const bio = BRAND_AUTHOR.bio;
+  const avatarUrl = BRAND_AUTHOR.avatar;
+  const website = BRAND_AUTHOR.website;
+  const location = BRAND_AUTHOR.location;
+  const expertise = BRAND_AUTHOR.expertise;
+  const social = BRAND_AUTHOR.social;
+  const roleDisplay = BRAND_AUTHOR.role;
   
-  const bio = author?.blogProfile?.bio || author?.bio || 'Escritor apasionado por compartir conocimiento y experiencias.';
-  const avatarUrl = author?.blogProfile?.avatar || author?.avatar;
-  const website = author?.blogProfile?.website || author?.website;
-  const location = author?.blogProfile?.location || author?.location;
-  const expertise = author?.blogProfile?.expertise || author?.expertise || [];
-  const social = author?.blogProfile?.social || author?.social;
-  const roleDisplay = author?.role || 'Autor';
-  
-  // ✨ Verificar si el perfil es público (igual que en CommentItem)
-  // El perfil es público si blogProfile.isPublicProfile !== false (puede ser true o undefined)
-  const hasUsername = author?.username || author?.publicUsername;
-  const isPublicProfile = hasUsername && author?.blogProfile?.isPublicProfile !== false;
-  const profileUrl = isPublicProfile && hasUsername 
-    ? `/perfil/${hasUsername}` 
-    : null;
+  // 🏢 No enlazar a perfil de usuario individual
+  const profileUrl = null;
+  const isPublicProfile = false;
 
   // Variante compacta (para sidebars, cards pequeñas)
   if (variant === 'compact') {
     const CompactContent = (
       <div className="flex items-center gap-3">
-        {/* Avatar */}
-        {avatarUrl ? (
+        {/* Avatar - Siempre logo de marca */}
+        <div className={`w-12 h-12 ${avatarCompactShapeClass} overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-gray-200 dark:border-gray-700`}>
           <img
-            src={avatarUrl}
-            alt={displayName}
-            className={`w-12 h-12 ${avatarCompactShapeClass} object-cover border-2 border-gray-200 dark:border-gray-700`}
+            src={BRAND_AUTHOR.logo}
+            alt={BRAND_AUTHOR.name}
+            className="w-full h-full object-contain"
           />
-        ) : (
-          <div className={`w-12 h-12 ${avatarCompactShapeClass} bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-gray-200 dark:border-gray-700`}>
-            <User className="text-white" size={24} />
-          </div>
-        )}
+        </div>
         
         {/* Info */}
         <div className="flex-1 min-w-0">
@@ -159,19 +148,15 @@ export default function AuthorCard({
   // Variante por defecto (completa) - Wrapper condicional para hacerla clickeable
   const CardContent = (
     <div className="flex flex-col sm:flex-row items-start gap-6">
-      {/* Avatar */}
+      {/* Avatar - Siempre logo de marca */}
       <div className="flex-shrink-0">
-        {avatarUrl ? (
+        <div className={`w-24 h-24 ${avatarShapeClass} overflow-hidden bg-white flex items-center justify-center p-2 border-4 border-white dark:border-gray-700 shadow-lg ring-2 ring-blue-500/20`}>
           <img
-            src={avatarUrl}
-            alt={displayName}
-            className={`w-24 h-24 ${avatarShapeClass} object-cover border-4 border-white dark:border-gray-700 shadow-lg ring-2 ring-blue-500/20`}
+            src={BRAND_AUTHOR.logo}
+            alt={BRAND_AUTHOR.name}
+            className="w-full h-full object-contain"
           />
-        ) : (
-          <div className={`w-24 h-24 ${avatarShapeClass} bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center border-4 border-white dark:border-gray-700 shadow-lg`}>
-            <User className="text-white" size={48} />
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Info */}

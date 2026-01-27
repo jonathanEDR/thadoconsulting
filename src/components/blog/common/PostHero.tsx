@@ -11,6 +11,7 @@ import { getImageUrl } from '../../../utils/imageUtils';
 import LazyImage from './LazyImage';
 import type { BlogPost } from '../../../types/blog';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 // Tipos para estilos del Hero
 interface HeroStyleTheme {
@@ -212,37 +213,28 @@ export default function PostHero({
                 className="flex flex-wrap items-center gap-3 text-sm"
                 style={{ color: metaColor }}
               >
-                {/* Author - Con estilos configurables */}
-                {showAuthor && post.author && (
+                {/* Author - Siempre mostrar marca Thado Consulting */}
+                {showAuthor && (
                   <div className="flex items-center gap-2">
-                    {post.author.avatar ? (
-                      <div 
-                        className="w-7 h-7 rounded-full overflow-hidden"
-                        style={{ border: `2px solid ${avatarBorderColor}` }}
-                      >
-                        <LazyImage
-                          src={getImageUrl(post.author.avatar)}
-                          alt={`${post.author.firstName || ''} ${post.author.lastName || ''}`}
-                          className="w-full h-full object-cover"
-                          width={28}
-                          height={28}
-                        />
-                      </div>
-                    ) : (
-                      <div 
-                        className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center"
-                        style={{ border: `2px solid ${avatarBorderColor}` }}
-                      >
-                        <User style={{ color: titleColor }} size={14} />
-                      </div>
-                    )}
+                    <div 
+                      className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5"
+                      style={{ border: `2px solid ${avatarBorderColor}` }}
+                    >
+                      <img
+                        src={BRAND_AUTHOR.logo}
+                        alt={BRAND_AUTHOR.name}
+                        className="w-full h-full object-contain"
+                        width={28}
+                        height={28}
+                      />
+                    </div>
                     <span className="font-medium" style={{ color: titleColor }}>
-                      {post.author.firstName || ''} {post.author.lastName || ''}
+                      {BRAND_AUTHOR.name}
                     </span>
                   </div>
                 )}
                 
-                {showAuthor && post.author && showPublishDate && <span style={{ opacity: 0.4 }}>•</span>}
+                {showAuthor && showPublishDate && <span style={{ opacity: 0.4 }}>•</span>}
                 
                 {/* Date - Con color de icono configurable */}
                 {showPublishDate && (
@@ -348,27 +340,21 @@ export default function PostHero({
 
               {/* Meta Bar */}
               <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                {/* Author */}
-                {post.author && (
-                  <div className="flex items-center gap-2">
-                    {post.author.avatar ? (
-                      <LazyImage
-                        src={getImageUrl(post.author.avatar)}
-                        alt={`${post.author.firstName || ''} ${post.author.lastName || ''}`}
-                        className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-700"
-                        width={24}
-                        height={24}
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                        <User className="text-purple-600 dark:text-purple-400" size={12} />
-                      </div>
-                    )}
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {post.author.firstName || ''} {post.author.lastName || ''}
-                    </span>
+                {/* Author - Siempre mostrar marca Thado Consulting */}
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border border-gray-200 dark:border-gray-700">
+                    <img
+                      src={BRAND_AUTHOR.logo}
+                      alt={BRAND_AUTHOR.name}
+                      className="w-full h-full object-contain"
+                      width={24}
+                      height={24}
+                    />
                   </div>
-                )}
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {BRAND_AUTHOR.name}
+                  </span>
+                </div>
                 
                 <span className="text-gray-300 dark:text-gray-600">•</span>
                 

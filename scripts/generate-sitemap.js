@@ -33,8 +33,10 @@ const CONFIG = {
 
 // Debug: mostrar qué URL se está usando
 console.log('═'.repeat(60));
-console.log('🔧 CONFIGURACIÓN DE BUILD');
+console.log('🔧 CONFIGURACIÓN DE BUILD - SITEMAP');
 console.log('═'.repeat(60));
+console.log(`   VITE_SITE_URL: ${process.env.VITE_SITE_URL || '(not set - using default)'}`);
+console.log(`   Site URL (used in sitemaps): ${CONFIG.siteUrl}`);
 console.log(`   VITE_API_URL (raw): ${process.env.VITE_API_URL || '(not set)'}`);
 console.log(`   API_URL (raw): ${process.env.API_URL || '(not set)'}`);
 console.log(`   Base URL (normalized): ${CONFIG.apiUrl}`);

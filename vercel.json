@@ -9,16 +9,16 @@
       "destination": "https://thadoconsulting-back.onrender.com/api/blog/sitemap.xml"
     },
     {
-      "source": "/sitemap-services.xml",
-      "destination": "/sitemap-services.xml"
-    },
-    {
       "source": "/api/blog/(.*)",
       "destination": "https://thadoconsulting-back.onrender.com/api/blog/$1"
     },
     {
       "source": "/blog/:slug",
       "destination": "/blog/:slug/index.html"
+    },
+    {
+      "source": "/servicios/:slug",
+      "destination": "/servicios/:slug/index.html"
     },
     {
       "source": "/(.*)",

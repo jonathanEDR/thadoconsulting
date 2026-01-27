@@ -1,10 +1,12 @@
 /**
  * 🔍 SEOHead Component
  * Genera meta tags dinámicos para SEO
+ * 🏢 Siempre usa marca Thado Consulting como autor
  */
 
 import { useEffect } from 'react';
 import type { BlogPost, BlogCategory } from '../../../types/blog';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 interface SEOHeadProps {
   post?: BlogPost;
@@ -50,13 +52,10 @@ export default function SEOHead({
       updateMetaTag('description', seoDescription);
       updateMetaTag('keywords', keywords);
       
-      // Autor con validación de null
-      const authorName = post.author 
-        ? `${post.author.firstName || ''} ${post.author.lastName || ''}`.trim()
-        : 'Autor Desconocido';
-      
-      updateMetaTag('author', authorName);
-      updateMetaTag('article:author', authorName);
+      // 🏢 Autor siempre Thado Consulting para posicionamiento de marca
+      updateMetaTag('author', BRAND_AUTHOR.name);
+      updateMetaTag('article:author', BRAND_AUTHOR.name);
+      updateMetaProperty('article:publisher', BRAND_AUTHOR.website);
       updateMetaTag('article:published_time', post.publishedAt);
       updateMetaTag('article:modified_time', post.updatedAt);
       updateMetaTag('article:section', post.category?.name || '');

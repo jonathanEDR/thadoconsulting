@@ -3,6 +3,7 @@
  * Dashboard simplificado para roles USER y CLIENT
  * Interfaz limpia enfocada en consumo de contenido y servicios
  * 🎨 Estilos configurables desde CMS
+ * 🏢 Siempre muestra marca Thado Consulting como autor
  */
 
 import { useEffect, useState, useCallback } from 'react';
@@ -17,6 +18,7 @@ import { getImageUrl } from '../utils/imageUtils';
 import { useDashboardFeaturedPostsConfig } from '../hooks/cms/useDashboardFeaturedPostsConfig';
 import { useDashboardSidebarConfig } from '../hooks/cms/useDashboardSidebarConfig';
 import DynamicIcon from '../components/ui/DynamicIcon';
+import { BRAND_AUTHOR } from '../config/brandConstants';
 
 // ============================================
 // CACHE PARA POSTS DESTACADOS
@@ -348,49 +350,36 @@ export default function ClientDashboard() {
                             {/* Separador */}
                             <div className="border-t border-gray-200 dark:border-gray-600 pt-4"></div>
                             
-                            {/* Autor y estadísticas */}
+                            {/* Autor y estadísticas - Siempre marca Thado Consulting */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                {post.author && typeof post.author === 'object' && (
-                                  <>
-                                    {post.author.profileImage ? (
-                                      <img
-                                        src={post.author.profileImage}
-                                        alt={post.author.firstName || 'Autor'}
-                                        className="w-12 h-12 rounded-full border-2 border-white dark:border-gray-600 shadow-md"
-                                      />
-                                    ) : (
-                                      <div 
-                                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md"
-                                        style={{
-                                          background: `linear-gradient(to bottom right, ${config.author.avatarGradientFrom}, ${config.author.avatarGradientTo})`
-                                        }}
-                                      >
-                                        {(post.author.firstName || post.author.email || 'U').charAt(0).toUpperCase()}
-                                      </div>
-                                    )}
-                                    <div className="flex flex-col">
-                                      <span 
-                                        className="font-bold text-base"
-                                        style={{ color: isDark ? config.author.nameColorDark : config.author.nameColorLight }}
-                                      >
-                                        {post.author.firstName || post.author.email?.split('@')[0] || 'Anónimo'}
-                                      </span>
-                                      {post.publishedAt && (
-                                        <span 
-                                          className="text-sm"
-                                          style={{ color: isDark ? config.author.dateColorDark : config.author.dateColorLight }}
-                                        >
-                                          {new Date(post.publishedAt).toLocaleDateString('es-ES', { 
-                                            day: 'numeric', 
-                                            month: 'long',
-                                            year: 'numeric'
-                                          })}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </>
-                                )}
+                                <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-white dark:border-gray-600 shadow-md">
+                                  <img
+                                    src={BRAND_AUTHOR.logo}
+                                    alt={BRAND_AUTHOR.name}
+                                    className="w-full h-full object-contain"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  <span 
+                                    className="font-bold text-base"
+                                    style={{ color: isDark ? config.author.nameColorDark : config.author.nameColorLight }}
+                                  >
+                                    {BRAND_AUTHOR.name}
+                                  </span>
+                                  {post.publishedAt && (
+                                    <span 
+                                      className="text-sm"
+                                      style={{ color: isDark ? config.author.dateColorDark : config.author.dateColorLight }}
+                                    >
+                                      {new Date(post.publishedAt).toLocaleDateString('es-ES', { 
+                                        day: 'numeric', 
+                                        month: 'long',
+                                        year: 'numeric'
+                                      })}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                               
                               <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">

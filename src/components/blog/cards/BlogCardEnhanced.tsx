@@ -1,12 +1,14 @@
 /**
  * 🎨 Enhanced Blog Card
  * Card modernizada con hover effects y tema dark/light
+ * 🏢 Siempre muestra marca Thado Consulting como autor
  */
 
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Eye, ArrowRight } from 'lucide-react';
 import type { BlogPost } from '../../../types/blog';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 
 interface BlogCardEnhancedProps {
   post: BlogPost;
@@ -127,21 +129,22 @@ export const BlogCardEnhanced: React.FC<BlogCardEnhancedProps> = ({
 
         {/* Footer con autor y CTA */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-          {/* Autor */}
+          {/* Autor - Siempre marca Thado Consulting */}
           {showAuthor && (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
-                {post.author?.firstName?.[0] || post.author?.email?.[0] || 'W'}
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border border-gray-200 dark:border-gray-700">
+                <img
+                  src={BRAND_AUTHOR.logo}
+                  alt={BRAND_AUTHOR.name}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {post.author?.firstName 
-                    ? `${post.author.firstName} ${post.author.lastName || ''}`.trim()
-                    : 'THADO Team'
-                  }
+                  {BRAND_AUTHOR.name}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Editor
+                  {BRAND_AUTHOR.role}
                 </p>
               </div>
             </div>

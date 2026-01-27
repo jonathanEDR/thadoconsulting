@@ -237,7 +237,7 @@ interface BlogArticleSchemaProps {
   image?: string;
   datePublished: string;
   dateModified?: string;
-  authorName: string;
+  authorName?: string; // 🏢 Ya no se usa - siempre es Thado Consulting
   url: string;
   keywords?: string[];  // ✅ Agregado para SEO
   focusKeyphrase?: string;  // ✅ Palabra clave principal
@@ -249,7 +249,7 @@ export const BlogArticleSchema = ({
   image,
   datePublished,
   dateModified,
-  authorName,
+  // authorName ya no se usa - siempre es Thado Consulting
   url,
   keywords,
   focusKeyphrase
@@ -266,9 +266,13 @@ export const BlogArticleSchema = ({
     "datePublished": datePublished,
     "dateModified": dateModified || datePublished,
     "author": {
-      "@type": "Person",
-      "name": authorName,
-      "url": "https://www.thadoconsulting.com"
+      "@type": "Organization",
+      "name": "Thado Consulting",
+      "url": "https://www.thadoconsulting.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.thadoconsulting.com/FAVICON.png"
+      }
     },
     "publisher": {
       "@type": "Organization",

@@ -4,6 +4,7 @@
  * encuentre y cite nuestro contenido
  * 
  * ✅ Integrado con CMS para configuración dinámica
+ * 🏢 Siempre muestra marca Thado Consulting como autor
  */
 
 import React, { useEffect } from 'react';
@@ -15,6 +16,7 @@ import { usePostContent } from '../../../hooks/blog/usePostContent';
 import { useCmsData } from '../../../hooks/cms/useCmsData';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { BlogArticleSchema, BreadcrumbSchema } from '../../../components/seo/SchemaOrg';
+import { BRAND_AUTHOR } from '../../../config/brandConstants';
 import { 
   TagList, 
   RelatedPosts, 
@@ -225,7 +227,7 @@ const BlogPostEnhanced: React.FC = () => {
         image={post.featuredImage ? getImageUrl(post.featuredImage) : undefined}
         datePublished={post.publishedAt || post.createdAt}
         dateModified={post.updatedAt}
-        authorName={typeof post.author === 'string' ? post.author : (post.author?.displayName || post.author?.firstName || 'THADO Consulting')}
+        authorName={BRAND_AUTHOR.name}
         url={`https://www.thadoconsulting.com/blog/${post.slug}`}
         keywords={post.seo?.keywords}
         focusKeyphrase={post.seo?.focusKeyphrase}
