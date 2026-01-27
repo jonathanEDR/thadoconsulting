@@ -1,0 +1,299 @@
+/* Variables CSS para el sistema de temas */
+:root {
+  /* Valores por defecto - se sobrescriben dinámicamente por ThemeContext */
+  --color-primary: #8B5CF6;
+  --color-secondary: #06B6D4;
+  --color-background: #FFFFFF;
+  --color-text: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-card-bg: #F9FAFB;
+  --color-border: #E5E7EB;
+}
+
+/* Estilos utilitarios para temas */
+.theme-bg-primary {
+  background-color: var(--color-primary);
+}
+
+.theme-bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.theme-bg-background {
+  background-color: var(--color-background);
+}
+
+.theme-bg-card {
+  background-color: var(--color-card-bg);
+}
+
+.theme-text-primary {
+  color: var(--color-text);
+}
+
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-border {
+  border-color: var(--color-border);
+}
+
+/* Gradientes dinámicos */
+.theme-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+.theme-gradient-primary-hover {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--color-primary) 90%, black),
+    color-mix(in srgb, var(--color-secondary) 90%, black)
+  );
+}
+
+/* Sombras dinámicas */
+.theme-shadow-primary {
+  box-shadow: 0 10px 25px -3px color-mix(in srgb, var(--color-primary) 20%, transparent),
+              0 4px 6px -2px color-mix(in srgb, var(--color-primary) 5%, transparent);
+}
+
+/* Transiciones suaves */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Modo oscuro específico */
+.dark {
+  color-scheme: dark;
+}
+
+/* Animaciones para el cambio de tema */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ============================================
+   OPTIMIZACIONES DEL SIDEBAR
+   ============================================ */
+
+/* Transición suave para el sidebar colapsado */
+.sidebar-collapsed {
+  transform: translateX(0) !important;
+  width: 3rem !important; /* 48px = w-12 */
+}
+
+/* Optimización de la animación del overlay */
+.sidebar-overlay {
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mejora en la transición de elementos del sidebar */
+.sidebar-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-item:hover {
+  transform: translateX(2px);
+}
+
+/* Animación específica para elementos móviles */
+@media (max-width: 767px) {
+  .sidebar-mobile-item {
+    transition: all 0.15s ease-in-out;
+  }
+  
+  .sidebar-mobile-layout {
+    animation: mobileSlideIn 0.3s ease-out;
+  }
+}
+
+@keyframes mobileSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Asegurar que los elementos mantengan su estilo durante transiciones */
+.theme-preserve {
+  transition: none !important;
+}
+
+/* Animaciones para gradientes */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes backgroundScroll {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+/* Compatibilidad para navegadores que no soportan color-mix */
+@supports not (color: color-mix(in srgb, red, blue)) {
+  .theme-bg-primary { background-color: #8B5CF6; }
+  .theme-bg-secondary { background-color: #06B6D4; }
+  .theme-bg-background { background-color: #FFFFFF; }
+  .theme-bg-card { background-color: #F9FAFB; }
+  .theme-text-primary { color: #1F2937; }
+  .theme-text-secondary { color: #6B7280; }
+  .theme-border { border-color: #E5E7EB; }
+  
+  .dark .theme-bg-primary { background-color: #A78BFA; }
+  .dark .theme-bg-secondary { background-color: #22D3EE; }
+  .dark .theme-bg-background { background-color: #111827; }
+  .dark .theme-bg-card { background-color: #1F2937; }
+  .dark .theme-text-primary { color: #F9FAFB; }
+  .dark .theme-text-secondary { color: #D1D5DB; }
+  .dark .theme-border { border-color: #374151; }
+}
+
+/* ============================================
+   ANIMACIONES DEL LOGO
+   ============================================ */
+
+/* Animación de entrada del logo */
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación de pulso sutil para el logo */
+@keyframes logoPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* Animación de brillo (shine effect) */
+@keyframes logoShine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Clase para logo animado */
+.logo-animated {
+  animation: logoFadeIn 0.6s ease-out;
+}
+
+/* Efecto hover para el logo */
+.logo-animated:hover {
+  animation: logoPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 25px rgba(139, 92, 246, 0.5)) !important;
+}
+
+/* Transición suave para cambios de tamaño */
+.logo-size-transition {
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto de escala en hover */
+.logo-scale-hover:hover {
+  transform: scale(1.05);
+}
+
+/* Animación de rotación sutil */
+@keyframes logoRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Glow effect para modo oscuro */
+.dark .logo-glow {
+  filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.4));
+}
+
+/* Glow effect para modo claro */
+.light .logo-glow {
+  filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
+}
+
+/* Animación de aparición con retraso para múltiples logos */
+.logo-delayed-1 {
+  animation: logoFadeIn 0.6s ease-out 0.1s both;
+}
+
+.logo-delayed-2 {
+  animation: logoFadeIn 0.6s ease-out 0.2s both;
+}
+
+.logo-delayed-3 {
+  animation: logoFadeIn 0.6s ease-out 0.3s both;
+}
+
+/* Resplandor animado continuo */
+@keyframes continuousGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(139, 92, 246, 0.6));
+  }
+}
+
+.logo-continuous-glow {
+  animation: continuousGlow 3s ease-in-out infinite;
+}
+
+/* ============================================
+   ANIMACIONES ADICIONALES PARA LA UI
+   ============================================ */
+
+/* fadeIn ya definido en index.css - usar esa versión */
+
+/* Slide in desde la izquierda */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+/* Slide in desde la derecha */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out;
+}

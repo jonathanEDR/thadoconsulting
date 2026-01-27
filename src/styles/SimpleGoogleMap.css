@@ -1,0 +1,381 @@
+/* Animaciones para el mapa con radar */
+
+@keyframes radarPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes markerPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.8), 0 0 0 2px rgba(139, 92, 246, 0.3);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 1), 0 0 0 4px rgba(139, 92, 246, 0.5);
+  }
+}
+
+/* 🆕 NUEVO: Animaciones de pulso con diferentes intensidades */
+@keyframes pulseLow {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulseMedium {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.4;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulseHigh {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseExtreme {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 1;
+  }
+}
+
+/* 🆕 NUEVO: Efectos de hover especiales */
+@keyframes thunderEffect {
+  0% { 
+    box-shadow: 
+      0 0 8px #ffffff,
+      0 0 16px #e0e7ff,
+      0 0 24px #c7d2fe;
+    filter: brightness(1);
+  }
+  15% { 
+    box-shadow: 
+      0 0 12px #ffffff,
+      0 0 24px #4f46e5,
+      0 0 36px #3730a3,
+      inset 0 0 8px rgba(255, 255, 255, 0.8);
+    filter: brightness(1.5);
+  }
+  25% { 
+    box-shadow: 
+      0 0 4px #ffffff,
+      0 0 8px #6366f1;
+    filter: brightness(0.8);
+  }
+  45% { 
+    box-shadow: 
+      0 0 20px #ffffff,
+      0 0 40px #4f46e5,
+      0 0 60px #3730a3,
+      0 0 80px #1e1b4b,
+      inset 0 0 12px rgba(255, 255, 255, 0.9);
+    filter: brightness(2);
+  }
+  55% { 
+    box-shadow: 
+      0 0 6px #ffffff,
+      0 0 12px #8b5cf6;
+    filter: brightness(0.9);
+  }
+  70% { 
+    box-shadow: 
+      0 0 16px #ffffff,
+      0 0 32px #4f46e5,
+      0 0 48px #3730a3,
+      inset 0 0 6px rgba(255, 255, 255, 0.7);
+    filter: brightness(1.8);
+  }
+  100% { 
+    box-shadow: 
+      0 0 8px #ffffff,
+      0 0 16px #e0e7ff,
+      0 0 24px #c7d2fe;
+    filter: brightness(1);
+  }
+}
+
+@keyframes rainbowGlow {
+  0% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+  16.66% { box-shadow: 0 0 20px #ff8800, 0 0 40px #ff8800; }
+  33.33% { box-shadow: 0 0 20px #ffff00, 0 0 40px #ffff00; }
+  50% { box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00; }
+  66.66% { box-shadow: 0 0 20px #0088ff, 0 0 40px #0088ff; }
+  83.33% { box-shadow: 0 0 20px #8800ff, 0 0 40px #8800ff; }
+  100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+}
+
+@keyframes shakeEffect {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-2px) rotate(-1deg); }
+  20% { transform: translateX(2px) rotate(1deg); }
+  30% { transform: translateX(-2px) rotate(-1deg); }
+  40% { transform: translateX(2px) rotate(1deg); }
+  50% { transform: translateX(-1px) rotate(-0.5deg); }
+  60% { transform: translateX(1px) rotate(0.5deg); }
+  70% { transform: translateX(-1px) rotate(-0.5deg); }
+  80% { transform: translateX(1px) rotate(0.5deg); }
+  90% { transform: translateX(-0.5px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.8), 0 0 40px rgba(139, 92, 246, 0.6);
+  }
+}
+
+/* Hover effect para el contenedor del mapa */
+.map-container:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* 🆕 NUEVO: Tamaños de contenedor predefinidos */
+.map-container-small { 
+  width: 300px !important; 
+  height: 200px !important; 
+}
+
+.map-container-medium { 
+  width: 400px !important; 
+  height: 300px !important; 
+}
+
+.map-container-large { 
+  width: 500px !important; 
+  height: 400px !important; 
+}
+
+.map-container-xl { 
+  width: 600px !important; 
+  height: 500px !important; 
+}
+
+/* 🆕 NUEVO: Aspect ratios */
+.aspect-square { 
+  aspect-ratio: 1 / 1; 
+}
+
+.aspect-video { 
+  aspect-ratio: 16 / 9; 
+}
+
+.aspect-\[9\/16\] { 
+  aspect-ratio: 9 / 16; 
+}
+
+/* 🆕 NUEVO: Alineaciones */
+.ml-0 { margin-left: 0; }
+.mr-auto { margin-right: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.ml-auto { margin-left: auto; }
+.mr-0 { margin-right: 0; }
+
+/* 🆕 NUEVO: Sombras mejoradas */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* 🆕 NUEVO: Responsividad mejorada */
+@media (max-width: 768px) {
+  .map-container-xl,
+  .map-container-large {
+    width: 100% !important;
+    max-width: 400px !important;
+  }
+  
+  .map-container-medium {
+    width: 100% !important;
+    max-width: 350px !important;
+  }
+  
+  .map-container-small {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-container {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: 200px !important;
+  }
+}
+
+/* 🆕 NUEVO: Mejoras en el logo personalizado */
+.custom-logo {
+  transition: all 0.3s ease;
+}
+
+.custom-logo:hover {
+  transform: scale(1.1);
+}
+
+/* Asegurar que las animaciones sean suaves */
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 🆕 NUEVO: Mejoras en la accesibilidad */
+.map-container:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* 🆕 NUEVO: Clases para diferentes intensidades de pulso */
+.pulse-none .radar-ring { animation: none !important; }
+.pulse-low .radar-ring { animation: pulseLow 6s infinite; }
+.pulse-medium .radar-ring { animation: radarPulse 4s infinite; }
+.pulse-high .radar-ring { animation: pulseHigh 3s infinite; }
+.pulse-extreme .radar-ring { animation: pulseExtreme 2s infinite; }
+
+/* 🆕 NUEVO: Velocidades de animación */
+.speed-slow .radar-ring { animation-duration: 8s !important; }
+.speed-normal .radar-ring { animation-duration: 4s !important; }
+.speed-fast .radar-ring { animation-duration: 2s !important; }
+.speed-ultra .radar-ring { animation-duration: 1s !important; }
+
+/* 🆕 NUEVO: Efectos de hover */
+.hover-glow:hover { animation: glowPulse 1s infinite alternate; }
+.hover-thunder:hover { animation: thunderEffect 0.8s infinite; }
+.hover-rainbow:hover { animation: rainbowGlow 2s infinite; }
+.hover-shake:hover { animation: shakeEffect 0.5s infinite; }
+
+/* 🆕 NUEVO: Transiciones suaves para cambios de configuración */
+.map-container {
+  transition: all 0.3s ease;
+}
+
+.map-container iframe {
+  transition: filter 0.3s ease;
+}
+
+/* 🆕 NUEVO: Mejorar la visibilidad de efectos de truenos */
+.hover-thunder:hover {
+  position: relative;
+  z-index: 10;
+}
+
+/* 🆕 NUEVO: Clases de vista previa para el CMS */
+.preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+  position: relative;
+}
+
+.preview-container .radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid;
+  pointer-events: none;
+  opacity: 0.6;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.preview-container .marker-center {
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 🆕 NUEVO: Mejoras para el efecto de truenos */
+.hover-thunder:hover {
+  position: relative;
+  z-index: 10;
+  animation: thunderEffect 0.8s infinite;
+}
+
+.hover-thunder:hover::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: thunderFlash 0.8s infinite;
+  pointer-events: none;
+}
+
+@keyframes thunderFlash {
+  0%, 100% { opacity: 0; }
+  15%, 45%, 70% { opacity: 1; }
+  25%, 55% { opacity: 0.3; }
+}
+
+/* 🆕 NUEVO: Clase para deshabilitar todas las animaciones */
+.animations-disabled * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ⚡ OPTIMIZACIÓN: Respetar preferencias del usuario para animaciones reducidas */
+@media (prefers-reduced-motion: reduce) {
+  .map-container,
+  .map-container * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .radar-ring {
+    animation: none !important;
+    opacity: 0.4;
+  }
+
+  .hover-thunder:hover,
+  .hover-rainbow:hover,
+  .hover-shake:hover,
+  .hover-glow:hover {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KBF4RX89');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NQB8D9SHKX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NQB8D9SHKX');
+    </script>
+    <!-- End Google Analytics 4 -->
+    
+    <!-- ⚡ PRECONNECT PRIMERO - Deben ir antes que cualquier otro recurso -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://light-dolphin-42.clerk.accounts.dev" crossorigin />
+    <link rel="preconnect" href="https://web-scuticompany-back.onrender.com" crossorigin />
+    
+    <!-- DNS Prefetch para recursos secundarios -->
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="google96cb30ebe99b22ed" />
+
+    <!-- ⚡ Critical CSS inline - RENDER INMEDIATO sin bloqueo -->
+    <style>
+      /* Critical CSS - Estilos mínimos para First Contentful Paint */
+      :root{--bg-primary:#0a0a0a;--text-primary:#ffffff;--accent:#7c3aed}
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html{line-height:1.5;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+      /* Fallback fonts con métricas similares a Inter/Montserrat para evitar CLS */
+      body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
+      /* Navegación usa Montserrat - fallback a system fonts con métricas similares */
+      nav[role="navigation"]{font-family:Montserrat,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+      #root{min-height:100vh;display:flex;flex-direction:column}
+      /* Loading state */
+      .loading-spinner{display:flex;align-items:center;justify-content:center;min-height:100vh}
+      .loading-spinner::after{content:'';width:40px;height:40px;border:3px solid rgba(124,58,237,.3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      /* Above the fold - Header placeholder */
+      header{height:64px;background:rgba(10,10,10,.95);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+      /* Hero section placeholder */
+      .hero-placeholder{min-height:80vh;display:flex;align-items:center;justify-content:center}
+    </style>
+
+    <!-- Favicon - Optimizado para Google Search -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- Favicon para Google Search Results -->
+    <link rel="shortcut icon" href="/logoiconoresultadosgoogle.jpeg" type="image/jpeg" />
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#7c3aed" />
+
+    <!-- ⚡ Google Fonts - Carga NO bloqueante con fallback del sistema -->
+    <!-- Inter (cuerpo) + Montserrat (marca/navegación) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" /></noscript>
+    
+    <!-- SEO Básico - Los valores serán reemplazados por react-snap según la ruta -->
+    <meta name="description" content="Transformamos procesos con soluciones digitales innovadoras | La Solución en Perú: Software, IA y Automatización para PYMES. Obtén la tecnología y escala rápido" data-rh="true" />
+    <meta name="keywords" content="desarrollo de software, inteligencia artificial, IA, PYMES, automatización, software a medida, Perú, transformación digital" data-rh="true" />
+    <meta name="author" content="SCUTI Company" data-rh="true" />
+    <link rel="canonical" href="https://scuticompany.com/" data-rh="true" />
+
+    <!-- Open Graph - Los valores serán reemplazados por react-snap según la ruta -->
+    <meta property="og:type" content="website" data-rh="true" />
+    <meta property="og:url" content="https://scuticompany.com/" data-rh="true" />
+    <meta property="og:title" content="Desarrollo de Software e IA para PYMES | SCUTI Company Perú" data-rh="true" />
+    <meta property="og:description" content="Transformamos procesos con soluciones digitales innovadoras | Software, IA y Automatización para PYMES" data-rh="true" />
+    <meta property="og:image" content="https://scuticompany.com/logofondonegro.jpeg" data-rh="true" />
+    <meta property="og:image:width" content="1200" data-rh="true" />
+    <meta property="og:image:height" content="630" data-rh="true" />
+    <meta property="og:image:alt" content="SCUTI Company - Desarrollo de Software e IA para PYMES" data-rh="true" />
+    <meta property="og:site_name" content="SCUTI Company" data-rh="true" />
+    <meta property="og:locale" content="es_PE" data-rh="true" />
+
+    <!-- Twitter Card - Los valores serán reemplazados por react-snap según la ruta -->
+    <meta name="twitter:card" content="summary_large_image" data-rh="true" />
+    <meta name="twitter:site" content="@scuticompany" data-rh="true" />
+    <meta name="twitter:title" content="Desarrollo de Software e IA para PYMES | SCUTI Company Perú" data-rh="true" />
+    <meta name="twitter:description" content="Software, IA y Automatización para PYMES en Perú" data-rh="true" />
+    <meta name="twitter:image" content="https://scuticompany.com/logofondonegro.jpeg" data-rh="true" />
+    
+    <!-- Schema.org JSON-LD - Fallback para crawlers sin JS (React sobrescribe con data-rh="true") -->
+    <!-- NOTA: Los schemas principales están en SchemaOrg.tsx y se inyectan via React Helmet -->
+    
+    <!-- Robots -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <title data-rh="true">Desarrollo de Software e IA para PYMES | SCUTI Company Perú</title>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KBF4RX89"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <!-- Placeholder mientras carga React - Mejora LCP -->
+    <div id="root">
+      <div class="loading-spinner" aria-label="Cargando..."></div>
+    </div>
+    <div id="modal-root"></div>
+    
+    <!-- ⚡ Script principal con modulepreload para cargar dependencias en paralelo -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

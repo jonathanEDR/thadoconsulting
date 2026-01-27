@@ -1,0 +1,947 @@
+/* ⚡ Google Fonts removido - Ahora se carga de forma no-bloqueante en index.html */
+/* Las fuentes de fallback del sistema se usarán mientras carga Inter */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset y configuración tipográfica moderna */
+@layer base {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    background: transparent;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background: transparent;
+  }
+  
+  #root {
+    background: transparent;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🎈 Animaciones de burbujas flotantes para logos */
+@keyframes logoEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Animación base de flotación (se sobrescribe con keyframes dinámicos) */
+@keyframes bubble-float-base {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -15px) scale(1.05);
+  }
+  50% {
+    transform: translate(-5px, -25px) scale(1);
+  }
+  75% {
+    transform: translate(-15px, -10px) scale(0.95);
+  }
+}
+
+/* Clase para contenedor de burbujas */
+.logos-bubble-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Clase para cada logo flotante */
+.logo-bubble {
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.5s ease, filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Clase de entrada */
+.logo-entrance {
+  animation: logoEntrance 0.8s ease-out forwards;
+}
+
+/* Clase base para logos mejorados */
+.logo-enhanced {
+  position: relative;
+  display: inline-block;
+}
+
+/* Efectos hover elegantes por categoría */
+.logo-bounce-elegant:hover {
+  animation-play-state: paused;
+  transform: translateY(-8px) scale(1.1);
+  filter: brightness(1.2);
+}
+
+.logo-pulse-smooth:hover {
+  animation-play-state: paused;
+  transform: scale(1.15);
+  filter: brightness(1.15) drop-shadow(0 4px 12px rgba(6, 182, 212, 0.4));
+}
+
+.logo-float-gentle:hover {
+  animation-play-state: paused;
+  transform: translateY(-10px) scale(1.1);
+  filter: brightness(1.1) drop-shadow(0 6px 16px rgba(34, 197, 94, 0.3));
+}
+
+.logo-glow-soft:hover {
+  animation-play-state: paused;
+  transform: scale(1.12);
+  filter: brightness(1.2) drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+}
+
+.logo-ai:hover {
+  animation-play-state: paused;
+  transform: scale(1.15) rotate(5deg);
+  filter: brightness(1.25) drop-shadow(0 0 24px rgba(168, 85, 247, 0.7));
+}
+
+.logo-scale-smooth:hover {
+  animation-play-state: paused;
+  transform: scale(1.18);
+  filter: brightness(1.15);
+}
+
+.logo-wobble-gentle:hover {
+  animation-play-state: paused;
+  transform: scale(1.1) rotate(-3deg);
+  filter: brightness(1.1);
+}
+
+.logo-lift-elegant:hover {
+  animation-play-state: paused;
+  transform: translateY(-12px) scale(1.12);
+  filter: brightness(1.15) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2));
+}
+
+/* Intensidades de hover */
+.hover-light:hover {
+  transform-origin: center;
+}
+
+.hover-normal:hover {
+  transform-origin: center;
+}
+
+.hover-strong:hover {
+  transform-origin: center;
+  filter: brightness(1.3) !important;
+}
+
+/* Efectos de glow */
+.glow-enabled:hover {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.glow-disabled:hover {
+  box-shadow: none;
+}
+
+/* Sin hover */
+.logo-no-hover {
+  pointer-events: none;
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeft {
+  from { 
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from { 
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+
+
+/* Animación para rotar todo el contenedor de logos */
+/* KEYFRAMES DE ENGRANAJE ELIMINADOS */
+
+/* CARRUSEL INFINITO ELIMINADO - Solo animaciones individuales */
+/* logoFadeScroll eliminado - no se usa en ningún componente */
+
+/* Estilos personalizados para Web Scuti */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200;
+}
+
+.btn-primary:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300;
+}
+
+/* Estilos específicos para tarjetas de soluciones - prioridad sobre otros estilos */
+.solutions-card {
+  /* Asegurar que los estilos inline del CMS tengan prioridad */
+  background: var(--solutions-card-bg, transparent) !important;
+}
+
+/* Clases de utilidad de animación */
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.6s ease-out;
+}
+
+.animate-slideLeft {
+  animation: slideLeft 0.5s ease-out;
+}
+
+.animate-slideRight {
+  animation: slideRight 0.5s ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.4s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+
+
+/* Animaciones específicas para logos individuales - ELIMINADAS LAS DE ENGRANAJE */
+
+/* CLASES DE CARRUSEL ELIMINADAS - Solo animaciones individuales básicas */
+
+/* CLASES DE CARRUSEL COMPLETAMENTE ELIMINADAS */
+
+/* Logos completamente estáticos - SIN animaciones complejas */
+.logo-static {
+  animation: none !important;
+  transform: none !important;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* CLASES DE ENGRANAJE Y CARRUSEL ELIMINADAS */
+
+/* Mejoras de performance */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Estados de interacción mejorados */
+.interactive-element {
+  @apply transition-all duration-200 transform hover:scale-105 active:scale-95;
+}
+
+/* Gradientes personalizados */
+.gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Fix para evitar doble espaciado en dashboard */
+.dashboard-layout {
+  margin: 0 !important;
+  position: relative;
+}
+
+.dashboard-content {
+  padding-left: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Asegurar que el sidebar no interfiera */
+.sidebar-fixed {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 30;
+}
+
+/* Contenido principal sin conflictos */
+.main-content {
+  min-height: 100vh;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* ========================================
+   ESTILOS PÁGINAS PÚBLICAS
+   ======================================== */
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Overflow control ya definido en @layer base */
+
+/* Clases de utilidad para control de overflow */
+.no-overflow-x {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+.container-safe {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Header optimizations for desktop/mobile */
+@media (min-width: 640px) {
+  .header-desktop-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+}
+
+/* Gradiente animado */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+/* Background scroll animation */
+@keyframes backgroundScroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(40px);
+  }
+}
+
+/* float ya definido arriba en línea 228 - eliminado duplicado */
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+}
+
+/* ========================================
+   📝 BLOG POST - ESTILOS PREMIUM
+   ======================================== */
+
+/* === CALL-OUT BOXES === */
+/* Caja de información/tip */
+.blog-callout {
+  @apply relative pl-6 pr-5 py-4 my-6 rounded-r-xl;
+  @apply border-l-4;
+  @apply bg-blue-50 border-blue-500 dark:bg-blue-900/20 dark:border-blue-400;
+}
+
+.blog-callout::before {
+  content: "💡";
+  @apply absolute -left-3 top-4 text-lg;
+  @apply bg-white dark:bg-gray-900 rounded-full p-1;
+}
+
+/* Caja de advertencia */
+.blog-callout-warning {
+  @apply relative pl-6 pr-5 py-4 my-6 rounded-r-xl;
+  @apply border-l-4;
+  @apply bg-amber-50 border-amber-500 dark:bg-amber-900/20 dark:border-amber-400;
+}
+
+.blog-callout-warning::before {
+  content: "⚠️";
+  @apply absolute -left-3 top-4 text-lg;
+  @apply bg-white dark:bg-gray-900 rounded-full p-1;
+}
+
+/* Caja de éxito/solución */
+.blog-callout-success {
+  @apply relative pl-6 pr-5 py-4 my-6 rounded-r-xl;
+  @apply border-l-4;
+  @apply bg-emerald-50 border-emerald-500 dark:bg-emerald-900/20 dark:border-emerald-400;
+}
+
+.blog-callout-success::before {
+  content: "✅";
+  @apply absolute -left-3 top-4 text-lg;
+  @apply bg-white dark:bg-gray-900 rounded-full p-1;
+}
+
+/* Caja de error/pérdida */
+.blog-callout-error {
+  @apply relative pl-6 pr-5 py-4 my-6 rounded-r-xl;
+  @apply border-l-4;
+  @apply bg-red-50 border-red-500 dark:bg-red-900/20 dark:border-red-400;
+}
+
+.blog-callout-error::before {
+  content: "❌";
+  @apply absolute -left-3 top-4 text-lg;
+  @apply bg-white dark:bg-gray-900 rounded-full p-1;
+}
+
+/* === TARJETAS DE CASO DE ESTUDIO === */
+.blog-case-study {
+  @apply relative my-8 p-6 rounded-2xl;
+  @apply bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50;
+  @apply border border-gray-200 dark:border-gray-700;
+  @apply shadow-lg;
+}
+
+.blog-case-study::before {
+  content: "📋 Caso Real";
+  @apply absolute -top-3 left-6 px-3 py-1 text-xs font-bold uppercase tracking-wider;
+  @apply bg-purple-600 text-white rounded-full;
+}
+
+.blog-case-study-title {
+  @apply text-xl font-bold mt-4 mb-3;
+  @apply text-gray-900 dark:text-white;
+}
+
+.blog-case-study-content {
+  @apply text-gray-700 dark:text-gray-300 leading-relaxed;
+}
+
+/* === DATOS FINANCIEROS SEMÁNTICOS === */
+/* Pérdida/Negativo - Rojo */
+.blog-money-loss {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold;
+  @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+}
+
+.blog-money-loss::before {
+  content: "↓";
+  @apply text-red-500 font-bold;
+}
+
+/* Ganancia/Positivo - Verde */
+.blog-money-gain {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold;
+  @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400;
+}
+
+.blog-money-gain::before {
+  content: "↑";
+  @apply text-emerald-500 font-bold;
+}
+
+/* Dato destacado neutral */
+.blog-highlight-stat {
+  @apply inline-block px-3 py-1 rounded-lg font-bold text-lg;
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300;
+}
+
+/* === CAJA DE RESUMEN/CONCLUSIÓN === */
+.blog-summary-box {
+  @apply my-8 p-6 rounded-2xl;
+  @apply bg-gradient-to-r from-purple-50 via-blue-50 to-cyan-50;
+  @apply dark:from-purple-900/20 dark:via-blue-900/20 dark:to-cyan-900/20;
+  @apply border-2 border-purple-200 dark:border-purple-800;
+}
+
+.blog-summary-box-title {
+  @apply flex items-center gap-2 text-lg font-bold mb-4;
+  @apply text-purple-800 dark:text-purple-300;
+}
+
+.blog-summary-box-title::before {
+  content: "📌";
+}
+
+/* === CITA DESTACADA (BLOCKQUOTE PREMIUM) === */
+.blog-quote-premium {
+  @apply relative my-8 pl-8 pr-6 py-6;
+  @apply border-l-4 border-purple-500 dark:border-purple-400;
+  @apply bg-gray-50 dark:bg-gray-800/50 rounded-r-xl;
+  @apply italic text-lg;
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.blog-quote-premium::before {
+  content: "\201C";
+  @apply absolute top-2 left-2 text-5xl leading-none;
+  @apply text-purple-300 dark:text-purple-700;
+}
+
+/* === LISTA DE PUNTOS CLAVE === */
+.blog-key-points {
+  @apply my-6 p-5 rounded-xl;
+  @apply bg-gray-50 dark:bg-gray-800/40;
+  @apply border border-gray-200 dark:border-gray-700;
+}
+
+.blog-key-points-title {
+  @apply flex items-center gap-2 font-bold text-base mb-3;
+  @apply text-gray-900 dark:text-white;
+}
+
+.blog-key-points-title::before {
+  content: "🔑";
+}
+
+.blog-key-points ul {
+  @apply space-y-2 ml-0 list-none;
+}
+
+.blog-key-points li {
+  @apply flex items-start gap-3 text-gray-700 dark:text-gray-300;
+}
+
+.blog-key-points li::before {
+  content: "→";
+  @apply text-purple-500 dark:text-purple-400 font-bold flex-shrink-0 mt-0.5;
+}
+
+/* === COMPARATIVA VISUAL === */
+.blog-comparison {
+  @apply my-8 grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.blog-comparison-bad {
+  @apply p-5 rounded-xl;
+  @apply bg-red-50 dark:bg-red-900/10;
+  @apply border-2 border-red-200 dark:border-red-800;
+}
+
+.blog-comparison-bad-title {
+  @apply flex items-center gap-2 font-bold text-red-700 dark:text-red-400 mb-3;
+}
+
+.blog-comparison-bad-title::before {
+  content: "❌";
+}
+
+.blog-comparison-good {
+  @apply p-5 rounded-xl;
+  @apply bg-emerald-50 dark:bg-emerald-900/10;
+  @apply border-2 border-emerald-200 dark:border-emerald-800;
+}
+
+.blog-comparison-good-title {
+  @apply flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-400 mb-3;
+}
+
+.blog-comparison-good-title::before {
+  content: "✅";
+}
+
+/* === NÚMERO DESTACADO GRANDE === */
+.blog-big-number {
+  @apply inline-flex flex-col items-center justify-center;
+  @apply px-6 py-4 rounded-2xl my-4;
+  @apply bg-gradient-to-br from-purple-600 to-blue-600;
+  @apply text-white shadow-lg;
+}
+
+.blog-big-number-value {
+  @apply text-4xl md:text-5xl font-black;
+}
+
+.blog-big-number-label {
+  @apply text-sm opacity-90 mt-1;
+}
+
+/* === TABLAS PREMIUM === */
+.blog-table-premium {
+  @apply w-full my-6 border-collapse overflow-hidden rounded-xl;
+  @apply shadow-sm;
+}
+
+.blog-table-premium thead {
+  @apply bg-gradient-to-r from-purple-600 to-blue-600;
+}
+
+.blog-table-premium thead th {
+  @apply px-4 py-4 text-left font-bold text-white text-sm uppercase tracking-wider;
+  @apply border-none;
+}
+
+.blog-table-premium tbody tr {
+  @apply transition-colors duration-150;
+}
+
+/* Zebra stripes - Light mode */
+.blog-table-premium tbody tr:nth-child(odd) {
+  @apply bg-white;
+}
+
+.blog-table-premium tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Zebra stripes - Dark mode */
+.dark .blog-table-premium tbody tr:nth-child(odd) {
+  @apply bg-gray-800;
+}
+
+.dark .blog-table-premium tbody tr:nth-child(even) {
+  @apply bg-gray-800/60;
+}
+
+/* Hover en filas */
+.blog-table-premium tbody tr:hover {
+  @apply bg-blue-50 dark:bg-blue-900/20;
+}
+
+.blog-table-premium td {
+  @apply px-4 py-3;
+  @apply text-gray-700 dark:text-gray-300;
+  @apply border-b border-gray-100 dark:border-gray-700;
+}
+
+/* Eliminar bordes verticales */
+.blog-table-premium td,
+.blog-table-premium th {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Primera columna destacada */
+.blog-table-premium td:first-child {
+  @apply font-medium text-gray-900 dark:text-white;
+}
+
+/* === ESTILOS PROSE OVERRIDE PARA TABLAS === */
+.prose table {
+  @apply w-full my-6 border-collapse overflow-hidden rounded-xl shadow-sm;
+}
+
+.prose thead {
+  @apply bg-gradient-to-r from-purple-600 to-blue-600;
+}
+
+.prose thead th {
+  @apply px-4 py-4 text-left font-bold text-white text-sm uppercase tracking-wider !important;
+  border: none !important;
+}
+
+.prose tbody tr:nth-child(odd) {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.prose tbody tr:nth-child(even) {
+  @apply bg-gray-50 dark:bg-gray-800/60;
+}
+
+.prose tbody tr:hover {
+  @apply bg-blue-50 dark:bg-blue-900/20;
+}
+
+.prose td {
+  @apply px-4 py-3 text-gray-700 dark:text-gray-300;
+  @apply border-b border-gray-100 dark:border-gray-700;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.prose td:first-child {
+  @apply font-medium text-gray-900 dark:text-white;
+}
+
+/* === ESTILOS PROSE OVERRIDE PARA BLOCKQUOTES === */
+.prose blockquote {
+  @apply relative my-8 pl-8 pr-6 py-6 not-italic;
+  @apply border-l-4 border-purple-500 dark:border-purple-400;
+  @apply bg-gradient-to-r from-purple-50/80 to-transparent dark:from-purple-900/20 dark:to-transparent;
+  @apply rounded-r-xl;
+  @apply text-gray-700 dark:text-gray-300;
+  font-style: normal !important;
+}
+
+.prose blockquote::before {
+  content: "\201C";
+  @apply absolute top-2 left-2 text-5xl leading-none font-serif;
+  @apply text-purple-300 dark:text-purple-700;
+}
+
+.prose blockquote p {
+  @apply text-lg leading-relaxed m-0;
+}
+
+.prose blockquote p:first-child {
+  @apply mt-0;
+}
+
+.prose blockquote p:last-child {
+  @apply mb-0;
+}
+
+/* === LISTAS CON MEJOR ESTILO === */
+.prose ul {
+  @apply my-6 space-y-3;
+}
+
+.prose ol {
+  @apply my-6 space-y-3;
+}
+
+.prose li {
+  @apply text-gray-700 dark:text-gray-300 leading-relaxed;
+}
+
+.prose li::marker {
+  @apply text-purple-600 dark:text-purple-400 font-bold;
+}
+
+/* === LINKS CON ESTILO MEJORADO === */
+.prose a {
+  @apply text-purple-600 dark:text-purple-400 font-medium no-underline;
+  @apply transition-all duration-200;
+  @apply hover:text-purple-700 dark:hover:text-purple-300;
+  @apply hover:underline underline-offset-4;
+}
+
+/* === SEPARADORES ELEGANTES === */
+.prose hr {
+  @apply my-12 border-none h-px;
+  @apply bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent;
+}
+
+/* === IMÁGENES CON CAPTION === */
+.prose figure {
+  @apply my-8;
+}
+
+.prose figure img {
+  @apply rounded-xl shadow-lg mx-auto;
+}
+
+.prose figcaption {
+  @apply text-center text-sm text-gray-500 dark:text-gray-400 mt-3 italic;
+}
+
+/* ========================================
+   📖 BLOG POST - LEGIBILIDAD MEJORADA
+   ======================================== */
+
+/* Fondo suavizado para modo oscuro */
+.dark .blog-post-content {
+  background-color: #1a1a1a;
+}
+
+/* Contenedor de artículo con ancho óptimo */
+.blog-article-content {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Texto off-white para modo oscuro (menos cansancio visual) */
+.dark .prose p,
+.dark .prose li,
+.dark .prose span {
+  color: #d4d4d4 !important;
+}
+
+/* Texto oscuro para modo claro (legibilidad óptima) */
+.prose p,
+.prose li,
+.prose span {
+  color: #374151 !important; /* gray-700 de Tailwind */
+}
+
+/* Line-height mejorado para lectura */
+.prose p {
+  line-height: 1.8 !important;
+  margin-bottom: 1.25rem !important;
+}
+
+/* Encabezados H2 con color de acento */
+.prose h2 {
+  @apply text-purple-700 dark:text-purple-400;
+  margin-top: 2.5rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+/* Espaciado entre secciones */
+.prose h2 + p {
+  margin-top: 1rem;
+}
+
+.prose h3 + p {
+  margin-top: 0.75rem;
+}
+
+/* Transiciones suaves */
+.blog-post-container * {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ========================================
+   📌 SIDEBAR STICKY - FIX
+   ======================================== */
+
+/* Contenedor del grid debe permitir sticky */
+.blog-grid-container {
+  display: grid;
+  align-items: start; /* Crítico para que sticky funcione */
+}
+
+/* Sidebar sticky - sin max-height para adaptarse al contenido */
+.blog-sidebar-sticky {
+  position: sticky;
+  top: 7rem; /* 112px = top-28 */
+}
+
+/* Asegurar que aside tenga altura automática y align-self: start */
+.blog-sidebar-aside {
+  align-self: flex-start;
+  height: auto;
+}
+
+/* Fix para scroll interno del TOC */
+.toc-scroll-container {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+}
+
+.toc-scroll-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 2px;
+}
+
+.toc-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* ========================================
+   📝 TOC - FUENTE MONTSERRAT (marca)
+   ======================================== */
+
+/* Aplicar Montserrat a todo el TOC */
+.table-of-contents,
+.table-of-contents * {
+  font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+.table-of-contents h3,
+.table-of-contents .toc-title {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.table-of-contents button,
+.table-of-contents a {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* También para el panel flotante del TOC */
+.toc-nav,
+.toc-nav * {
+  font-family: 'Montserrat', system-ui, sans-serif;
+}
+

@@ -1,0 +1,78 @@
+/* Utilidades CSS para gradientes en bordes */
+
+/* Clase para botones con bordes (gradientes o sólidos) - Técnica dual-background */
+.gradient-border-button {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  padding: 0.375rem 0.75rem;
+  transition: all 0.3s ease;
+  /* Técnica dual-background: fondo de la página + borde gradiente */
+  background: 
+    linear-gradient(var(--color-background, #111827), var(--color-background, #111827)) padding-box,
+    var(--gradient-border, #8B5CF6) border-box;
+}
+
+/* Hover effect - cambiar el fondo interior */
+.gradient-border-button:hover {
+  background: 
+    linear-gradient(var(--gradient-border-hover, var(--color-contact-hover-bg, #8B5CF6)), var(--gradient-border-hover, var(--color-contact-hover-bg, #8B5CF6))) padding-box,
+    var(--gradient-border, #8B5CF6) border-box;
+  color: var(--color-contact-hover-text, #FFFFFF);
+}
+
+/* Clase legacy para compatibilidad */
+.gradient-border {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 2px; /* Grosor del borde */
+  border-radius: 9999px; /* rounded-full */
+  transition: all 0.3s ease;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-border, linear-gradient(90deg, #06B6D4, #8B5CF6));
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-out;
+}
+
+/* Para botones de contacto con gradientes (legacy) */
+.contact-button-gradient {
+  position: relative;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+.contact-button-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: var(--gradient-border, linear-gradient(90deg, #06B6D4, #8B5CF6));
+}
+
+/* Hover effects para gradientes */
+.contact-button-gradient:hover::before {
+  background: var(--gradient-border-hover, var(--gradient-border, linear-gradient(90deg, #06B6D4, #8B5CF6)));
+}
+
+.contact-button-gradient:hover {
+  background: var(--gradient-border-hover, var(--gradient-border, linear-gradient(90deg, #06B6D4, #8B5CF6)));
+  color: var(--hover-text-color, #ffffff);
+}

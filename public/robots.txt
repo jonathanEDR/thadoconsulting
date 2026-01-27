@@ -1,0 +1,26 @@
+# Robots.txt para Scuti Company
+# https://scuticompany.com
+
+User-agent: *
+Allow: /
+
+# Bloquear rutas de admin y API privadas
+Disallow: /admin/
+Disallow: /dashboard/
+
+# Bloquear filtros de blog (no son páginas, son filtros de la página principal)
+Disallow: /blog/category/
+Disallow: /blog/categoria/
+Disallow: /blog/tag/
+Disallow: /blog/tags/
+
+# Bloquear parámetros de filtro
+Disallow: /*?categoria=
+Disallow: /*?tag=
+Disallow: /*?search=
+
+# Sitemaps
+Sitemap: https://scuticompany.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

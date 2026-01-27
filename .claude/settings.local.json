@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/pc1/Desktop/web-scuti/**)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(dir:*)",
+      "Bash(cp:*)",
+      "Bash(npm run build:simple:*)",
+      "Bash(wc -l:*)",
+      "Bash(git stash:*)",
+      "Bash(npx tsc:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

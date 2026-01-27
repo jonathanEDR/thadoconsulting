@@ -1,0 +1,444 @@
+/* ✍️ Estilos Profesionales para el Editor TipTap - Estilo Medium/Notion */
+
+/* Editor en el CMS */
+.ProseMirror {
+  outline: none;
+  min-height: 400px;
+  padding: 2rem 3rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #1a202c;
+}
+
+/* Dark mode */
+.dark .ProseMirror {
+  color: #e2e8f0;
+}
+
+/* Párrafos con mejor espaciado */
+.ProseMirror p {
+  margin: 1.25rem 0;
+  line-height: 1.75;
+  color: inherit;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+/* Encabezados con tipografía profesional */
+.ProseMirror h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin: 2rem 0 1.5rem 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #000;
+}
+
+.dark .ProseMirror h1 {
+  color: #fff;
+}
+
+.ProseMirror h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 1.75rem 0 1.25rem 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #000;
+}
+
+.dark .ProseMirror h2 {
+  color: #fff;
+}
+
+.ProseMirror h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  line-height: 1.4;
+  color: #1a202c;
+}
+
+.dark .ProseMirror h3 {
+  color: #e2e8f0;
+}
+
+.ProseMirror h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.875rem 0;
+  color: #2d3748;
+}
+
+.dark .ProseMirror h4 {
+  color: #cbd5e0;
+}
+
+.ProseMirror h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.75rem 0;
+  color: #2d3748;
+}
+
+.dark .ProseMirror h5 {
+  color: #cbd5e0;
+}
+
+.ProseMirror h6 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 1rem 0 0.75rem 0;
+  color: #4a5568;
+}
+
+.dark .ProseMirror h6 {
+  color: #a0aec0;
+}
+
+/* Formato de texto */
+.ProseMirror strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+.ProseMirror em {
+  font-style: italic;
+  color: inherit;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Enlaces con mejor estilo */
+.ProseMirror a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ProseMirror a:hover {
+  color: #2563eb;
+  text-decoration-thickness: 2px;
+}
+
+.dark .ProseMirror a {
+  color: #60a5fa;
+}
+
+.dark .ProseMirror a:hover {
+  color: #93c5fd;
+}
+
+/* Listas con mejor espaciado y estilo */
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+  margin: 1.25rem 0;
+}
+
+.ProseMirror ul li {
+  margin: 0.5rem 0;
+  padding-left: 0.5rem;
+  line-height: 1.7;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+  margin: 1.25rem 0;
+}
+
+.ProseMirror ol li {
+  margin: 0.5rem 0;
+  padding-left: 0.5rem;
+  line-height: 1.7;
+}
+
+.ProseMirror ul ul,
+.ProseMirror ol ul,
+.ProseMirror ul ol,
+.ProseMirror ol ol {
+  margin: 0.5rem 0;
+}
+
+/* Citas con estilo elegante */
+.ProseMirror blockquote {
+  border-left: 4px solid #cbd5e0;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #4a5568;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.dark .ProseMirror blockquote {
+  border-left-color: #4a5568;
+  color: #a0aec0;
+}
+
+/* Código inline */
+.ProseMirror code {
+  background-color: #f7fafc;
+  color: #e53e3e;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9em;
+  border: 1px solid #e2e8f0;
+}
+
+.dark .ProseMirror code {
+  background-color: #2d3748;
+  color: #fc8181;
+  border-color: #4a5568;
+}
+
+/* Bloques de código */
+.ProseMirror pre {
+  background-color: #1a202c;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+}
+
+/* Resaltado de texto */
+.ProseMirror mark {
+  background-color: #fef3c7;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.dark .ProseMirror mark {
+  background-color: #92400e;
+  color: #fef3c7;
+}
+
+/* Imágenes con mejor presentación */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: block;
+}
+
+/* Línea horizontal */
+.ProseMirror hr {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin: 2rem 0;
+}
+
+.dark .ProseMirror hr {
+  border-top-color: #4a5568;
+}
+
+/* Alineación de texto */
+.ProseMirror [style*="text-align: left"] {
+  text-align: left;
+}
+
+.ProseMirror [style*="text-align: center"] {
+  text-align: center;
+}
+
+.ProseMirror [style*="text-align: right"] {
+  text-align: right;
+}
+
+.ProseMirror [style*="text-align: justify"] {
+  text-align: justify;
+}
+
+/* Placeholder con mejor estilo */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #cbd5e0;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
+
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #4a5568;
+}
+
+/* Selección de texto */
+.ProseMirror ::selection {
+  background-color: #bfdbfe;
+}
+
+.dark .ProseMirror ::selection {
+  background-color: #1e40af;
+}
+
+/* Focus state para accesibilidad */
+.ProseMirror:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Espaciado entre elementos consecutivos */
+.ProseMirror > * + * {
+  margin-top: 1rem;
+}
+
+.ProseMirror > h1 + *,
+.ProseMirror > h2 + *,
+.ProseMirror > h3 + * {
+  margin-top: 0.75rem;
+}
+
+/* Tablas profesionales con estilo moderno */
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 2rem 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  border: 1px solid #e2e8f0;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  min-width: 100px;
+}
+
+.dark .ProseMirror table td,
+.dark .ProseMirror table th {
+  border-color: #4a5568;
+}
+
+.ProseMirror table th {
+  background: linear-gradient(to bottom, #f7fafc, #edf2f7);
+  font-weight: 600;
+  color: #1a202c;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.dark .ProseMirror table th {
+  background: linear-gradient(to bottom, #2d3748, #1a202c);
+  color: #e2e8f0;
+}
+
+/* Efecto hover en filas de tabla */
+.ProseMirror table tbody tr {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.ProseMirror table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.dark .ProseMirror table tbody tr:hover {
+  background-color: #2d3748;
+}
+
+/* Zebra striping para mejor legibilidad */
+.ProseMirror table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.dark .ProseMirror table tbody tr:nth-child(even) {
+  background-color: #1f2937;
+}
+
+/* Celda seleccionada */
+.ProseMirror .selectedCell {
+  background-color: #dbeafe !important;
+  position: relative;
+}
+
+.dark .ProseMirror .selectedCell {
+  background-color: #1e3a8a !important;
+}
+
+/* Indicador de celda editable */
+.ProseMirror table td:focus,
+.ProseMirror table th:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+  background-color: #eff6ff;
+}
+
+.dark .ProseMirror table td:focus,
+.dark .ProseMirror table th:focus {
+  background-color: #1e3a8a;
+}
+
+/* Control de resize de columnas */
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #3b82f6;
+  cursor: col-resize;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ProseMirror table:hover .column-resize-handle {
+  opacity: 0.3;
+}
+
+.ProseMirror .column-resize-handle:hover {
+  opacity: 1 !important;
+}
+
+/* Videos responsive (iframes de YouTube, etc.) */
+.ProseMirror iframe {
+  max-width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación suave para elementos interactivos */
+.ProseMirror a,
+.ProseMirror button {
+  transition: all 0.2s ease-in-out;
+}
