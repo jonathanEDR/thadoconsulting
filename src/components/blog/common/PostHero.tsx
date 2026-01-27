@@ -217,13 +217,13 @@ export default function PostHero({
                 {showAuthor && (
                   <div className="flex items-center gap-2">
                     <div 
-                      className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5"
+                      className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center"
                       style={{ border: `2px solid ${avatarBorderColor}` }}
                     >
                       <img
-                        src={BRAND_AUTHOR.logo}
+                        src={BRAND_AUTHOR.logoDark}
                         alt={BRAND_AUTHOR.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                         width={28}
                         height={28}
                       />
@@ -342,11 +342,11 @@ export default function PostHero({
               <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
                 {/* Author - Siempre mostrar marca Thado Consulting */}
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border border-gray-200 dark:border-gray-700">
+                  <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 dark:border-gray-700">
                     <img
-                      src={BRAND_AUTHOR.logo}
+                      src={theme === 'dark' ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight}
                       alt={BRAND_AUTHOR.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                       width={24}
                       height={24}
                     />

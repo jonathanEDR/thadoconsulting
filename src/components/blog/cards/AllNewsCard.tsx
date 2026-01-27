@@ -101,9 +101,9 @@ export const AllNewsCard: React.FC<AllNewsCardProps> = ({
     return BRAND_AUTHOR.name;
   };
 
-  // 🏢 Helper para obtener el avatar del autor - Siempre logo
+  // 🏢 Helper para obtener el avatar del autor - Logo para fondo oscuro (overlay)
   const getAuthorAvatar = () => {
-    return BRAND_AUTHOR.logo;
+    return BRAND_AUTHOR.logoDark;
   };
 
   // Variante: Imagen con overlay (tarjetas laterales de la maqueta)
@@ -236,11 +236,11 @@ export const AllNewsCard: React.FC<AllNewsCardProps> = ({
           {/* Autor y fecha - Siempre marca Thado Consulting */}
           {config.showAuthor !== false && (
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-white/30">
+              <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-white/30">
                 <img 
                   src={getAuthorAvatar()} 
                   alt={getAuthorName()}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div>

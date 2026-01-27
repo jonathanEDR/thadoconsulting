@@ -5,12 +5,11 @@
  */
 
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, User, Eye, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, Eye, ArrowLeft } from 'lucide-react';
 import { CategoryBadge, ReadingTimeIndicator, LikeButton, FavoriteButton } from './';
-import { getImageUrl } from '../../../utils/imageUtils';
-import LazyImage from './LazyImage';
 import type { BlogPost } from '../../../types/blog';
 import { BRAND_AUTHOR } from '../../../config/brandConstants';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface PostHeaderProps {
   post: BlogPost;
@@ -18,6 +17,9 @@ interface PostHeaderProps {
 }
 
 export default function PostHeader({ post, className = '' }: PostHeaderProps) {
+  const { theme } = useTheme();
+  const logoUrl = theme === 'dark' ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight;
+  
   return (
     <header className={`post-header bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -56,11 +58,11 @@ export default function PostHeader({ post, className = '' }: PostHeaderProps) {
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
               {/* Author - Siempre marca Thado Consulting */}
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border-2 border-gray-200 dark:border-gray-700">
+                <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200 dark:border-gray-700">
                   <img
-                    src={BRAND_AUTHOR.logo}
+                    src={logoUrl}
                     alt={BRAND_AUTHOR.name}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                     width={32}
                     height={32}
                   />

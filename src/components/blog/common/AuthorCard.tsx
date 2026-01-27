@@ -83,7 +83,8 @@ export default function AuthorCard({
   // 🏢 Siempre usar datos de marca Thado Consulting
   const displayName = BRAND_AUTHOR.displayName;
   const bio = BRAND_AUTHOR.bio;
-  const avatarUrl = BRAND_AUTHOR.avatar;
+  // Seleccionar logo según tema
+  const avatarUrl = theme === 'dark' ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight;
   const website = BRAND_AUTHOR.website;
   const location = BRAND_AUTHOR.location;
   const expertise = BRAND_AUTHOR.expertise;
@@ -98,12 +99,12 @@ export default function AuthorCard({
   if (variant === 'compact') {
     const CompactContent = (
       <div className="flex items-center gap-3">
-        {/* Avatar - Siempre logo de marca */}
-        <div className={`w-12 h-12 ${avatarCompactShapeClass} overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-gray-200 dark:border-gray-700`}>
+        {/* Avatar - Logo de marca según tema */}
+        <div className={`w-12 h-12 ${avatarCompactShapeClass} overflow-hidden flex items-center justify-center border-2 border-gray-200 dark:border-gray-700`}>
           <img
-            src={BRAND_AUTHOR.logo}
+            src={avatarUrl}
             alt={BRAND_AUTHOR.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover"
           />
         </div>
         
@@ -148,13 +149,13 @@ export default function AuthorCard({
   // Variante por defecto (completa) - Wrapper condicional para hacerla clickeable
   const CardContent = (
     <div className="flex flex-col sm:flex-row items-start gap-6">
-      {/* Avatar - Siempre logo de marca */}
+      {/* Avatar - Logo de marca según tema */}
       <div className="flex-shrink-0">
-        <div className={`w-24 h-24 ${avatarShapeClass} overflow-hidden bg-white flex items-center justify-center p-2 border-4 border-white dark:border-gray-700 shadow-lg ring-2 ring-blue-500/20`}>
+        <div className={`w-24 h-24 ${avatarShapeClass} overflow-hidden flex items-center justify-center border-4 border-white dark:border-gray-700 shadow-lg ring-2 ring-blue-500/20`}>
           <img
-            src={BRAND_AUTHOR.logo}
+            src={avatarUrl}
             alt={BRAND_AUTHOR.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover"
           />
         </div>
       </div>

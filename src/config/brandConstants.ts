@@ -13,10 +13,12 @@ export const BRAND_AUTHOR = {
   firstName: 'Thado',
   lastName: 'Consulting',
   
-  // Visual - Logo/Avatar
-  logo: '/FAVICON.png',
-  avatar: '/FAVICON.png',
-  profileImage: '/FAVICON.png',
+  // Visual - Logo/Avatar (con opciones para diferentes fondos)
+  logo: '/ICONOS/ICONO_1_FONDO_BLANCO.png',  // Logo principal con fondo blanco
+  logoDark: '/ICONOS/ICONO_1_FONDO_NEGRO.png', // Logo para fondos oscuros
+  logoLight: '/ICONOS/ICONO_1_FONDO_BLANCO.png', // Logo para fondos claros
+  avatar: '/ICONOS/ICONO_1_FONDO_BLANCO.png',
+  profileImage: '/ICONOS/ICONO_1_FONDO_BLANCO.png',
   
   // Descripción y rol
   role: 'Consultoría Empresarial',
@@ -35,7 +37,8 @@ export const BRAND_AUTHOR = {
     facebook: 'https://www.facebook.com/thadoconsulting',
     instagram: 'https://www.instagram.com/thadoconsulting',
     twitter: 'https://twitter.com/thadoconsulting',
-    tiktok: ''
+    tiktok: '',
+    github: '' // No aplica para empresa de consultoría
   },
   
   // Expertise/Especialidades
@@ -51,7 +54,7 @@ export const BRAND_AUTHOR = {
   blogProfile: {
     displayName: 'Thado Consulting',
     bio: 'Thado Consulting es tu aliado estratégico en transformación digital y crecimiento empresarial. Expertos en planeamiento tributario, desarrollo de software y soluciones tecnológicas innovadoras.',
-    avatar: '/FAVICON.png',
+    avatar: '/ICONOS/ICONO_1_FONDO_BLANCO.png',
     isPublicProfile: false, // No redirigir a perfil de usuario
     website: 'https://www.thadoconsulting.com',
     location: 'Perú',
@@ -67,7 +70,8 @@ export const BRAND_AUTHOR = {
       facebook: 'https://www.facebook.com/thadoconsulting',
       instagram: 'https://www.instagram.com/thadoconsulting',
       twitter: 'https://twitter.com/thadoconsulting',
-      tiktok: ''
+      tiktok: '',
+      github: ''
     }
   }
 };
@@ -88,10 +92,11 @@ export function getBrandName(): string {
 }
 
 /**
- * Helper para obtener logo de marca
+ * Helper para obtener logo de marca según el tema
+ * @param isDark - Si el tema es oscuro
  */
-export function getBrandLogo(): string {
-  return BRAND_AUTHOR.logo;
+export function getBrandLogo(isDark?: boolean): string {
+  return isDark ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight;
 }
 
 /**

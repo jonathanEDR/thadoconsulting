@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, Clock, Eye, ArrowRight } from 'lucide-react';
 import type { BlogPost } from '../../../types/blog';
 import { BRAND_AUTHOR } from '../../../config/brandConstants';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface BlogCardEnhancedProps {
   post: BlogPost;
@@ -23,6 +24,8 @@ export const BlogCardEnhanced: React.FC<BlogCardEnhancedProps> = ({
   showAuthor = true,
   showStats = true
 }) => {
+  const { theme } = useTheme();
+  
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('es-ES', {
       year: 'numeric',
@@ -132,11 +135,11 @@ export const BlogCardEnhanced: React.FC<BlogCardEnhancedProps> = ({
           {/* Autor - Siempre marca Thado Consulting */}
           {showAuthor && (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center p-0.5 border border-gray-200 dark:border-gray-700">
+              <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 dark:border-gray-700">
                 <img
-                  src={BRAND_AUTHOR.logo}
+                  src={theme === 'dark' ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight}
                   alt={BRAND_AUTHOR.name}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div>

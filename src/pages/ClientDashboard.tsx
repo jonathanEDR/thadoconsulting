@@ -353,11 +353,11 @@ export default function ClientDashboard() {
                             {/* Autor y estadísticas - Siempre marca Thado Consulting */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1 border-2 border-white dark:border-gray-600 shadow-md">
+                                <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200 dark:border-gray-600 shadow-md">
                                   <img
-                                    src={BRAND_AUTHOR.logo}
+                                    src={isDark ? BRAND_AUTHOR.logoDark : BRAND_AUTHOR.logoLight}
                                     alt={BRAND_AUTHOR.name}
-                                    className="w-full h-full object-contain"
+                                    className="w-full h-full object-cover"
                                   />
                                 </div>
                                 <div className="flex flex-col">
