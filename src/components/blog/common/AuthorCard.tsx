@@ -4,7 +4,7 @@
  * 🏢 Siempre muestra información de marca Thado Consulting
  */
 
-import { User, Globe, Linkedin, Github, Mail, MapPin, Award, Facebook, Music } from 'lucide-react';
+import { Globe, Linkedin, Github, Mail, MapPin, Award, Facebook, Music } from 'lucide-react';
 import type { BlogAuthor } from '../../../types/blog';
 import { BRAND_AUTHOR } from '../../../config/brandConstants';
 

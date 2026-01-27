@@ -5,9 +5,9 @@
  */
 
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, User, Eye, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, Eye, ArrowLeft } from 'lucide-react';
 import { CategoryBadge, ReadingTimeIndicator, LikeButton, FavoriteButton } from './';
-import { getImageUrl } from '../../../utils/imageUtils';
+// getImageUrl ya no se usa - ahora usamos BRAND_AUTHOR para logos
 import LazyImage from './LazyImage';
 import type { BlogPost } from '../../../types/blog';
 import { useTheme } from '../../../contexts/ThemeContext';
