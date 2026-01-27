@@ -29,7 +29,7 @@ export const WelcomeNotification: React.FC<WelcomeNotificationProps> = ({
                 <span className="text-2xl">🎉</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold">¡Bienvenido a SCUTI!</h3>
+                <h3 className="text-xl font-bold">¡Bienvenido a THADO!</h3>
                 <p className="text-blue-100 text-sm">Tu cuenta ha sido configurada</p>
               </div>
             </div>

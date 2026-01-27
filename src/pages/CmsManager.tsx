@@ -9,7 +9,7 @@ const CmsManagerPage: React.FC = () => {
     <SignedIn>
       <DashboardSeo
         pageName="cms"
-        fallbackTitle="CMS Manager - SCUTI Company"
+        fallbackTitle="CMS Manager - THADO Consulting"
         fallbackDescription="Gestor de contenido, SEO y temas para tu página web."
       >
         <SmartDashboardLayout>

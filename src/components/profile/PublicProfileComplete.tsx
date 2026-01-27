@@ -145,13 +145,13 @@ const PublicProfileComplete: React.FC = () => {
 
   const handleShare = async () => {
     const url = window.location.href;
-    const title = `Perfil de ${profile?.displayName || username} - SCUTI Company`;
+    const title = `Perfil de ${profile?.displayName || username} - THADO Consulting`;
 
     if (navigator.share) {
       try {
         await navigator.share({
           title,
-          text: profile?.bio || 'Conoce este perfil en SCUTI Company',
+          text: profile?.bio || 'Conoce este perfil en THADO Consulting',
           url
         });
         return;

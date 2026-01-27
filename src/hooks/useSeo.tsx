@@ -52,11 +52,11 @@ interface UseSeoReturn {
 }
 
 const DEFAULT_SEO: SeoData = {
-  metaTitle: 'SCUTI Company',
-  metaDescription: 'Empresa líder en desarrollo de software en Perú.',
-  keywords: ['desarrollo', 'software', 'tecnología', 'IA', 'aplicaciones'],
-  ogTitle: 'SCUTI Company',
-  ogDescription: 'Empresa líder en desarrollo de software en Perú.',
+  metaTitle: 'THADO Consulting',
+  metaDescription: 'Servicios contables, tributarios y financieros para MYPES en Perú.',
+  keywords: ['contabilidad', 'tributación', 'SUNAT', 'MYPES', 'Perú'],
+  ogTitle: 'THADO Consulting',
+  ogDescription: 'Servicios contables, tributarios y financieros para MYPES en Perú.',
   ogImage: ''
 };
 
@@ -285,7 +285,7 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
         {seoData.ogImageHeight && <meta property="og:image:height" content={seoData.ogImageHeight} />}
         {seoData.ogImageAlt && <meta property="og:image:alt" content={seoData.ogImageAlt} />}
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="SCUTI Company" />
+        <meta property="og:site_name" content="THADO Consulting" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />

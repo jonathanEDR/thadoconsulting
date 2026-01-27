@@ -1869,7 +1869,7 @@ const ValuesConfigSection: React.FC<ValuesConfigSectionProps> = ({
                 value={whyChooseUs.title || ''}
                 onChange={(e) => updateContent('whyChooseUs.title', e.target.value)}
                 className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                placeholder="Ej: ¿Por qué elegir SCUTI Company?"
+                placeholder="Ej: ¿Por qué elegir THADO Consulting?"
               />
             </div>
 

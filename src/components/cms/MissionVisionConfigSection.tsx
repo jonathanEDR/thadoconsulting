@@ -294,7 +294,7 @@ const MissionVisionConfigSection: React.FC<MissionVisionConfigSectionProps> = ({
               value={history.title || ''}
               onChange={(e) => updateContent('history.title', e.target.value)}
               className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              placeholder="Ej: ¿Cómo nació SCUTI Company?"
+              placeholder="Ej: ¿Cómo nació THADO Consulting?"
             />
           </div>
 
@@ -311,11 +311,11 @@ const MissionVisionConfigSection: React.FC<MissionVisionConfigSectionProps> = ({
               onChange={(e) => updateContent('history.description', e.target.value)}
               className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none"
               rows={8}
-              placeholder="SCUTI Company nació de una visión clara: cerrar la brecha tecnológica que enfrentan las PYMES peruanas...
+              placeholder="THADO Consulting nació de una visión clara: cerrar la brecha tecnológica que enfrentan las PYMES peruanas...
 
 Fundada por un equipo de profesionales apasionados por la tecnología y el emprendimiento...
 
-Hoy, SCUTI Company se posiciona como una empresa líder en desarrollo de software e inteligencia artificial en Perú..."
+Hoy, THADO Consulting se posiciona como una empresa líder en desarrollo de software e inteligencia artificial en Perú..."
             />
           </div>
 

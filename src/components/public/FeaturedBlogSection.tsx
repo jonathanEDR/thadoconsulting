@@ -133,11 +133,11 @@ const FeaturedBlogSection = ({ data = DEFAULT_FEATURED_BLOG_CONFIG, themeConfig 
 
   // Función para obtener nombre completo del autor
   const getAuthorName = (author: BlogPost['author']) => {
-    if (!author) return 'SCUTI Company';
+    if (!author) return 'THADO Consulting';
     const firstName = author.firstName || '';
     const lastName = author.lastName || '';
     const fullName = `${firstName} ${lastName}`.trim();
-    return fullName || author.username || 'SCUTI Company';
+    return fullName || author.username || 'THADO Consulting';
   };
 
   return (

@@ -442,7 +442,7 @@ export default function MyMessages() {
               {secureFilteredMessages.map((message) => {
                 // 🎯 Usar helper mejorado para identificar mensajes del equipo
                 const isTeamMessage = isMessageFromTeam(message);
-                const displayName = isTeamMessage ? 'SCUTI Company' : message.autor.nombre;
+                const displayName = isTeamMessage ? 'THADO Consulting' : message.autor.nombre;
                 const avatarInitial = isTeamMessage ? 'SC' : message.autor.nombre.charAt(0).toUpperCase();
                 
                 return (
@@ -464,7 +464,7 @@ export default function MyMessages() {
                         >
                           <img 
                             src={businessLogo}
-                            alt="SCUTI Company"
+                            alt="THADO Consulting"
                             className="w-9 h-9 object-contain"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
@@ -501,7 +501,7 @@ export default function MyMessages() {
                                 className="w-3 h-3 object-contain"
                                 onError={(e) => e.currentTarget.style.display = 'none'}
                               />
-                              SCUTI COMPANY
+                              THADO CONSULTING
                             </span>
                           )}
                           {!message.leido && (

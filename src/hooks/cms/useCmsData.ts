@@ -121,20 +121,20 @@ export const useCmsData = (pageSlug: string = 'home') => {
               };
             case 'blog-post-detail':
               return {
-                metaTitle: 'Artículo del Blog - SCUTI Company',
+                metaTitle: 'Artículo del Blog - THADO Consulting',
                 metaDescription: 'Lee nuestros artículos sobre tecnología, desarrollo de software e inteligencia artificial.',
                 keywords: ['blog', 'artículo', 'tecnología', 'software', 'inteligencia artificial'],
-                ogTitle: 'Blog - SCUTI Company',
+                ogTitle: 'Blog - THADO Consulting',
                 ogDescription: 'Contenido educativo sobre tecnología y desarrollo',
                 ogImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage.dark,
                 twitterCard: 'summary_large_image'
               };
             default:
               return {
-                metaTitle: 'SCUTI Company',
+                metaTitle: 'THADO Consulting',
                 metaDescription: 'Soluciones tecnológicas inteligentes',
                 keywords: ['tecnología', 'software'],
-                ogTitle: 'SCUTI Company',
+                ogTitle: 'THADO Consulting',
                 ogDescription: 'Soluciones tecnológicas',
                 ogImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage.dark,
                 twitterCard: 'summary_large_image'
@@ -175,7 +175,7 @@ export const useCmsData = (pageSlug: string = 'home') => {
                 ctaText: 'Conocer más',
                 ctaLink: '/nosotros',
                 backgroundImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage,
-                backgroundImageAlt: 'Equipo SCUTI Company',
+                backgroundImageAlt: 'Equipo THADO Consulting',
                 styles: DEFAULT_PAGE_CONFIG.hero.styles
               };
             case 'contact':
@@ -186,7 +186,7 @@ export const useCmsData = (pageSlug: string = 'home') => {
                 ctaText: 'Enviar mensaje',
                 ctaLink: '/contacto',
                 backgroundImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage,
-                backgroundImageAlt: 'Contacto SCUTI Company',
+                backgroundImageAlt: 'Contacto THADO Consulting',
                 styles: DEFAULT_PAGE_CONFIG.hero.styles
               };
             case 'blog':
@@ -197,18 +197,18 @@ export const useCmsData = (pageSlug: string = 'home') => {
                 ctaText: 'Ver Noticias',
                 ctaLink: '/blog',
                 backgroundImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage,
-                backgroundImageAlt: 'Blog Web Scuti',
+                backgroundImageAlt: 'Blog THADO Consulting',
                 styles: DEFAULT_PAGE_CONFIG.hero.styles
               };
             default:
               return {
-                title: 'SCUTI Company',
+                title: 'THADO Consulting',
                 subtitle: 'Tecnología Inteligente',
                 description: 'Transformamos empresas con soluciones digitales.',
                 ctaText: 'Comenzar',
                 ctaLink: '/',
                 backgroundImage: DEFAULT_PAGE_CONFIG.hero.backgroundImage,
-                backgroundImageAlt: 'SCUTI Company',
+                backgroundImageAlt: 'THADO Consulting',
                 styles: DEFAULT_PAGE_CONFIG.hero.styles
               };
           }

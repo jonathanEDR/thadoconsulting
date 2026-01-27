@@ -137,7 +137,7 @@ export const BlogCardEnhanced: React.FC<BlogCardEnhancedProps> = ({
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {post.author?.firstName 
                     ? `${post.author.firstName} ${post.author.lastName || ''}`.trim()
-                    : 'SCUTI Team'
+                    : 'THADO Team'
                   }
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">

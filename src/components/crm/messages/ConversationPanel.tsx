@@ -468,7 +468,7 @@ export const ConversationPanel: React.FC<ConversationPanelProps> = ({
                           <div className="w-7 h-7 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden flex-shrink-0 border border-green-500">
                             <img 
                               src="/FAVICON.png"
-                              alt="SCUTI"
+                              alt="THADO"
                               className="w-4 h-4 object-contain"
                               onError={(e) => {
                                 e.currentTarget.style.display = 'none';

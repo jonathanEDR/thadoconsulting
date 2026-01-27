@@ -379,7 +379,7 @@ export default function ClientConversationPanel({
               <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
                 <img 
                   src={businessLogo}
-                  alt="SCUTI Company"
+                  alt="THADO Consulting"
                   className="w-8 h-8 object-contain"
                   onError={(e) => {
                     // Fallback al ícono si la imagen falla
@@ -391,7 +391,7 @@ export default function ClientConversationPanel({
               </div>
               <div>
                 <h3 className="font-bold text-lg">
-                  {lead?.nombre || 'SCUTI Company'}
+                  {lead?.nombre || 'THADO Consulting'}
                 </h3>
                 <p className="text-sm text-white/80">
                   {lead?.tipoServicio || 'consultoria'}
@@ -478,7 +478,7 @@ export default function ClientConversationPanel({
                             >
                               <img 
                                 src={businessLogo}
-                                alt="SCUTI"
+                                alt="THADO"
                                 className="w-5 h-5 object-contain"
                                 onError={(e) => {
                                   e.currentTarget.style.display = 'none';
@@ -520,7 +520,7 @@ export default function ClientConversationPanel({
                                     : clientConfig.headerGradientFrom 
                                 }}
                               >
-                                SCUTI Company
+                                THADO Consulting
                               </span>
                             </div>
                           )}

@@ -20,15 +20,15 @@ const distPath = path.join(__dirname, '../dist');
 
 // Configuración
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://web-scuticompany-back.onrender.com';
+let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
 // Remover /api del final si existe para evitar duplicación
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 
 // ✅ Configuración centralizada - Usar variables de entorno con fallbacks
 const CONFIG = {
   apiUrl: baseApiUrl,
-  siteUrl: process.env.VITE_SITE_URL || 'https://scuticompany.com',
-  siteName: process.env.VITE_SITE_NAME || 'SCUTI Company'
+  siteUrl: process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com',
+  siteName: process.env.VITE_SITE_NAME || 'THADO Consulting'
 };
 
 // Debug: mostrar qué URL se está usando

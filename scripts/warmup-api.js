@@ -9,7 +9,7 @@
  */
 
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://web-scuticompany-back.onrender.com';
+let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 
 const CONFIG = {

@@ -75,8 +75,8 @@ export default function Dashboard() {
   // 🎯 SEO dinámico para Dashboard
   const { SeoHelmet } = useSeo({
     pageName: 'dashboard',
-    fallbackTitle: 'Dashboard - SCUTI Company',
-    fallbackDescription: 'Panel de administración y gestión de contenidos de SCUTI Company.'
+    fallbackTitle: 'Dashboard - THADO Consulting',
+    fallbackDescription: 'Panel de administración y gestión de contenidos de THADO Consulting.'
   });
   
   const [backendData, setBackendData] = useState<BackendStatus | null>(null);

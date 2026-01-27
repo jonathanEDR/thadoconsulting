@@ -14,7 +14,7 @@
  * const precio = formatPrice(150, 'PEN'); // "S/. 150.00"
  * 
  * // Obtener título SEO
- * const title = getSeoTitle('Desarrollo Web'); // "Desarrollo Web - SCUTI Company"
+ * const title = getSeoTitle('Desarrollo Web'); // "Desarrollo Web - THADO Consulting"
  */
 
 import { useMemo } from 'react';

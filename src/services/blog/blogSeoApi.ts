@@ -248,7 +248,7 @@ export const generateSchemaMarkup = async (_slug: string): Promise<SchemaMarkup>
       article: {
         '@type': 'Article',
         headline: 'Artículo de ejemplo',
-        author: { '@type': 'Person', name: 'SCUTI Company Team' },
+        author: { '@type': 'Person', name: 'THADO Consulting Team' },
         datePublished: new Date().toISOString()
       },
       breadcrumb: {
@@ -257,11 +257,11 @@ export const generateSchemaMarkup = async (_slug: string): Promise<SchemaMarkup>
       },
       organization: {
         '@type': 'Organization',
-        name: 'SCUTI Company'
+        name: 'THADO Consulting'
       },
       website: {
         '@type': 'WebSite',
-        name: 'SCUTI Company Blog'
+        name: 'THADO Consulting Blog'
       }
     };
 

@@ -173,7 +173,7 @@ const Login = () => {
         >
           <img
             src={logoSrc}
-            alt="SCUTI Company"
+            alt="THADO Consulting"
             className="h-12 w-auto"
           />
         </Link>

@@ -44,7 +44,7 @@ const CONFIG = {
   apiUrl: baseApiUrl,
   siteUrl: process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com',
   siteName: process.env.VITE_SITE_NAME || 'THADO Consulting',
-  defaultImage: `${process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com'}/logofondonegro.jpeg`,
+  defaultImage: `${process.env.VITE_SITE_URL || 'https://www.thadoconsulting.com'}/FAVICON.png`,
   twitterHandle: '@thadoconsulting',
   locale: 'es_PE',
   country: 'Peru',
@@ -234,7 +234,7 @@ function generateServiceSchema(servicio) {
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "PE",
-        "addressLocality": "Huánuco"
+        "addressLocality": "Lima"
       }
     },
     "areaServed": {

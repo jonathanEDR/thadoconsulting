@@ -898,7 +898,7 @@ export const CrmMessages: React.FC = () => {
                                 <div className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden border-2 border-green-500">
                                   <img 
                                     src="/FAVICON.png"
-                                    alt="SCUTI Company"
+                                    alt="THADO Consulting"
                                     className="w-5 h-5 object-contain"
                                     onError={(e) => {
                                       e.currentTarget.style.display = 'none';
