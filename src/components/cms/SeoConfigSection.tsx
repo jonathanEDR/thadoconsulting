@@ -99,16 +99,40 @@ const SeoConfigSection: React.FC<SeoConfigSectionProps> = ({
           </div>
         </div>
 
+        {/* Palabra Clave Principal */}
+        <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            ⭐ Palabra Clave Principal
+          </h3>
+
+          <div className="space-y-3">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              La palabra o frase clave más importante para esta página. Debe aparecer en el título, descripción y contenido.
+            </p>
+            <input
+              type="text"
+              value={pageData.seo.primaryKeyword || ''}
+              onChange={(e) => handleSeoFieldUpdate('primaryKeyword', e.target.value)}
+              className="w-full px-4 py-3 border-2 border-amber-300 dark:border-amber-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium"
+              placeholder="Ej: servicios contables Lima, contador MYPES Perú"
+            />
+            <div className="flex items-start space-x-2 text-xs text-amber-700 dark:text-amber-300">
+              <span>💡</span>
+              <span>Esta palabra clave será usada para optimizar el posicionamiento en buscadores. Debe ser específica y relevante para tu público objetivo.</span>
+            </div>
+          </div>
+        </div>
+
         {/* Palabras Clave */}
         <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            🏷️ Palabras Clave
+            🏷️ Palabras Clave Secundarias
           </h3>
-          
+
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Palabras clave relevantes para el contenido
+                Palabras clave adicionales relevantes para el contenido
               </p>
               <button
                 onClick={addKeyword}

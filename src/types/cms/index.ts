@@ -1275,6 +1275,7 @@ export interface DashboardFeaturedPostsConfig {
 export interface PageSeo {
   metaTitle: string;
   metaDescription: string;
+  primaryKeyword?: string; // Palabra clave principal para SEO
   keywords: string[];
   ogTitle: string;
   ogDescription: string;
