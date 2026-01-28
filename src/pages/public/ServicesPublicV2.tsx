@@ -229,16 +229,16 @@ const ServicesPublicV2 = () => {
       {/* ✅ SEO usando configuración centralizada */}
       <Helmet>
         <title>Nuestros Servicios{config.seo.titleSuffix}</title>
-        <meta name="description" content="Consultoría IT, Proyectos Tecnológicos e Inteligencia Artificial para impulsar tu negocio. Soluciones de desarrollo de software a medida." />
-        <meta name="keywords" content="servicios, consultoría, tecnología, software, inteligencia artificial, desarrollo web, aplicaciones móviles, soluciones digitales" />
+        <meta name="description" content="Servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú. Soluciones profesionales para el crecimiento de tu negocio." />
+        <meta name="keywords" content="servicios contables, asesoría tributaria, gestión laboral, costos y presupuestos, SUNAT, declaraciones, contabilidad MYPE, estudio contable Perú" />
 
         {/* Open Graph - ✅ Usando configuración centralizada */}
-        <meta property="og:title" content={`Servicios de Desarrollo de Software${config.seo.titleSuffix}`} />
-        <meta property="og:description" content={`Consultoría IT, desarrollo web/móvil e Inteligencia Artificial para impulsar tu negocio. Soluciones tecnológicas a medida en ${config.country}.`} />
+        <meta property="og:title" content={`Servicios Contables y Tributarios${config.seo.titleSuffix}`} />
+        <meta property="og:description" content={`Servicios contables, asesoría tributaria, gestión laboral y financiera para MYPES en ${config.country}. Soluciones profesionales a tu medida.`} />
         <meta property="og:image" content={getImageUrl(config.images.ogServices)} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={`${config.siteName} - Servicios de desarrollo de software y consultoría IT`} />
+        <meta property="og:image:alt" content={`${config.siteName} - Servicios Contables y Tributarios para MYPES`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={getFullUrl('/servicios')} />
         <meta property="og:site_name" content={config.siteName} />
@@ -246,10 +246,10 @@ const ServicesPublicV2 = () => {
 
         {/* Twitter Card - ✅ Usando configuración centralizada */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`Servicios de Desarrollo de Software${config.seo.titleSuffix}`} />
-        <meta name="twitter:description" content="Consultoría IT, desarrollo web/móvil e Inteligencia Artificial para impulsar tu negocio." />
+        <meta name="twitter:title" content={`Servicios Contables y Tributarios${config.seo.titleSuffix}`} />
+        <meta name="twitter:description" content="Servicios contables, asesoría tributaria y gestión financiera para MYPES en Perú." />
         <meta name="twitter:image" content={getImageUrl(config.images.ogServices)} />
-        <meta name="twitter:image:alt" content={`${config.siteName} - Servicios de desarrollo de software y consultoría IT`} />
+        <meta name="twitter:image:alt" content={`${config.siteName} - Servicios Contables y Tributarios para MYPES`} />
 
         {/* Canonical */}
         <link rel="canonical" href={getFullUrl('/servicios')} />
@@ -259,8 +259,8 @@ const ServicesPublicV2 = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            "name": "Servicios de Desarrollo de Software - THADO Consulting",
-            "description": "Catálogo de servicios de desarrollo de software, consultoría IT e inteligencia artificial para empresas PYMES en Perú",
+            "name": "Servicios Contables y Tributarios - THADO Consulting",
+            "description": "Catálogo de servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú",
             "url": "https://www.thadoconsulting.com/servicios",
             "numberOfItems": servicios?.length || 24,
             "itemListElement": servicios?.slice(0, 10).map((servicio: Servicio, index: number) => ({

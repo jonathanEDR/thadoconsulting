@@ -244,11 +244,11 @@ const About = () => {
             },
             mission: {
               title: 'Nuestra Misión',
-              description: 'Transformar empresas a través de la tecnología inteligente, creando soluciones digitales personalizadas que impulsen el crecimiento y la eficiencia.'
+              description: 'Brindar servicios contables, tributarios y financieros de excelencia, ayudando a las MYPES a cumplir con sus obligaciones y tomar decisiones informadas para crecer de manera sostenible.'
             },
             vision: {
               title: 'Nuestra Visión',
-              description: 'Ser la empresa de referencia en desarrollo de software en Latinoamérica, reconocida por la calidad, innovación y impacto de nuestras soluciones.'
+              description: 'Ser el estudio contable de referencia en Perú para MYPES, reconocido por la calidad de nuestros servicios, la cercanía con nuestros clientes y el impacto positivo en sus negocios.'
             },
             values: {
               title: 'Nuestros Valores',

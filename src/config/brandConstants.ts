@@ -21,8 +21,8 @@ export const BRAND_AUTHOR = {
   profileImage: '/ICONOS/ICONO_1_FONDO_BLANCO.png',
   
   // Descripción y rol
-  role: 'Consultoría Empresarial',
-  bio: 'Thado Consulting es tu aliado estratégico en transformación digital y crecimiento empresarial. Expertos en planeamiento tributario, desarrollo de software y soluciones tecnológicas innovadoras para impulsar tu negocio.',
+  role: 'Estudio Contable y Tributario',
+  bio: 'Thado Consulting es tu aliado estratégico en gestión contable, tributaria y financiera. Expertos en SUNAT, declaraciones, libros electrónicos y planificación fiscal para MYPES en Perú.',
   
   // Contacto
   website: 'https://www.thadoconsulting.com',
@@ -43,27 +43,27 @@ export const BRAND_AUTHOR = {
   
   // Expertise/Especialidades
   expertise: [
-    'Planeamiento Tributario',
-    'Transformación Digital',
-    'Desarrollo de Software',
-    'Inteligencia Artificial',
-    'Consultoría Empresarial'
+    'Contabilidad para MYPES',
+    'Asesoría Tributaria SUNAT',
+    'Gestión Laboral y PLAME',
+    'Costos y Presupuestos',
+    'Transformación Digital Contable'
   ],
   
   // Estructura compatible con blogProfile (para AuthorCard)
   blogProfile: {
     displayName: 'Thado Consulting',
-    bio: 'Thado Consulting es tu aliado estratégico en transformación digital y crecimiento empresarial. Expertos en planeamiento tributario, desarrollo de software y soluciones tecnológicas innovadoras.',
+    bio: 'Estudio contable especializado en MYPES. Expertos en contabilidad, tributación, gestión laboral y financiera para empresas en Perú.',
     avatar: '/ICONOS/ICONO_1_FONDO_BLANCO.png',
     isPublicProfile: false, // No redirigir a perfil de usuario
     website: 'https://www.thadoconsulting.com',
     location: 'Perú',
     expertise: [
-      'Planeamiento Tributario',
-      'Transformación Digital',
-      'Desarrollo de Software',
-      'Inteligencia Artificial',
-      'Consultoría Empresarial'
+      'Contabilidad para MYPES',
+      'Asesoría Tributaria SUNAT',
+      'Gestión Laboral y PLAME',
+      'Costos y Presupuestos',
+      'Transformación Digital Contable'
     ],
     social: {
       linkedin: 'https://www.linkedin.com/company/thadoconsulting',

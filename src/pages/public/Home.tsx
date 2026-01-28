@@ -24,7 +24,7 @@ const SEO_FALLBACK = {
   keywords: ['contador Perú', 'estudio contable Lima', 'servicios contables Perú', 'asesoría tributaria SUNAT'],
   ogTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
   ogDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú.',
-  ogImage: '',
+  ogImage: 'https://www.thadoconsulting.com/logohorizontal.jpeg',
 };
 
 
@@ -328,7 +328,7 @@ const HomeOptimized = () => {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="THADO Consulting - Desarrollo de Software e IA para PYMES" />
+        <meta property="og:image:alt" content="THADO Consulting - Servicios Contables y Tributarios para MYPES en Perú" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.thadoconsulting.com/" />
         <meta property="og:site_name" content="THADO Consulting" />
