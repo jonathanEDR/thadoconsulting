@@ -9,8 +9,8 @@ const Signup = () => {
 
   // Logo según el tema
   const logoSrc = theme === 'dark'
-    ? '/LOGO VECTOR VERSION NEGRA.svg'
-    : '/LOGO VECTOR VERSION BLANCA.svg';
+    ? '/logotemaoscuro.png'  // Logo claro para tema oscuro
+    : '/logotemaclaro.png';   // Logo oscuro para tema claro
 
   // Asegurar que el tema se haya cargado antes de renderizar
   useEffect(() => {

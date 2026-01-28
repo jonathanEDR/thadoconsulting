@@ -195,7 +195,7 @@ function getServicioImageUrl(servicio: any): string {
     return `https://res.cloudinary.com/ds54wlchi/image/upload/${img}`;
   }
   // Fallback al logo horizontal
-  return `${CONFIG.siteUrl}/logohorizontal.jpeg`;
+  return `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`;
 }
 
 /**
@@ -249,7 +249,7 @@ function generateBlogListMetaTags(cmsData?: any): string {
   const keywords = escapeHtml(seo.keywords?.join(', ') || '');
   const ogTitle = escapeHtml(seo.ogTitle || title);
   const ogDescription = escapeHtml(seo.ogDescription || description);
-  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`;
   const blogUrl = `${CONFIG.siteUrl}/blog`;
 
   return `
@@ -318,7 +318,7 @@ function generateHomeMetaTags(cmsData?: any): string {
   const keywords = escapeHtml(seo.keywords?.join(', ') || '');
   const ogTitle = escapeHtml(seo.ogTitle || title);
   const ogDescription = escapeHtml(seo.ogDescription || description);
-  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`;
   const homeUrl = CONFIG.siteUrl;
 
   return `
@@ -389,7 +389,7 @@ function generateServiciosMetaTags(cmsData?: any): string {
   const keywords = escapeHtml(seo.keywords?.join(', ') || '');
   const ogTitle = escapeHtml(seo.ogTitle || title);
   const ogDescription = escapeHtml(seo.ogDescription || description);
-  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`;
   const serviciosUrl = `${CONFIG.siteUrl}/servicios`;
 
   return `
@@ -455,7 +455,7 @@ function generateNosotrosMetaTags(cmsData?: any): string {
   const keywords = escapeHtml(seo.keywords?.join(', ') || '');
   const ogTitle = escapeHtml(seo.ogTitle || title);
   const ogDescription = escapeHtml(seo.ogDescription || description);
-  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`;
   const nosotrosUrl = `${CONFIG.siteUrl}/nosotros`;
 
   return `
@@ -591,7 +591,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
         "@type": "Organization",
         "name": "THADO Consulting",
         "url": "${CONFIG.siteUrl}",
-        "logo": "${CONFIG.siteUrl}/logohorizontal.jpeg"
+        "logo": "${CONFIG.siteUrl}/logohorizontalconfondo.jpg"
       },
       "areaServed": {
         "@type": "Country",

@@ -116,14 +116,14 @@ export const SITE_CONFIG: SiteConfig = {
   // IMÁGENES POR DEFECTO
   // ─────────────────────────────────────────
   images: {
-    logo: '/Logo.png',
-    logoWhite: '/LOGO VECTOR VERSION BLANCA.svg',
-    logoDark: '/LOGO VECTOR VERSION NEGRA.svg',
+    logo: '/logotemaclaro.png',
+    logoWhite: '/logotemaoscuro.png',  // Logo para fondos oscuros
+    logoDark: '/logotemaclaro.png',    // Logo para fondos claros
     favicon: '/FAVICON.png',
-    ogDefault: '/logofondonegro.jpeg',
-    ogServices: '/logofondonegro.jpeg',
-    ogBlog: '/logofondonegro.jpeg',
-    placeholder: '/logofondonegro.jpeg',
+    ogDefault: '/logohorizontalconfondo.jpg',
+    ogServices: '/logohorizontalconfondo.jpg',
+    ogBlog: '/logohorizontalconfondo.jpg',
+    placeholder: '/logohorizontalconfondo.jpg',
   },
   
   // ─────────────────────────────────────────

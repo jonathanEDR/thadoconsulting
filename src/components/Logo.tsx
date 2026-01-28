@@ -53,18 +53,16 @@ const Logo = ({
   const logoSrc = (() => {
     switch (variant) {
       case 'white':
-        return '/logo-white.svg';  // Logo blanco para fondos oscuros
+        return '/logotemaoscuro.png';  // Logo para fondos oscuros (texto claro)
       case 'dark':
-        return '/LOGO VECTOR VERSION BLANCA.svg';  // Logo oscuro para fondos claros
+        return '/logotemaclaro.png';  // Logo para fondos claros (texto oscuro)
       case 'auto':
       default:
-        // NOTA: Los nombres de archivo están invertidos vs su contenido real
-        // "NEGRA.svg" = texto blanco, "BLANCA.svg" = texto negro
-        // Tema claro (light) → Necesitamos contraste oscuro → usar "BLANCA.svg" (que tiene texto negro)
-        // Tema oscuro (dark) → Necesitamos contraste claro → usar "NEGRA.svg" (que tiene texto blanco)
+        // Tema claro (light) → Logo con texto oscuro para contraste
+        // Tema oscuro (dark) → Logo con texto claro para contraste
         return theme === 'light' 
-          ? '/LOGO VECTOR VERSION BLANCA.svg'  // Contiene texto negro (bueno para fondo claro)
-          : '/LOGO VECTOR VERSION NEGRA.svg';  // Contiene texto blanco (bueno para fondo oscuro)
+          ? '/logotemaclaro.png'  // Logo para tema claro
+          : '/logotemaoscuro.png';  // Logo para tema oscuro
     }
   })();
 
