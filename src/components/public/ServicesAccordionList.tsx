@@ -438,9 +438,7 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
             {/* Precio */}
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold" style={{ color: iconColor }}>
-                {servicio.tipoPrecio === 'personalizado' 
-                  ? 'Consultar precio'
-                  : (() => {
+                {(() => {
                       const getCurrencySymbol = (moneda?: string): string => {
                         switch (moneda?.toUpperCase()) {
                           case 'PEN': return 'S/.';
@@ -450,25 +448,27 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
                         }
                       };
                       const symbol = getCurrencySymbol(servicio.moneda);
-                      if (servicio.tipoPrecio === 'consultar') {
+                      const tipoPrecio = servicio.tipoPrecio as any;
+                      
+                      if (tipoPrecio === 'consultar') {
                         return 'Consultar precio';
                       }
-                      if (servicio.tipoPrecio === 'personalizado') {
+                      if (tipoPrecio === 'personalizado') {
                         return 'Precio personalizado';
                       }
-                      if (servicio.tipoPrecio === 'desde' && servicio.precio) {
+                      if (tipoPrecio === 'desde' && servicio.precio) {
                         return `Desde ${symbol} ${servicio.precio.toLocaleString()}`;
                       }
-                      if (servicio.tipoPrecio === 'fijo' && servicio.precio) {
+                      if (tipoPrecio === 'fijo' && servicio.precio) {
                         return `${symbol} ${servicio.precio.toLocaleString()}`;
                       }
-                      if (servicio.tipoPrecio === 'rango' && servicio.precioMin && servicio.precioMax) {
+                      if (tipoPrecio === 'rango' && servicio.precioMin && servicio.precioMax) {
                         return `${symbol} ${servicio.precioMin.toLocaleString()} - ${symbol} ${servicio.precioMax.toLocaleString()}`;
                       }
-                      if (servicio.tipoPrecio === 'paquetes' && servicio.precioMin) {
+                      if (tipoPrecio === 'paquetes' && servicio.precioMin) {
                         return `Desde ${symbol} ${servicio.precioMin.toLocaleString()}`;
                       }
-                      if (servicio.tipoPrecio === 'suscripcion' && servicio.precio) {
+                      if (tipoPrecio === 'suscripcion' && servicio.precio) {
                         return `${symbol} ${servicio.precio.toLocaleString()}/mes`;
                       }
                       return 'Consultar precio';
