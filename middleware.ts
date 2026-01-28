@@ -41,7 +41,56 @@ function generateFavicons(): string {
 // Cache en memoria para evitar llamadas repetidas a la API
 const postCache = new Map<string, { data: any; timestamp: number }>();
 const servicioCache = new Map<string, { data: any; timestamp: number }>();
+const cmsPageCache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000; // 1 hora
+
+/**
+ * Obtener datos SEO de una página desde el CMS
+ * Consulta /api/cms/pages/:slug para obtener la configuración SEO
+ */
+async function getCmsPageData(pageSlug: string): Promise<any | null> {
+  // Verificar cache
+  const cached = cmsPageCache.get(pageSlug);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    console.log(`[Edge Middleware] CMS page ${pageSlug} from cache`);
+    return cached.data;
+  }
+
+  try {
+    const response = await fetch(
+      `${CONFIG.apiUrl}/api/cms/pages/${pageSlug}`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'Vercel-Edge-Middleware'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      console.error(`[Edge Middleware] Error fetching CMS page ${pageSlug}: ${response.status}`);
+      return null;
+    }
+
+    const data = await response.json();
+    
+    if (!data.success || !data.data) {
+      console.error(`[Edge Middleware] CMS page ${pageSlug} not found or invalid response`);
+      return null;
+    }
+
+    const page = data.data;
+    
+    // Guardar en cache
+    cmsPageCache.set(pageSlug, { data: page, timestamp: Date.now() });
+    console.log(`[Edge Middleware] CMS page ${pageSlug} loaded and cached`);
+    
+    return page;
+  } catch (error) {
+    console.error(`[Edge Middleware] Error fetching CMS page ${pageSlug}:`, error);
+    return null;
+  }
+}
 
 /**
  * Obtener datos del post desde la API
@@ -190,41 +239,46 @@ function escapeHtml(text: string): string {
 
 /**
  * Generar meta tags para la página del listado del blog
+ * @param cmsData - Datos del CMS (opcional, si no se pasa usa fallbacks)
  */
-function generateBlogListMetaTags(): string {
-  const title = 'Blog de Tecnología y Software';
-  const description = 'Artículos sobre desarrollo de software, inteligencia artificial, automatización y transformación digital para PYMES. Consejos, guías y casos de éxito.';
+function generateBlogListMetaTags(cmsData?: any): string {
+  // Usar datos del CMS si están disponibles, sino usar fallbacks mínimos
+  const seo = cmsData?.seo || {};
+  const title = escapeHtml(seo.metaTitle || 'Blog - THADO Consulting');
+  const description = escapeHtml(seo.metaDescription || 'Artículos y novedades de THADO Consulting');
+  const keywords = escapeHtml(seo.keywords?.join(', ') || '');
+  const ogTitle = escapeHtml(seo.ogTitle || title);
+  const ogDescription = escapeHtml(seo.ogDescription || description);
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
   const blogUrl = `${CONFIG.siteUrl}/blog`;
-  // Imagen específica para el blog - Logo horizontal con fondo blanco
-  const imageUrl = `${CONFIG.siteUrl}/logohorizontal.jpeg`;
 
   return `
     ${generateFavicons()}
-    <!-- Primary Meta Tags - Blog Listing - Generado por Edge Middleware -->
-    <title>${title} | ${CONFIG.siteName}</title>
-    <meta name="title" content="${title} | ${CONFIG.siteName}" />
+    <!-- Primary Meta Tags - Blog Listing - Generado por Edge Middleware desde CMS -->
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="blog tecnología, desarrollo software, inteligencia artificial, IA para PYMES, transformación digital, automatización empresarial, software a medida, artículos tecnología, noticias digitales Perú, tutoriales desarrollo, guías programación, tendencias tech" />
+    ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
     <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${blogUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${blogUrl}" />
-    <meta property="og:title" content="${title} | ${CONFIG.siteName}" />
-    <meta property="og:description" content="${description}" />
-    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:image" content="${ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="${CONFIG.siteName}" />
+    <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="${seo.twitterCard || 'summary_large_image'}" />
     <meta name="twitter:url" content="${blogUrl}" />
-    <meta name="twitter:title" content="${title} | ${CONFIG.siteName}" />
-    <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${imageUrl}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    <meta name="twitter:image" content="${ogImage}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
     
     <!-- Schema.org JSON-LD -->
@@ -254,40 +308,46 @@ function generateBlogListMetaTags(): string {
 
 /**
  * Generar meta tags para la página Home
+ * @param cmsData - Datos del CMS (opcional, si no se pasa usa fallbacks)
  */
-function generateHomeMetaTags(): string {
-  const title = 'Desarrollo de Software e IA para PYMES';
-  const description = 'Transformamos procesos con soluciones digitales innovadoras. La Solución en Perú: Software, IA y Automatización para PYMES. Obtén la tecnología y escala rápido.';
+function generateHomeMetaTags(cmsData?: any): string {
+  // Usar datos del CMS si están disponibles, sino usar fallbacks mínimos
+  const seo = cmsData?.seo || {};
+  const title = escapeHtml(seo.metaTitle || 'THADO Consulting');
+  const description = escapeHtml(seo.metaDescription || 'Servicios profesionales para empresas');
+  const keywords = escapeHtml(seo.keywords?.join(', ') || '');
+  const ogTitle = escapeHtml(seo.ogTitle || title);
+  const ogDescription = escapeHtml(seo.ogDescription || description);
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
   const homeUrl = CONFIG.siteUrl;
-  const imageUrl = `${CONFIG.siteUrl}/logohorizontal.jpeg`;
 
   return `
     ${generateFavicons()}
-    <!-- Primary Meta Tags - Home - Generado por Edge Middleware -->
-    <title>${title} | THADO Consulting Perú</title>
-    <meta name="title" content="${title} | THADO Consulting Perú" />
+    <!-- Primary Meta Tags - Home - Generado por Edge Middleware desde CMS -->
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="desarrollo software, inteligencia artificial, IA, PYMES, automatización, software a medida, Perú, transformación digital, empresa tecnología Lima, sistemas empresariales, soluciones digitales Perú, desarrollo web Lima, apps empresariales" />
+    ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
     <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${homeUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${homeUrl}" />
-    <meta property="og:title" content="${title} | THADO Consulting Perú" />
-    <meta property="og:description" content="${description}" />
-    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:image" content="${ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="${seo.twitterCard || 'summary_large_image'}" />
     <meta name="twitter:url" content="${homeUrl}" />
-    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
-    <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${imageUrl}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    <meta name="twitter:image" content="${ogImage}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
     
     <!-- Schema.org JSON-LD -->
@@ -300,7 +360,7 @@ function generateHomeMetaTags(): string {
       "url": "${homeUrl}",
       "logo": {
         "@type": "ImageObject",
-        "url": "${imageUrl}"
+        "url": "${ogImage}"
       },
       "description": "${description}",
       "foundingDate": "2024",
@@ -319,40 +379,46 @@ function generateHomeMetaTags(): string {
 
 /**
  * Generar meta tags para la página Servicios
+ * @param cmsData - Datos del CMS (opcional, si no se pasa usa fallbacks)
  */
-function generateServiciosMetaTags(): string {
-  const title = 'Servicios de Desarrollo de Software e IA';
-  const description = 'Soluciones tecnológicas para PYMES: Desarrollo de Software a Medida, Inteligencia Artificial, Automatización de Procesos, Integración de Sistemas y Consultoría Tecnológica.';
+function generateServiciosMetaTags(cmsData?: any): string {
+  // Usar datos del CMS si están disponibles, sino usar fallbacks mínimos
+  const seo = cmsData?.seo || {};
+  const title = escapeHtml(seo.metaTitle || 'Servicios - THADO Consulting');
+  const description = escapeHtml(seo.metaDescription || 'Conoce nuestros servicios profesionales');
+  const keywords = escapeHtml(seo.keywords?.join(', ') || '');
+  const ogTitle = escapeHtml(seo.ogTitle || title);
+  const ogDescription = escapeHtml(seo.ogDescription || description);
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
   const serviciosUrl = `${CONFIG.siteUrl}/servicios`;
-  const imageUrl = `${CONFIG.siteUrl}/logohorizontal.jpeg`;
 
   return `
     ${generateFavicons()}
-    <!-- Primary Meta Tags - Servicios - Generado por Edge Middleware -->
-    <title>${title} | THADO Consulting Perú</title>
-    <meta name="title" content="${title} | THADO Consulting Perú" />
+    <!-- Primary Meta Tags - Servicios - Generado por Edge Middleware desde CMS -->
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="servicios software, desarrollo a medida, inteligencia artificial, automatización, integración sistemas, consultoría tecnológica, PYMES Perú, cotización software, apps empresariales Lima, sistemas web Perú, desarrollo aplicaciones, soluciones cloud" />
+    ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
     <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${serviciosUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${serviciosUrl}" />
-    <meta property="og:title" content="${title} | THADO Consulting Perú" />
-    <meta property="og:description" content="${description}" />
-    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:image" content="${ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="${seo.twitterCard || 'summary_large_image'}" />
     <meta name="twitter:url" content="${serviciosUrl}" />
-    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
-    <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${imageUrl}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    <meta name="twitter:image" content="${ogImage}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
     
     <!-- Schema.org JSON-LD -->
@@ -371,8 +437,7 @@ function generateServiciosMetaTags(): string {
       "areaServed": {
         "@type": "Country",
         "name": "Perú"
-      },
-      "serviceType": ["Desarrollo de Software", "Inteligencia Artificial", "Automatización", "Consultoría Tecnológica"]
+      }
     }
     </script>
   `;
@@ -380,40 +445,46 @@ function generateServiciosMetaTags(): string {
 
 /**
  * Generar meta tags para la página Nosotros
+ * @param cmsData - Datos del CMS (opcional, si no se pasa usa fallbacks)
  */
-function generateNosotrosMetaTags(): string {
-  const title = 'Sobre Nosotros - Conoce a THADO Consulting';
-  const description = 'Somos una empresa peruana especializada en desarrollo de software e inteligencia artificial para PYMES. Conoce nuestra misión, visión y equipo de expertos.';
+function generateNosotrosMetaTags(cmsData?: any): string {
+  // Usar datos del CMS si están disponibles, sino usar fallbacks mínimos
+  const seo = cmsData?.seo || {};
+  const title = escapeHtml(seo.metaTitle || 'Nosotros - THADO Consulting');
+  const description = escapeHtml(seo.metaDescription || 'Conoce más sobre nosotros');
+  const keywords = escapeHtml(seo.keywords?.join(', ') || '');
+  const ogTitle = escapeHtml(seo.ogTitle || title);
+  const ogDescription = escapeHtml(seo.ogDescription || description);
+  const ogImage = seo.ogImage || `${CONFIG.siteUrl}/logohorizontal.jpeg`;
   const nosotrosUrl = `${CONFIG.siteUrl}/nosotros`;
-  const imageUrl = `${CONFIG.siteUrl}/logohorizontal.jpeg`;
 
   return `
     ${generateFavicons()}
-    <!-- Primary Meta Tags - Nosotros - Generado por Edge Middleware -->
-    <title>${title} | THADO Consulting Perú</title>
-    <meta name="title" content="${title} | THADO Consulting Perú" />
+    <!-- Primary Meta Tags - Nosotros - Generado por Edge Middleware desde CMS -->
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
-    <meta name="keywords" content="THADO Consulting, empresa software Perú, equipo desarrollo, IA PYMES, quiénes somos, misión visión, startup tecnología Lima, desarrolladores peruanos, empresa innovación digital, equipo tech Perú" />
+    ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
     <meta name="author" content="THADO Consulting" />
     <link rel="canonical" href="${nosotrosUrl}" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${nosotrosUrl}" />
-    <meta property="og:title" content="${title} | THADO Consulting Perú" />
-    <meta property="og:description" content="${description}" />
-    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:image" content="${ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="THADO Consulting" />
     <meta property="og:locale" content="es_PE" />
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="${seo.twitterCard || 'summary_large_image'}" />
     <meta name="twitter:url" content="${nosotrosUrl}" />
-    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
-    <meta name="twitter:description" content="${description}" />
-    <meta name="twitter:image" content="${imageUrl}" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${ogDescription}" />
+    <meta name="twitter:image" content="${ogImage}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
     
     <!-- Schema.org JSON-LD -->
@@ -479,8 +550,8 @@ function generateServicioDetailMetaTags(servicio: any): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Servicio Detail - Generado por Edge Middleware -->
-    <title>${title} | THADO Consulting Perú</title>
-    <meta name="title" content="${title} | THADO Consulting Perú" />
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="${escapeHtml(keywords)}" />
     <meta name="author" content="THADO Consulting" />
@@ -489,7 +560,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="product" />
     <meta property="og:url" content="${servicioUrl}" />
-    <meta property="og:title" content="${title} | THADO Consulting Perú" />
+    <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:width" content="1200" />
@@ -502,7 +573,7 @@ function generateServicioDetailMetaTags(servicio: any): string {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${servicioUrl}" />
-    <meta name="twitter:title" content="${title} | THADO Consulting Perú" />
+    <meta name="twitter:title" content="${title}" />
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${imageUrl}" />
     <meta name="twitter:site" content="${CONFIG.twitterHandle}" />
@@ -566,8 +637,8 @@ function generateMetaTags(post: any): string {
   return `
     ${generateFavicons()}
     <!-- Primary Meta Tags - Generado por Edge Middleware -->
-    <title>${title} | ${CONFIG.siteName}</title>
-    <meta name="title" content="${title} | ${CONFIG.siteName}" />
+    <title>${title}</title>
+    <meta name="title" content="${title}" />
     <meta name="description" content="${description}" />
     <meta name="keywords" content="${escapeHtml(keywords)}" />
     <meta name="author" content="${authorName}" />
@@ -773,6 +844,14 @@ export default async function middleware(request: Request) {
     const pageName = isHomePage ? 'home' : isServiciosPage ? 'servicios' : 'nosotros';
     console.log(`[Edge Middleware] Crawler detected for /${pageName}: ${userAgent.substring(0, 50)}`);
     
+    // 🔄 Obtener datos SEO desde el CMS
+    const cmsData = await getCmsPageData(pageName);
+    if (cmsData) {
+      console.log(`[Edge Middleware] CMS SEO data loaded for ${pageName}`);
+    } else {
+      console.log(`[Edge Middleware] Using fallback SEO for ${pageName} (CMS data not available)`);
+    }
+    
     // Obtener el HTML original desde /index.html
     const indexUrl = new URL('/', request.url);
     const response = await fetch(indexUrl.toString(), {
@@ -789,14 +868,14 @@ export default async function middleware(request: Request) {
     
     let html = await response.text();
 
-    // Generar meta tags según la página
+    // Generar meta tags según la página - PASANDO DATOS DEL CMS
     let metaTags: string;
     if (isHomePage) {
-      metaTags = generateHomeMetaTags();
+      metaTags = generateHomeMetaTags(cmsData);
     } else if (isServiciosPage) {
-      metaTags = generateServiciosMetaTags();
+      metaTags = generateServiciosMetaTags(cmsData);
     } else {
-      metaTags = generateNosotrosMetaTags();
+      metaTags = generateNosotrosMetaTags(cmsData);
     }
 
     // Reemplazar el contenido del <head>
@@ -830,6 +909,14 @@ export default async function middleware(request: Request) {
   if (isBlogListPage) {
     console.log(`[Edge Middleware] Crawler detected for /blog: ${userAgent.substring(0, 50)}`);
     
+    // 🔄 Obtener datos SEO desde el CMS
+    const cmsData = await getCmsPageData('blog');
+    if (cmsData) {
+      console.log(`[Edge Middleware] CMS SEO data loaded for blog`);
+    } else {
+      console.log(`[Edge Middleware] Using fallback SEO for blog (CMS data not available)`);
+    }
+    
     // Obtener el HTML original desde /index.html
     const indexUrl = new URL('/', request.url);
     const response = await fetch(indexUrl.toString(), {
@@ -846,8 +933,8 @@ export default async function middleware(request: Request) {
     
     let html = await response.text();
 
-    // Generar meta tags para el listado del blog
-    const metaTags = generateBlogListMetaTags();
+    // Generar meta tags para el listado del blog - PASANDO DATOS DEL CMS
+    const metaTags = generateBlogListMetaTags(cmsData);
 
     // Reemplazar el contenido del <head>
     html = html.replace(/<title[^>]*>.*?<\/title>/gi, '');
