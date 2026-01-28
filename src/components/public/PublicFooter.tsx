@@ -88,7 +88,7 @@ const PublicFooter = () => {
             style={{
               borderTopWidth: '1px',
               borderTopColor: `color-mix(in srgb, var(--color-primary) 20%, transparent)`,
-              backgroundImage: 'url(/8.webp)',
+              backgroundImage: 'url(/8.png)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
