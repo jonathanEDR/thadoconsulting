@@ -355,7 +355,7 @@ export interface CreateServicioRequest {
   precio?: number;
   precioMin?: number;
   precioMax?: number;
-  tipoPrecio: 'fijo' | 'rango' | 'paquetes' | 'personalizado' | 'suscripcion';
+  tipoPrecio: 'fijo' | 'desde' | 'rango' | 'paquetes' | 'personalizado' | 'consultar' | 'suscripcion';
   moneda?: 'USD' | 'MXN' | 'EUR' | 'PEN';
   duracion?: {
     valor: number;

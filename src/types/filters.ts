@@ -23,7 +23,7 @@ export interface ServicioFilters {
   // Rango de precio
   precioMin?: number;
   precioMax?: number;
-  tipoPrecio?: ('fijo' | 'desde' | 'personalizado')[];
+  tipoPrecio?: ('fijo' | 'desde' | 'rango' | 'paquetes' | 'personalizado' | 'consultar' | 'suscripcion')[];
   
   // Estado
   estado?: ('activo' | 'inactivo' | 'borrador')[];
