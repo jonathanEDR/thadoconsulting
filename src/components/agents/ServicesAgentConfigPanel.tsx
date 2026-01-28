@@ -195,7 +195,7 @@ const ServicesAgentConfigPanel: React.FC<ServicesAgentConfigPanelProps> = ({ onC
           analyzeBundleOpportunities: true,
           defaultCurrency: 'PEN',
           supportedCurrencies: ['USD', 'EUR', 'MXN', 'PEN'],
-          pricingTypes: ['fijo', 'desde', 'rango', 'personalizado', 'consultar']
+          pricingTypes: ['fijo', 'desde', 'rango', 'paquetes', 'personalizado', 'consultar', 'suscripcion']
         },
         optimization: {
           types: ['seo', 'description', 'structure', 'conversion', 'complete'],

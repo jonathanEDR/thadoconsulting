@@ -142,8 +142,11 @@ const PricingForm: React.FC<PricingFormProps> = ({
             >
               <option value="fijo">🏷️ Precio Fijo</option>
               <option value="desde">📈 Desde (mínimo)</option>
-              <option value="consultar">💬 Consultar</option>
+              <option value="rango">📊 Rango de Precios</option>
+              <option value="paquetes">📦 Por Paquetes</option>
               <option value="personalizado">🎯 Personalizado</option>
+              <option value="consultar">💬 Consultar</option>
+              <option value="suscripcion">🔄 Suscripción</option>
             </select>
           </div>
 

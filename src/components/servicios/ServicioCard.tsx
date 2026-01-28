@@ -81,6 +81,15 @@ export const ServicioCard: React.FC<ServicioCardProps> = ({
     
     const symbol = getCurrencySymbol(servicio.moneda);
     
+    if (servicio.tipoPrecio === 'consultar') {
+      return 'Consultar precio';
+    }
+    if (servicio.tipoPrecio === 'personalizado') {
+      return 'Precio personalizado';
+    }
+    if (servicio.tipoPrecio === 'desde' && servicio.precio) {
+      return `Desde ${symbol} ${servicio.precio.toLocaleString()}`;
+    }
     if (servicio.tipoPrecio === 'paquetes' && servicio.precioMin && servicio.precioMax) {
       return `${symbol} ${servicio.precioMin.toLocaleString()} - ${symbol} ${servicio.precioMax.toLocaleString()}`;
     }
@@ -90,11 +99,8 @@ export const ServicioCard: React.FC<ServicioCardProps> = ({
     if (servicio.tipoPrecio === 'rango' && servicio.precioMin && servicio.precioMax) {
       return `${symbol} ${servicio.precioMin.toLocaleString()} - ${symbol} ${servicio.precioMax.toLocaleString()}`;
     }
-    if (servicio.tipoPrecio === 'personalizado') {
-      return 'Precio personalizado';
-    }
-    if (servicio.tipoPrecio === 'suscripcion') {
-      return `Desde ${symbol} ${servicio.precioMin?.toLocaleString() || 0}/mes`;
+    if (servicio.tipoPrecio === 'suscripcion' && servicio.precio) {
+      return `${symbol} ${servicio.precio.toLocaleString()}/mes`;
     }
     return 'Consultar precio';
   };

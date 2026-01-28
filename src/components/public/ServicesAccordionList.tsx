@@ -450,6 +450,15 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
                         }
                       };
                       const symbol = getCurrencySymbol(servicio.moneda);
+                      if (servicio.tipoPrecio === 'consultar') {
+                        return 'Consultar precio';
+                      }
+                      if (servicio.tipoPrecio === 'personalizado') {
+                        return 'Precio personalizado';
+                      }
+                      if (servicio.tipoPrecio === 'desde' && servicio.precio) {
+                        return `Desde ${symbol} ${servicio.precio.toLocaleString()}`;
+                      }
                       if (servicio.tipoPrecio === 'fijo' && servicio.precio) {
                         return `${symbol} ${servicio.precio.toLocaleString()}`;
                       }
@@ -458,6 +467,9 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
                       }
                       if (servicio.tipoPrecio === 'paquetes' && servicio.precioMin) {
                         return `Desde ${symbol} ${servicio.precioMin.toLocaleString()}`;
+                      }
+                      if (servicio.tipoPrecio === 'suscripcion' && servicio.precio) {
+                        return `${symbol} ${servicio.precio.toLocaleString()}/mes`;
                       }
                       return 'Consultar precio';
                     })()

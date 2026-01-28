@@ -465,17 +465,26 @@ export const ServicioDetail: React.FC = () => {
     
     const symbol = getCurrencySymbol(servicio.moneda);
     
+    if (servicio.tipoPrecio === 'consultar') {
+      return 'Consultar precio';
+    }
     if (servicio.tipoPrecio === 'personalizado') {
       return 'Precio personalizado';
+    }
+    if (servicio.tipoPrecio === 'desde' && servicio.precio) {
+      return `Desde ${symbol} ${servicio.precio.toLocaleString()}`;
     }
     if (servicio.tipoPrecio === 'rango' && servicio.precioMin && servicio.precioMax) {
       return `${symbol} ${servicio.precioMin.toLocaleString()} - ${symbol} ${servicio.precioMax.toLocaleString()}`;
     }
+    if (servicio.tipoPrecio === 'paquetes') {
+      return 'Ver paquetes disponibles';
+    }
+    if (servicio.tipoPrecio === 'suscripcion' && servicio.precio) {
+      return `${symbol} ${servicio.precio.toLocaleString()}/mes`;
+    }
     if (servicio.tipoPrecio === 'fijo' && servicio.precio) {
       return `${symbol} ${servicio.precio.toLocaleString()}`;
-    }
-    if (servicio.tipoPrecio === 'rango' && servicio.precioMin) {
-      return `Desde ${symbol} ${servicio.precioMin.toLocaleString()}`;
     }
     return 'Consultar precio';
   };

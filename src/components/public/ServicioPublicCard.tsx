@@ -142,6 +142,12 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
             {symbol} {servicio.precio?.toLocaleString()}
           </div>
         );
+      case 'desde':
+        return (
+          <div className="text-2xl font-bold text-purple-600">
+            Desde {symbol} {servicio.precio?.toLocaleString()}
+          </div>
+        );
       case 'rango':
         return (
           <div className="text-lg font-semibold text-purple-600">
@@ -154,10 +160,22 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
             Desde {symbol} {servicio.precioMin?.toLocaleString()}
           </div>
         );
-      case 'personalizado':
+      case 'suscripcion':
+        return (
+          <div className="text-lg font-semibold text-purple-600">
+            {symbol} {servicio.precio?.toLocaleString()}/mes
+          </div>
+        );
+      case 'consultar':
         return (
           <div className="text-lg font-semibold text-gray-600">
             Consultar precio
+          </div>
+        );
+      case 'personalizado':
+        return (
+          <div className="text-lg font-semibold text-gray-600">
+            Precio personalizado
           </div>
         );
       default:
