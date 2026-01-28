@@ -425,7 +425,7 @@ const ContactConfigSection: React.FC<ContactConfigSectionProps> = ({
                 value={pageData.content.contactPage?.features?.title || ''}
                 onChange={(e) => updateContent('contactPage.features.title', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                placeholder="¿Por qué elegir Scuti Company?"
+                placeholder="¿Por qué elegir THADO Consulting?"
               />
             </div>
 

@@ -149,7 +149,7 @@ const AIAgentsDashboard = () => {
             },
             contextConfig: {
               projectInfo: {
-                name: 'Web Scuti',
+                name: 'THADO Consulting',
                 type: 'tech_blog',
                 domain: 'technology',
                 language: 'es-ES',

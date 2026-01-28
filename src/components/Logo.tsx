@@ -78,7 +78,7 @@ const Logo = ({
         <img 
           key={logoKey} // Force re-render on theme change
           src={logoSrcWithCache}
-          alt="Scuti Company - Tecnología Inteligente"
+          alt="THADO Consulting - Servicios Contables y Tributarios"
           className={`
             w-auto 
             ${compact && isScrolled ? sizeClasses.sm : sizeClasses[size]}

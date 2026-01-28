@@ -124,7 +124,7 @@ export default function ClientDashboard() {
 
   // Cargar posts al montar
   useEffect(() => {
-    document.title = 'Mi Dashboard | Web Scuti';
+    document.title = 'Mi Dashboard | THADO Consulting';
     loadFeaturedPosts();
   }, [loadFeaturedPosts]);
 

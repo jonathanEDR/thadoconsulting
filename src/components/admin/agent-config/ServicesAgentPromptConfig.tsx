@@ -375,7 +375,7 @@ Adapta tus respuestas al contexto del negocio y las necesidades específicas del
                     type="text"
                     value={newVariable.value}
                     onChange={(e) => setNewVariable({ ...newVariable, value: e.target.value })}
-                    placeholder="ej: Web Scuti"
+                    placeholder="ej: THADO Consulting"
                     className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>

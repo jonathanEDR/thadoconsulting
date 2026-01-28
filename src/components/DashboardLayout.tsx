@@ -50,12 +50,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="flex items-center gap-2">
                 <img 
                   src="/logos/logo-black.svg" 
-                  alt="Web Scuti" 
+                  alt="THADO Consulting" 
                   className="h-8 w-auto dark:hidden"
                 />
                 <img 
                   src="/logos/logo-white.svg" 
-                  alt="Web Scuti" 
+                  alt="THADO Consulting" 
                   className="h-8 w-auto hidden dark:block"
                 />
               </div>

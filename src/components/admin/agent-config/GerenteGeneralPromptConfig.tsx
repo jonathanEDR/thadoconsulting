@@ -230,7 +230,7 @@ export const GerenteGeneralPromptConfig: React.FC<GerenteGeneralPromptConfigProp
               placeholder="Escribe aquí el prompt del sistema personalizado...
 
 Ejemplo:
-Eres el Gerente General de SCUTI, un coordinador inteligente de agentes especializados.
+Eres el Gerente General de THADO, un coordinador inteligente de agentes especializados.
 Tu rol es analizar las consultas de los usuarios y delegarlas al agente más apropiado.
 
 Variables disponibles:

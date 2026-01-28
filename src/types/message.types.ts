@@ -597,7 +597,7 @@ export const DEFAULT_TEMPLATE_VARIABLES: TemplateVariable[] = [
     nombre: 'empresa',
     variable: '{empresa}',
     descripcion: 'Nombre de la empresa',
-    ejemplo: 'Scuti Company',
+    ejemplo: 'THADO Consulting',
     requerida: false,
   },
   {

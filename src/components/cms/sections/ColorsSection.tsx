@@ -156,9 +156,9 @@ const ColorsSection: React.FC<ColorsSectionProps> = ({
                 <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">✨ Gradientes Predefinidos:</p>
                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                   {[
-                    { name: 'Scuti Original', gradient: 'linear-gradient(90deg, #8B5CF6, #06B6D4)', category: 'brand' },
-                    { name: 'Scuti Diagonal', gradient: 'linear-gradient(135deg, #8B5CF6, #06B6D4)', category: 'brand' },
-                    { name: 'Scuti Reverse', gradient: 'linear-gradient(90deg, #06B6D4, #8B5CF6)', category: 'brand' },
+                    { name: 'THADO Original', gradient: 'linear-gradient(90deg, #8B5CF6, #06B6D4)', category: 'brand' },
+                    { name: 'THADO Diagonal', gradient: 'linear-gradient(135deg, #8B5CF6, #06B6D4)', category: 'brand' },
+                    { name: 'THADO Reverse', gradient: 'linear-gradient(90deg, #06B6D4, #8B5CF6)', category: 'brand' },
                     { name: 'Rosa-Naranja', gradient: 'linear-gradient(90deg, #F472B6, #FB923C)', category: 'warm' },
                     { name: 'Azul-Verde', gradient: 'linear-gradient(90deg, #3B82F6, #10B981)', category: 'cool' },
                     { name: 'Rojo-Rosa', gradient: 'linear-gradient(90deg, #EF4444, #EC4899)', category: 'warm' },

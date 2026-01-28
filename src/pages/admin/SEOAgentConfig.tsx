@@ -73,7 +73,7 @@ export const SEOAgentConfig: React.FC = () => {
       },
       contextConfig: {
         projectInfo: {
-          name: 'Web Scuti',
+          name: 'THADO Consulting',
           type: 'seo_platform',
           domain: 'technology',
           language: 'es-ES',

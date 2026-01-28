@@ -26,7 +26,7 @@ const LogoIcon = ({
     <div className={`relative group ${className}`}>
       <img 
         src="/FAVICON.png"
-        alt="Scuti Company Icon"
+        alt="THADO Consulting"
         className={`
           ${sizeClasses[size]}
           transition-all 

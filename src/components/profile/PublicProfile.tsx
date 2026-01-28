@@ -152,7 +152,7 @@ export const PublicProfile: React.FC<PublicProfileProps> = ({
       try {
         await navigator.share({
           title: `Perfil de ${profile?.displayName}`,
-          text: profile?.bio || 'Mira este perfil en Web Scuti',
+          text: profile?.bio || 'Mira este perfil en THADO Consulting',
           url
         });
       } catch (error) {

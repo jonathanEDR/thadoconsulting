@@ -438,7 +438,7 @@ export default function ClientSidebar({ isOpen, setIsOpen }: ClientSidebarProps)
           {isOpen ? (
             // Footer expandido
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-gray-400 font-medium">Web Scuti v1.0.0</p>
+              <p className="text-xs text-slate-500 dark:text-gray-400 font-medium">THADO Consulting v1.0.0</p>
               <p className="text-xs text-slate-400 dark:text-gray-500">© 2025</p>
             </div>
           ) : (

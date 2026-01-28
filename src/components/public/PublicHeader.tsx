@@ -150,7 +150,7 @@ const PublicHeaderOptimized = () => {
             <div className="flex-1 flex justify-center sm:justify-start sm:flex-initial">
               <Link 
                 to="/" 
-                aria-label="Scuti Company - Ir al inicio"
+                aria-label="THADO Consulting - Ir al inicio"
                 className="flex items-center transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75 rounded-lg"
               >
                 <Logo size="sm" animated compact />

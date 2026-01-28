@@ -604,7 +604,7 @@ const PublicFooter = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Scuti Company. Todos los derechos reservados.
+              © {new Date().getFullYear()} THADO Consulting. Todos los derechos reservados.
             </p>
             
             {/* Enlaces legales */}

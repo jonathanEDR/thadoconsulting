@@ -95,7 +95,7 @@ const DEFAULT_CLIENT_CONFIG: DashboardSidebarConfig['client'] = {
 
 const DEFAULT_GLOBAL_CONFIG: DashboardSidebarConfig['global'] = {
   logoUrl: '/logos/logo-white.svg',
-  logoAlt: 'Web Scuti',
+  logoAlt: 'THADO Consulting',
   borderColorLight: 'rgba(226, 232, 240, 0.6)',
   borderColorDark: 'rgba(55, 65, 81, 0.6)',
   expandedWidth: '18rem', // w-72

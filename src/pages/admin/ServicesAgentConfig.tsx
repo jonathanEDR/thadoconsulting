@@ -73,7 +73,7 @@ export const ServicesAgentConfig: React.FC = () => {
       },
       contextConfig: {
         projectInfo: {
-          name: 'Web Scuti Services',
+          name: 'THADO Consulting Services',
           type: 'service_portfolio',
           domain: 'professional_services',
           language: 'es-ES',

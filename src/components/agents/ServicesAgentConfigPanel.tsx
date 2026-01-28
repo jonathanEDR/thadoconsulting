@@ -128,7 +128,7 @@ const ServicesAgentConfigPanel: React.FC<ServicesAgentConfigPanelProps> = ({ onC
       },
       contextConfig: {
         projectInfo: {
-          name: 'Web Scuti',
+          name: 'THADO Consulting',
           type: 'services_platform',
           domain: 'technology',
           language: 'es-ES',

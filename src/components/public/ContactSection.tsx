@@ -647,7 +647,7 @@ const ContactSection = ({ data, categorias = [], transparentBackground = false }
                 aspectRatio={data.map.aspectRatio || 'landscape'}
                 alignment={data.map.alignment || 'center'}
                 containerSize={data.map.containerSize || 'medium'}
-                companyName={data.map.companyName || 'Scuti Company S.A.C'}
+                companyName={data.map.companyName || 'THADO Consulting S.A.C'}
                 address={data.map.address || 'calles los molles It-02, Huánuco, Perú'}
                 customLogo={data.map.customLogo}
                 logoSize={data.map.logoSize || 'medium'}

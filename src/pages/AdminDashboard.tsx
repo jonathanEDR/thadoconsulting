@@ -79,7 +79,7 @@ export default function AdminDashboard() {
   // ⚡ useEffect simplificado
   useEffect(() => {
     loadStats();
-    document.title = 'Panel Administrativo | Web Scuti';
+    document.title = 'Panel Administrativo | THADO Consulting';
   }, [loadStats]);
 
   if (!user || !role) {

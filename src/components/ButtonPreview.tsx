@@ -134,7 +134,7 @@ export const ButtonPreview: React.FC<ButtonPreviewProps> = ({
         <div className="mt-8 pt-6 border-t" style={{ borderColor: currentTheme === 'light' ? '#e5e7eb' : '#374151' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
-              <div className="font-bold">🚀 Web Scuti</div>
+              <div className="font-bold">🚀 THADO Consulting</div>
               <nav className="hidden md:flex space-x-6">
                 <a href="#" style={{ color: currentTheme === 'light' ? '#1f2937' : '#f9fafb' }}>Inicio</a>
                 <a href="#" style={{ color: currentTheme === 'light' ? '#6b7280' : '#d1d5db' }}>Nosotros</a>

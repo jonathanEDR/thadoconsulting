@@ -22,7 +22,7 @@ const BlogPost: React.FC = () => {
 
   useEffect(() => {
     if (post) {
-      document.title = `${post.title} | Blog Web Scuti`;
+      document.title = `${post.title} | Blog THADO Consulting`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [post]);
