@@ -433,13 +433,10 @@ const HomeOptimized = () => {
               
               {/* Logo favicon en el centro */}
               <div className="absolute inset-2 rounded-full bg-white shadow-xl flex items-center justify-center overflow-hidden">
-                <img 
-                  src="https://res.cloudinary.com/ds54wlchi/image/upload/v1761502909/web-scuti/uze3gepsrrjpe43uobxj.png" 
-                  alt="Cargando..." 
+                <img
+                  src="/FAVICON.png"
+                  alt="Cargando..."
                   className="w-3/4 h-3/4 object-contain"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/FAVICON.png';
-                  }}
                 />
               </div>
             </div>
