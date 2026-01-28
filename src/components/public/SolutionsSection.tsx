@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../contexts/ThemeContext';
-import { DEFAULT_SOLUTIONS_CONFIG } from '../../utils/defaultConfig';
+import { SolutionsSkeleton } from '../common/SectionSkeletons';
 import type { CardDesignStyles, ButtonStyle } from '../../types/cms';
 
 interface SolutionItem {
@@ -74,8 +74,10 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
     return tempDiv.textContent || tempDiv.innerText || '';
   };
 
-  // ⚡ Priorizar datos del CMS sobre defaultConfig
-  const solutionsData: SolutionsData = data || DEFAULT_SOLUTIONS_CONFIG;
+  // Si no hay datos, mostrar skeleton de carga
+  if (!data) return <SolutionsSkeleton />;
+
+  const solutionsData: SolutionsData = data;
 
   // Mapear datos del CMS a estructura esperada
   const getMappedSolutionsData = () => {
@@ -180,9 +182,6 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
   // Obtener estilos actuales según el tema (CMS o defaults)
   const cardStyles = getCMSCardStyles();
 
-  // 🔍 LOGS DE DEPURACIÓN - Para diagnosticar problemas de configuración
-  useEffect(() => {
-  }, [data, theme, cardStyles]);
 
   // ⚡ Obtener estilos del botón "Ver más..." desde la configuración de tema
   const getViewMoreButtonStyles = (): ButtonStyle => {

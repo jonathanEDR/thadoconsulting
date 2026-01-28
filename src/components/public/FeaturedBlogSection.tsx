@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, User, Clock, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
-import { DEFAULT_FEATURED_BLOG_CONFIG } from '../../utils/defaultConfig';
 import type { DefaultFeaturedBlogConfig } from '../../utils/defaultConfig';
+import { FeaturedBlogSkeleton } from '../common/SectionSkeletons';
 import DynamicIcon from '../ui/DynamicIcon';
 
 interface BlogPost {
@@ -36,29 +36,16 @@ interface FeaturedBlogSectionProps {
  * Muestra los posts marcados como "destacados" en el home
  * Configurable desde CMS con estilos y textos personalizados
  */
-const FeaturedBlogSection = ({ data = DEFAULT_FEATURED_BLOG_CONFIG, themeConfig }: FeaturedBlogSectionProps) => {
+const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) => {
+  // Todos los hooks ANTES de cualquier early return (reglas de React Hooks)
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
-
-  // Obtener estilos según el tema actual
-  const currentStyles = isDarkMode ? data.styles?.dark : data.styles?.light;
-  const currentCardsDesign = isDarkMode ? data.cardsDesign?.dark : data.cardsDesign?.light;
-  const currentBackgroundImage = isDarkMode ? data.backgroundImage?.dark : data.backgroundImage?.light;
-
-  // 🆕 Obtener configuración del botón del tema
-  const buttonConfig = isDarkMode 
-    ? themeConfig?.darkMode?.buttons?.featuredBlogCta 
-    : themeConfig?.lightMode?.buttons?.featuredBlogCta;
-  
-  const buttonText = buttonConfig?.text || data.buttonText;
-  const buttonBackground = buttonConfig?.background || 'linear-gradient(135deg, #8B5CF6, #06B6D4)';
-  const buttonTextColor = buttonConfig?.textColor || '#FFFFFF';
-  const buttonBorderColor = buttonConfig?.borderColor || 'transparent';
 
   useEffect(() => {
+    if (!data) return;
+
     const controller = new AbortController();
     let isMounted = true;
 
@@ -96,7 +83,26 @@ const FeaturedBlogSection = ({ data = DEFAULT_FEATURED_BLOG_CONFIG, themeConfig 
       isMounted = false;
       controller.abort();
     };
-  }, [data.limit]);
+  }, [data?.limit]);
+
+  if (!data) return <FeaturedBlogSkeleton />;
+
+  const isDarkMode = theme === 'dark';
+
+  // Obtener estilos según el tema actual
+  const currentStyles = isDarkMode ? data.styles?.dark : data.styles?.light;
+  const currentCardsDesign = isDarkMode ? data.cardsDesign?.dark : data.cardsDesign?.light;
+  const currentBackgroundImage = isDarkMode ? data.backgroundImage?.dark : data.backgroundImage?.light;
+
+  // 🆕 Obtener configuración del botón del tema
+  const buttonConfig = isDarkMode
+    ? themeConfig?.darkMode?.buttons?.featuredBlogCta
+    : themeConfig?.lightMode?.buttons?.featuredBlogCta;
+
+  const buttonText = buttonConfig?.text || data.buttonText;
+  const buttonBackground = buttonConfig?.background || 'linear-gradient(135deg, #8B5CF6, #06B6D4)';
+  const buttonTextColor = buttonConfig?.textColor || '#FFFFFF';
+  const buttonBorderColor = buttonConfig?.borderColor || 'transparent';
 
   // No renderizar nada si hay error o no hay posts
   if (error || (!loading && posts.length === 0)) {

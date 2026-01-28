@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../contexts/ThemeContext';
-import { DEFAULT_HERO_CONFIG } from '../../utils/defaultConfig';
+import { HeroSkeleton } from '../common/SectionSkeletons';
 import '../../styles/gradient-borders.css';
 
 interface HeroData {
@@ -35,42 +35,11 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ data }: HeroSectionProps) => {
-  // Estados para animaciones progresivas
+  // Todos los hooks ANTES de cualquier early return (reglas de React Hooks)
   const [isVisible, setIsVisible] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0);
   const { theme: currentTheme } = useTheme();
 
-  // Usar datos proporcionados o configuración predeterminada como fallback
-  const rawHeroData: HeroData = data || DEFAULT_HERO_CONFIG;
-  
-  // Validar y corregir ctaLink para asegurar navegación correcta
-  const heroData: HeroData = {
-    ...rawHeroData,
-    ctaLink: rawHeroData.ctaLink?.startsWith('#') ? '/servicios' : (rawHeroData.ctaLink || '/servicios')
-  };
-
-  // Obtener la imagen correcta según el tema activo
-  const getCurrentBackgroundImage = () => {
-    const backgroundImageData = heroData.backgroundImage;
-    
-    if (!backgroundImageData) return null;
-    
-    // Si es un string (formato anterior), usarlo como fallback
-    if (typeof backgroundImageData === 'string') {
-      return backgroundImageData;
-    }
-    
-    // Usar imagen del tema activo, con fallback a la otra si no existe
-    if (currentTheme === 'light') {
-      return backgroundImageData.light || backgroundImageData.dark || null;
-    } else {
-      return backgroundImageData.dark || backgroundImageData.light || null;
-    }
-  };
-
-  const currentBackgroundImage = getCurrentBackgroundImage();
-
-  // Animación progresiva al cargar el componente
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     const phases = [
@@ -83,6 +52,33 @@ const HeroSection = ({ data }: HeroSectionProps) => {
       phases.forEach(clearTimeout);
     };
   }, []);
+
+  if (!data) return <HeroSkeleton />;
+
+  const rawHeroData: HeroData = data;
+
+  const heroData: HeroData = {
+    ...rawHeroData,
+    ctaLink: rawHeroData.ctaLink?.startsWith('#') ? '/servicios' : (rawHeroData.ctaLink || '/servicios')
+  };
+
+  const getCurrentBackgroundImage = () => {
+    const backgroundImageData = heroData.backgroundImage;
+
+    if (!backgroundImageData) return null;
+
+    if (typeof backgroundImageData === 'string') {
+      return backgroundImageData;
+    }
+
+    if (currentTheme === 'light') {
+      return backgroundImageData.light || backgroundImageData.dark || null;
+    } else {
+      return backgroundImageData.dark || backgroundImageData.light || null;
+    }
+  };
+
+  const currentBackgroundImage = getCurrentBackgroundImage();
 
   return (
     <section className="relative overflow-hidden theme-transition"

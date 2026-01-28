@@ -12,11 +12,20 @@ import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidge
 import { HomePageSchema } from '../../components/seo/SchemaOrg';
 import { getPageBySlug, forceReload } from '../../services/cmsApi';
 import { useTheme } from '../../contexts/ThemeContext';
-import { DEFAULT_HERO_CONFIG, DEFAULT_SOLUTIONS_CONFIG, DEFAULT_VALUE_ADDED_CONFIG, DEFAULT_CONTACT_CONFIG, DEFAULT_FEATURED_BLOG_CONFIG, DEFAULT_SEO_CONFIG } from '../../utils/defaultConfig';
 import { useCategoriasList, type Categoria } from '../../hooks/useCategoriasCache';
 import type { ThemeConfig } from '../../contexts/ThemeContext';
 import type { ClientLogosContent } from '../../types/cms';
 import type { DefaultFeaturedBlogConfig } from '../../utils/defaultConfig';
+
+// SEO fallback mínimo (el contenido real viene del CMS)
+const SEO_FALLBACK = {
+  metaTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
+  metaDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú. Evita multas SUNAT, ordena tu contabilidad y crece con confianza.',
+  keywords: ['contador Perú', 'estudio contable Lima', 'servicios contables Perú', 'asesoría tributaria SUNAT'],
+  ogTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
+  ogDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú.',
+  ogImage: '',
+};
 
 
 interface ButtonTheme {
@@ -162,25 +171,14 @@ const addCategoriasToConfig = (cmsConfig: any, categorias: Categoria[] = []) => 
   return configWithCategories;
 };
 
-const DEFAULT_PAGE_DATA: PageData = {
-  content: {
-    hero: DEFAULT_HERO_CONFIG,
-    solutions: DEFAULT_SOLUTIONS_CONFIG,
-    valueAdded: DEFAULT_VALUE_ADDED_CONFIG,
-    featuredBlog: DEFAULT_FEATURED_BLOG_CONFIG,
-    contactForm: DEFAULT_CONTACT_CONFIG
-  },
-  seo: DEFAULT_SEO_CONFIG  // ✅ Importado de defaultConfig.ts (una sola fuente de verdad)
-};
-
 /**
  * Página Home Optimizada
- * - Renderiza contenido estático inmediatamente
+ * - Muestra skeletons mientras carga datos del CMS
  * - Carga datos del CMS en background sin bloquear
  * - Sin dependencias de autenticación
  */
 const HomeOptimized = () => {
-  const [pageData, setPageData] = useState<PageData>(DEFAULT_PAGE_DATA);
+  const [pageData, setPageData] = useState<PageData | null>(null);
   const [isLoadingCMS, setIsLoadingCMS] = useState(false);
   const { setThemeConfig } = useTheme();
   
@@ -292,7 +290,6 @@ const HomeOptimized = () => {
   // ✅ Validar que la imagen OG sea una URL directa de imagen (no URLs de Facebook/redes sociales)
   const isValidOgImage = (url: string | undefined): boolean => {
     if (!url) return false;
-    // Rechazar URLs de Facebook, Instagram, Twitter que no son imágenes directas
     const invalidPatterns = [
       'facebook.com/photo',
       'facebook.com/profile',
@@ -303,32 +300,31 @@ const HomeOptimized = () => {
     return !invalidPatterns.some(pattern => url.includes(pattern));
   };
 
-  // Obtener la imagen OG válida (prioriza CMS, pero valida que sea URL de imagen directa)
   const getValidOgImage = (): string => {
-    const cmsImage = pageData.seo?.ogImage;
+    const cmsImage = pageData?.seo?.ogImage;
     if (cmsImage && isValidOgImage(cmsImage)) {
-      // Si es una ruta relativa, convertir a absoluta
       if (cmsImage.startsWith('/')) {
         return `https://www.thadoconsulting.com${cmsImage}`;
       }
       return cmsImage;
     }
-    return DEFAULT_SEO_CONFIG.ogImage;
+    return SEO_FALLBACK.ogImage;
   };
 
   const ogImage = getValidOgImage();
+  const seo = pageData?.seo;
 
   return (
     <>
       {/* ✅ SEO Manual desde pageData (sin hook duplicado) */}
       <Helmet>
-        <title>{pageData.seo?.metaTitle || DEFAULT_SEO_CONFIG.metaTitle}</title>
-        <meta name="description" content={pageData.seo?.metaDescription || DEFAULT_SEO_CONFIG.metaDescription} />
-        <meta name="keywords" content={(pageData.seo?.keywords || DEFAULT_SEO_CONFIG.keywords).join(', ')} />
-        
+        <title>{seo?.metaTitle || SEO_FALLBACK.metaTitle}</title>
+        <meta name="description" content={seo?.metaDescription || SEO_FALLBACK.metaDescription} />
+        <meta name="keywords" content={(seo?.keywords || SEO_FALLBACK.keywords).join(', ')} />
+
         {/* Open Graph */}
-        <meta property="og:title" content={pageData.seo?.ogTitle || pageData.seo?.metaTitle || DEFAULT_SEO_CONFIG.ogTitle} />
-        <meta property="og:description" content={pageData.seo?.ogDescription || pageData.seo?.metaDescription || DEFAULT_SEO_CONFIG.ogDescription} />
+        <meta property="og:title" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
+        <meta property="og:description" content={seo?.ogDescription || seo?.metaDescription || SEO_FALLBACK.ogDescription} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -337,13 +333,13 @@ const HomeOptimized = () => {
         <meta property="og:url" content="https://www.thadoconsulting.com/" />
         <meta property="og:site_name" content="THADO Consulting" />
         <meta property="og:locale" content="es_PE" />
-        
+
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageData.seo?.ogTitle || pageData.seo?.metaTitle || DEFAULT_SEO_CONFIG.ogTitle} />
-        <meta name="twitter:description" content={pageData.seo?.ogDescription || pageData.seo?.metaDescription || DEFAULT_SEO_CONFIG.ogDescription} />
+        <meta name="twitter:title" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
+        <meta name="twitter:description" content={seo?.ogDescription || seo?.metaDescription || SEO_FALLBACK.ogDescription} />
         <meta name="twitter:image" content={ogImage} />
-        
+
         {/* Canonical */}
         <link rel="canonical" href="https://www.thadoconsulting.com/" />
       </Helmet>
@@ -354,27 +350,27 @@ const HomeOptimized = () => {
       <div className="min-h-screen w-full overflow-x-hidden bg-transparent">
         <PublicHeader />
         <main className="w-full bg-transparent">
-          <HeroSection data={pageData.content.hero} />
-          <SolutionsSection 
-            data={pageData.content.solutions} 
-            themeConfig={pageData.theme}
+          <HeroSection data={pageData?.content.hero} />
+          <SolutionsSection
+            data={pageData?.content.solutions}
+            themeConfig={pageData?.theme}
           />
-          <ValueAddedSection 
-            data={pageData.content.valueAdded} 
-            themeConfig={pageData.theme}
+          <ValueAddedSection
+            data={pageData?.content.valueAdded}
+            themeConfig={pageData?.theme}
           />
-          <ClientLogosSection 
-            data={pageData.content.clientLogos}
+          <ClientLogosSection
+            data={pageData?.content.clientLogos}
           />
 
-          <ContactSection 
-            data={addCategoriasToConfig(pageData.content.contactForm, categorias)}
+          <ContactSection
+            data={pageData?.content.contactForm ? addCategoriasToConfig(pageData.content.contactForm, categorias) : undefined}
             categorias={categorias}
           />
 
-          <FeaturedBlogSection 
-            data={pageData.content.featuredBlog}
-            themeConfig={pageData.theme}
+          <FeaturedBlogSection
+            data={pageData?.content.featuredBlog}
+            themeConfig={pageData?.theme}
           />
         </main>
         <PublicFooter />

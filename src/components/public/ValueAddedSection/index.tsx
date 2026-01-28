@@ -6,12 +6,16 @@ import { BackgroundImage } from './components/BackgroundImage';
 import { SectionHeader } from './components/SectionHeader';
 import { LogosSection } from './components/LogosSection';
 import { ValueCard } from './components/ValueCard';
+import { ValueAddedSkeleton } from '../../common/SectionSkeletons';
 import './styles/animations.css';
 
 const ValueAddedSection = ({ data, themeConfig: _themeConfig }: ValueAddedSectionProps) => {
+  // Todos los hooks ANTES de cualquier early return (reglas de React Hooks)
   const { theme } = useTheme();
   const { isVisible } = useAnimations();
   const { mappedData, cardStyles, currentBackgroundImage, valueItems } = useValueAddedData(data, theme);
+
+  if (!data || !mappedData) return <ValueAddedSkeleton />;
 
   return (
     <section
