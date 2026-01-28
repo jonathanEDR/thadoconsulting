@@ -351,7 +351,7 @@ const About = () => {
         {/* Open Graph */}
         <meta property="og:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
         <meta property="og:description" content="Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú." />
-        <meta property="og:image" content="https://www.thadoconsulting.com/FAVICON.png" />
+        <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="THADO Consulting - Estudio Contable en Perú" />
@@ -364,7 +364,7 @@ const About = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
         <meta name="twitter:description" content="Estudio contable especializado en servicios para MYPES en Perú" />
-        <meta name="twitter:image" content="https://www.thadoconsulting.com/FAVICON.png" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
 
         {/* Canonical */}
         <link rel="canonical" href="https://www.thadoconsulting.com/nosotros" />

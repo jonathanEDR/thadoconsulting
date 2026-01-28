@@ -175,7 +175,7 @@ const BlogHome: React.FC = () => {
         {/* Open Graph */}
         <meta property="og:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
         <meta property="og:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú." />
-        <meta property="og:image" content="https://www.thadoconsulting.com/FAVICON.png" />
+        <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
@@ -188,7 +188,7 @@ const BlogHome: React.FC = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
         <meta name="twitter:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú" />
-        <meta name="twitter:image" content="https://www.thadoconsulting.com/FAVICON.png" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta name="twitter:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
 
         {/* Canonical */}

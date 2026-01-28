@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
         {/* Open Graph */}
         <meta property="og:title" content="Politica de Privacidad - THADO Consulting" />
         <meta property="og:description" content="Conoce nuestra politica de privacidad y como protegemos tus datos personales" />
-        <meta property="og:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
+        <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="THADO Consulting - Política de Privacidad" />
@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Politica de Privacidad - THADO Consulting" />
         <meta name="twitter:description" content="Conoce nuestra politica de privacidad" />
-        <meta name="twitter:image" content="https://www.thadoconsulting.com/logofondonegro.jpeg" />
+        <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta name="twitter:image:alt" content="THADO Consulting - Política de Privacidad" />
 
         {/* Canonical */}
