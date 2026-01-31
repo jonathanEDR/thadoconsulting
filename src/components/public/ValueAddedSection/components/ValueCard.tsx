@@ -1,7 +1,8 @@
 import React from 'react';
 import type { CardDesignStyles } from '../../../../types/cms';
 import type { ValueAddedItem } from '../types';
-import { cleanHtmlToText, getCurrentIcon, getSafeStyle } from '../utils';
+import { cleanHtmlToText, getSafeStyle } from '../utils';
+import { CardIcon } from './CardIcon';
 
 interface ValueCardProps {
   valueItem: ValueAddedItem;
@@ -11,39 +12,6 @@ interface ValueCardProps {
   index: number;
   isVisible: boolean;
 }
-
-const CardIcon = ({
-  iconData,
-  cardStyles,
-  title
-}: {
-  iconData: { type: 'image' | 'none'; value: string | null };
-  cardStyles: CardDesignStyles;
-  title: string;
-}) => {
-  if (iconData.type !== 'image' || !iconData.value) return null;
-
-  return (
-    <div className={`mb-6 flex ${cardStyles.iconAlignment === 'center' ? 'justify-center' : cardStyles.iconAlignment === 'right' ? 'justify-end' : 'justify-start'}`}>
-      <div
-        className="w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300"
-        style={{
-          background: cardStyles.iconBackground,
-          border: cardStyles.iconBorderEnabled ? `2px solid ${cardStyles.iconColor}` : 'none'
-        }}
-      >
-        <img
-          src={iconData.value}
-          alt={`Icono ${title}`}
-          className="w-10 h-10 object-contain"
-          style={{
-            filter: `hue-rotate(0deg) saturate(1) brightness(1)`
-          }}
-        />
-      </div>
-    </div>
-  );
-};
 
 export const ValueCard = ({
   valueItem,
@@ -84,7 +52,10 @@ export const ValueCard = ({
     card.style.boxShadow = cardStyles.shadow || '0 8px 16px rgba(0, 0, 0, 0.1)';
   };
 
-  const iconData = getCurrentIcon(valueItem, theme);
+  // Obtener color del icono según el tema
+  const iconColor = theme === 'dark' 
+    ? (valueItem.iconColorDark || '#818cf8') 
+    : (valueItem.iconColorLight || '#6366f1');
 
   // Si el fondo es transparente, usar estructura simple con borde CSS real
   if (isTransparentBackground) {
@@ -114,9 +85,10 @@ export const ValueCard = ({
             padding: getSafeStyle(cardStyles.cardPadding, '2rem')
           }}
         >
-          {showIcons && iconData.type === 'image' && iconData.value && (
+          {showIcons && valueItem.iconName && (
             <CardIcon
-              iconData={iconData}
+              iconName={valueItem.iconName}
+              iconColor={iconColor}
               cardStyles={cardStyles}
               title={valueItem.title}
             />
@@ -236,9 +208,10 @@ export const ValueCard = ({
             padding: getSafeStyle(cardStyles.cardPadding, '2rem')
           }}
         >
-          {showIcons && iconData.type === 'image' && iconData.value && (
+          {showIcons && valueItem.iconName && (
             <CardIcon
-              iconData={iconData}
+              iconName={valueItem.iconName}
+              iconColor={iconColor}
               cardStyles={cardStyles}
               title={valueItem.title}
             />

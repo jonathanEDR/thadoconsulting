@@ -4,12 +4,18 @@ import DOMPurify from 'dompurify';
 import { useTheme } from '../../contexts/ThemeContext';
 import { SolutionsSkeleton } from '../common/SectionSkeletons';
 import type { CardDesignStyles, ButtonStyle } from '../../types/cms';
+import DynamicIcon from '../ui/DynamicIcon';
 
 interface SolutionItem {
   id?: string;
   title: string;
   description: string;
   icon?: string;
+  // Nuevo sistema de iconos dinámicos
+  iconName?: string;
+  iconColorLight?: string;
+  iconColorDark?: string;
+  // Sistema antiguo (deprecated)
   iconLight?: string;
   iconDark?: string;
   gradient?: string;
@@ -93,6 +99,11 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
           title: item.title,
           description: item.description,
           icon: item.icon || '📄',
+          // Nuevo sistema de iconos dinámicos
+          iconName: item.iconName,
+          iconColorLight: item.iconColorLight,
+          iconColorDark: item.iconColorDark,
+          // Sistema antiguo para compatibilidad
           iconLight: item.iconLight,
           iconDark: item.iconDark,
           gradient: item.gradient,
@@ -225,8 +236,20 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
   };
 
   // Obtener el icono correcto según el tema activo
-  const getCurrentIcon = (solution: SolutionItem): { type: 'image' | 'emoji' | 'component' | 'none', value: string | React.ReactNode | null } => {
-    // Prioridad 1: iconLight/iconDark según tema activo
+  const getCurrentIcon = (solution: SolutionItem): { type: 'dynamic' | 'image' | 'emoji' | 'component' | 'none', value: string | React.ReactNode | null, color?: string } => {
+    // Prioridad 1: Nuevo sistema de iconos dinámicos (iconName)
+    if (solution.iconName) {
+      const iconColor = theme === 'dark' 
+        ? (solution.iconColorDark || '#818cf8')
+        : (solution.iconColorLight || '#6366f1');
+      return { 
+        type: 'dynamic', 
+        value: solution.iconName, 
+        color: iconColor 
+      };
+    }
+    
+    // Prioridad 2: Sistema antiguo - iconLight/iconDark según tema activo
     if (theme === 'light' && solution.iconLight) {
       const iconType = isImageUrl(solution.iconLight) ? 'image' : 'emoji';
       return { type: iconType, value: solution.iconLight };
@@ -236,7 +259,7 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
       return { type: iconType, value: solution.iconDark };
     }
     
-    // Prioridad 2: Fallback al icono del otro tema si el actual no existe
+    // Prioridad 3: Fallback al icono del otro tema si el actual no existe
     if (theme === 'light' && solution.iconDark) {
       const iconType = isImageUrl(solution.iconDark) ? 'image' : 'emoji';
       return { type: iconType, value: solution.iconDark };
@@ -246,7 +269,7 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
       return { type: iconType, value: solution.iconLight };
     }
     
-    // Prioridad 3: Usar icon como fallback (siempre será string en defaultConfig)
+    // Prioridad 4: Usar icon como fallback (siempre será string en defaultConfig)
     if (solution.icon) {
       const iconType = isImageUrl(solution.icon) ? 'image' : 'emoji';
       return { type: iconType, value: solution.icon };
@@ -393,6 +416,15 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
                 // Renderizar contenido del icono basado en el tipo
                 const renderIconContent = () => {
                   switch (currentIcon.type) {
+                    case 'dynamic':
+                      return (
+                        <DynamicIcon 
+                          name={currentIcon.value as string} 
+                          size={32} 
+                          color={currentIcon.color || cardStyles.iconColor || '#8B5CF6'}
+                          strokeWidth={2}
+                        />
+                      );
                     case 'image':
                       return (
                         <img 

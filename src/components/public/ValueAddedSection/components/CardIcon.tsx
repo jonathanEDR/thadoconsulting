@@ -1,30 +1,39 @@
+import DynamicIcon from '../../../ui/DynamicIcon';
 import type { CardDesignStyles } from '../../../../types/cms';
 
 interface CardIconProps {
-  iconData: { type: 'image' | 'none'; value: string | null };
+  iconName?: string;
+  iconColor?: string;
   cardStyles: CardDesignStyles;
   title: string;
 }
 
-export const CardIcon = ({ iconData, cardStyles, title }: CardIconProps) => {
-  if (iconData.type !== 'image' || !iconData.value) return null;
+export const CardIcon = ({ iconName, iconColor, cardStyles, title }: CardIconProps) => {
+  // Si no hay iconName, no mostrar nada
+  if (!iconName) return null;
 
   return (
-    <div className={`mb-6 flex ${cardStyles.iconAlignment === 'center' ? 'justify-center' : cardStyles.iconAlignment === 'right' ? 'justify-end' : 'justify-start'}`}>
+    <div className={`mb-6 flex ${
+      cardStyles.iconAlignment === 'center' 
+        ? 'justify-center' 
+        : cardStyles.iconAlignment === 'right' 
+        ? 'justify-end' 
+        : 'justify-start'
+    }`}>
       <div 
         className="w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
         style={{
-          background: cardStyles.iconBackground,
-          border: cardStyles.iconBorderEnabled ? `2px solid ${cardStyles.iconColor}` : 'none'
+          background: cardStyles.iconBackground || 'rgba(139, 92, 246, 0.1)',
+          border: cardStyles.iconBorderEnabled 
+            ? `2px solid ${iconColor || cardStyles.iconColor || '#8B5CF6'}` 
+            : 'none'
         }}
       >
-        <img 
-          src={iconData.value}
-          alt={`Icono ${title}`}
-          className="w-10 h-10 object-contain"
-          style={{
-            filter: `hue-rotate(0deg) saturate(1) brightness(1)`
-          }}
+        <DynamicIcon
+          name={iconName}
+          size={32}
+          color={iconColor || cardStyles.iconColor || '#8B5CF6'}
+          strokeWidth={2}
         />
       </div>
     </div>

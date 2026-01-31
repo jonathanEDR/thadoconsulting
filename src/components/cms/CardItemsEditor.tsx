@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import type { SolutionItem, PageData } from '../../types/cms';
-import ManagedImageSelector from '../ManagedImageSelector';
 import RichTextEditor from '../RichTextEditor';
 import RichTextEditorCompact from '../RichTextEditorCompact';
+import IconSelector from './shared/IconSelector';
+import DynamicIcon from '../ui/DynamicIcon';
 
 interface CardItemsEditorProps {
   items: SolutionItem[];
@@ -61,11 +62,17 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
       'from-cyan-500 to-cyan-700',
       'from-amber-500 to-amber-700'
     ];
+    const defaultIcons = [
+      'Sparkles',
+      'Code2',
+      'Brain'
+    ];
     
     return {
       // No incluir _id para nuevos items, dejar que el backend lo genere
-      iconLight: '',
-      iconDark: '',
+      iconName: defaultIcons[index] || 'Circle',
+      iconColorLight: '#6366f1',
+      iconColorDark: '#818cf8',
       title: defaultTitles[index] || `Solución ${index + 1}`,
       description: defaultDescriptions[index] || `Descripción de la solución ${index + 1}`,
       gradient: defaultGradients[index] || 'from-gray-500 to-gray-700',
@@ -370,58 +377,18 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
                     
                   </div>
 
-                  {/* Columna derecha: Iconos por tema (1/3) */}
+                  {/* Columna derecha: Selector de Iconos (1/3) */}
                   <div className="xl:col-span-1">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                      🖼️ Iconos por Tema
-                    </h4>
-                    <div className="space-y-4">
-                      
-                      {/* Icono Tema Claro */}
-                      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-700/50">
-                        <div className="flex items-center mb-3">
-                          <div className="bg-white dark:bg-gray-800 rounded-full p-2 mr-3 shadow-sm">
-                            <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h5 className="text-sm font-bold text-gray-800 dark:text-gray-200">🌞 Tema Claro</h5>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Icono para modo día</p>
-                          </div>
-                        </div>
-                        <ManagedImageSelector
-                          label="Icono Tema Claro"
-                          description="Imagen PNG para el modo claro"
-                          currentImage={item.iconLight}
-                          onImageSelect={(url: string) => updateItem(index, 'iconLight', url)}
-                          hideButtonArea={!!item.iconLight}
-                        />
-                      </div>
-
-                      {/* Icono Tema Oscuro */}
-                      <div className="bg-gradient-to-br from-slate-900 to-gray-900 dark:from-slate-800/50 dark:to-gray-800/50 p-4 rounded-lg border border-gray-700 dark:border-gray-600">
-                        <div className="flex items-center mb-3">
-                          <div className="bg-gray-800 dark:bg-gray-700 rounded-full p-2 mr-3 shadow-sm">
-                            <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                            </svg>
-                          </div>
-                          <div>
-                            <h5 className="text-sm font-bold text-white dark:text-gray-200">🌙 Tema Oscuro</h5>
-                            <p className="text-xs text-gray-400 dark:text-gray-500">Icono para modo noche</p>
-                          </div>
-                        </div>
-                        <ManagedImageSelector
-                          label="Icono Tema Oscuro"
-                          description="Imagen PNG para el modo oscuro"
-                          currentImage={item.iconDark}
-                          onImageSelect={(url: string) => updateItem(index, 'iconDark', url)}
-                          hideButtonArea={!!item.iconDark}
-                          darkMode={true}
-                        />
-                      </div>
-                    </div>
+                    <IconSelector
+                      iconName={item.iconName || 'Circle'}
+                      iconColorLight={item.iconColorLight || '#6366f1'}
+                      iconColorDark={item.iconColorDark || '#818cf8'}
+                      onIconChange={(iconName) => updateItem(index, 'iconName', iconName)}
+                      onColorLightChange={(color) => updateItem(index, 'iconColorLight', color)}
+                      onColorDarkChange={(color) => updateItem(index, 'iconColorDark', color)}
+                      title="🎨 Icono de la Tarjeta"
+                      description="Selecciona un icono vectorial de Lucide React"
+                    />
                   </div>
 
                 </div>
@@ -435,27 +402,33 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
                       <div className="flex items-start gap-4">
                         {/* Preview de iconos */}
                         <div className="flex gap-2">
-                          {item.iconLight && (
-                            <div className="text-center">
-                              <img 
-                                src={item.iconLight} 
-                                alt={`${item.title} - Light`}
-                                className="w-12 h-12 object-contain rounded border bg-white p-1"
-                              />
-                              <span className="text-xs text-gray-600 dark:text-gray-400">🌞</span>
-                            </div>
+                          {item.iconName && (
+                            <>
+                              <div className="text-center">
+                                <div className="w-12 h-12 rounded border bg-white p-2 flex items-center justify-center">
+                                  <DynamicIcon 
+                                    name={item.iconName} 
+                                    size={28} 
+                                    color={item.iconColorLight || '#6366f1'}
+                                    strokeWidth={2}
+                                  />
+                                </div>
+                                <span className="text-xs text-gray-600 dark:text-gray-400">🌞</span>
+                              </div>
+                              <div className="text-center">
+                                <div className="w-12 h-12 rounded border bg-gray-800 p-2 flex items-center justify-center">
+                                  <DynamicIcon 
+                                    name={item.iconName} 
+                                    size={28} 
+                                    color={item.iconColorDark || '#818cf8'}
+                                    strokeWidth={2}
+                                  />
+                                </div>
+                                <span className="text-xs text-gray-400">🌙</span>
+                              </div>
+                            </>
                           )}
-                          {item.iconDark && (
-                            <div className="text-center">
-                              <img 
-                                src={item.iconDark} 
-                                alt={`${item.title} - Dark`}
-                                className="w-12 h-12 object-contain rounded border bg-gray-800 p-1"
-                              />
-                              <span className="text-xs text-gray-600 dark:text-gray-400">🌙</span>
-                            </div>
-                          )}
-                          {!item.iconLight && !item.iconDark && (
+                          {!item.iconName && (
                             <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded flex items-center justify-center text-gray-500">
                               📄
                             </div>

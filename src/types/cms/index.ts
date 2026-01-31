@@ -106,11 +106,10 @@ export interface ThemeColors {
 
 export interface SolutionItem {
   _id?: string;        // ObjectId opcional de MongoDB
-  iconLight?: string;  // URL del icono para tema claro (PNG)
-  iconDark?: string;   // URL del icono para tema oscuro (PNG)
-  // Mantener para compatibilidad con datos antiguos
-  icon?: string;
-  iconUrl?: string;
+  // 🆕 Nuevo sistema de iconos dinámicos (Lucide React)
+  iconName?: string;         // Nombre del icono Lucide (ej: 'FileText', 'Rocket', etc.)
+  iconColorLight?: string;   // Color del icono para tema claro (hex)
+  iconColorDark?: string;    // Color del icono para tema oscuro (hex)
   title: string;
   description: string;
   gradient: string;
