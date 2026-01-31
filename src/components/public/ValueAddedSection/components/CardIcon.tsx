@@ -5,10 +5,9 @@ interface CardIconProps {
   iconName?: string;
   iconColor?: string;
   cardStyles: CardDesignStyles;
-  title: string;
 }
 
-export const CardIcon = ({ iconName, iconColor, cardStyles, title }: CardIconProps) => {
+export const CardIcon = ({ iconName, iconColor, cardStyles }: CardIconProps) => {
   // Si no hay iconName, no mostrar nada
   if (!iconName) return null;
 

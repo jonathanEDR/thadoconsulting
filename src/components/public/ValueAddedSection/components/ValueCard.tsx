@@ -90,7 +90,6 @@ export const ValueCard = ({
               iconName={valueItem.iconName}
               iconColor={iconColor}
               cardStyles={cardStyles}
-              title={valueItem.title}
             />
           )}
 
@@ -213,7 +212,6 @@ export const ValueCard = ({
               iconName={valueItem.iconName}
               iconColor={iconColor}
               cardStyles={cardStyles}
-              title={valueItem.title}
             />
           )}
 

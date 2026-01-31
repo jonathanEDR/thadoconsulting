@@ -4,6 +4,11 @@ export interface ValueAddedItem {
   id?: string;
   title: string;
   description: string;
+  // Nuevo sistema de iconos dinámicos
+  iconName?: string;
+  iconColorLight?: string;
+  iconColorDark?: string;
+  // Sistema antiguo (deprecated)
   iconLight?: string;
   iconDark?: string;
   gradient?: string;

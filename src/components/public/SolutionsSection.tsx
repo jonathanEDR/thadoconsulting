@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { useTheme } from '../../contexts/ThemeContext';
 import { SolutionsSkeleton } from '../common/SectionSkeletons';
 import type { CardDesignStyles, ButtonStyle } from '../../types/cms';
 import DynamicIcon from '../ui/DynamicIcon';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SolutionItem {
   id?: string;
@@ -70,6 +71,57 @@ interface SolutionsSectionProps {
 
 const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
   const { theme } = useTheme();
+
+  // 🎪 Estados del carrusel
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [cardsPerView, setCardsPerView] = useState(3);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // 📱 Detectar tamaño de pantalla para carrusel responsive
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setCardsPerView(1); // Mobile: 1 tarjeta
+      } else if (width < 1024) {
+        setCardsPerView(2); // Tablet: 2 tarjetas
+      } else if (width < 1280) {
+        setCardsPerView(3); // Desktop: 3 tarjetas
+      } else {
+        setCardsPerView(4); // Large desktop: 4 tarjetas
+      }
+    };
+
+    handleResize(); // Ejecutar al montar
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // ⬅️ Navegar a la izquierda
+  const handlePrev = useCallback(() => {
+    if (isTransitioning || currentIndex === 0) return;
+    setIsTransitioning(true);
+    setCurrentIndex(prev => Math.max(0, prev - 1));
+    setTimeout(() => setIsTransitioning(false), 300);
+  }, [currentIndex, isTransitioning]);
+
+  // ➡️ Navegar a la derecha
+  const handleNext = useCallback(() => {
+    if (isTransitioning) return;
+    const maxIndex = Math.max(0, (data?.items?.length || 0) - cardsPerView);
+    if (currentIndex >= maxIndex) return;
+    setIsTransitioning(true);
+    setCurrentIndex(prev => Math.min(maxIndex, prev + 1));
+    setTimeout(() => setIsTransitioning(false), 300);
+  }, [currentIndex, isTransitioning, cardsPerView, data?.items?.length]);
+
+  // ⏸️ Reset al cambiar tamaño de pantalla
+  useEffect(() => {
+    const maxIndex = Math.max(0, (data?.items?.length || 0) - cardsPerView);
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [cardsPerView, currentIndex, data?.items?.length]);
 
   // 🔧 SOLUCIÓN: Función para limpiar HTML del RichTextEditor y extraer solo texto
   const cleanHtmlToText = (htmlString: string): string => {
@@ -284,26 +336,6 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
   // Usar items mapeados correctamente
   const solutions = mappedData.cards || [];
 
-  // Función para obtener clases de alineación de tarjetas
-  const getCardsAlignmentClasses = () => {
-    const alignment = cardStyles.cardsAlignment || 'left';
-    
-
-    
-    // Para que la alineación sea visible, necesitamos cambiar el comportamiento del grid
-    switch (alignment) {
-      case 'center':
-        return 'justify-center'; // Centra todo el contenido del grid
-      case 'right':
-        return 'justify-end'; // Alinea todo a la derecha
-      case 'left':
-      default:
-        return 'justify-start'; // Alinea todo a la izquierda (por defecto)
-    }
-  };
-
-
-
   return (
     <section className="relative py-20 theme-transition overflow-hidden w-full"
              style={{
@@ -361,21 +393,29 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
 
       {/* Solutions Grid */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex flex-wrap gap-8 w-full ${getCardsAlignmentClasses()}`}>
-          {solutions.map((solution, index) => (
+        {/* Contenedor del carrusel */}
+        <div className="relative overflow-hidden">
+          {/* Track del carrusel */}
+          <div 
+            className="flex transition-transform duration-300 ease-out gap-6"
+            style={{
+              transform: `translateX(calc(-${currentIndex} * (100% / ${cardsPerView} + 1.5rem)))`
+            }}
+          >
+            {solutions.map((solution, index) => (
             <div
               key={index}
-              className="group relative rounded-2xl transition-all duration-300 hover:transform hover:-translate-y-2 overflow-hidden solutions-card flex-shrink-0"
+              className="group relative rounded-2xl transition-all duration-300 hover:transform hover:-translate-y-2 overflow-hidden solutions-card"
               style={{
                 animationDelay: `${index * 100}ms`,
                 '--solutions-card-bg': cardStyles.background,
                 background: cardStyles.background,
-                // SIN backdrop-filter para máxima nitidez
                 boxShadow: cardStyles.shadow,
-                width: `min(${getSafeStyle(cardStyles.cardMinWidth, '320px')}, 100%)`, // 🛡️ CSS robusto
-                maxWidth: getSafeStyle(cardStyles.cardMaxWidth, '100%'), // 🛡️ CSS robusto
-                minHeight: getSafeStyle(cardStyles.cardMinHeight, 'auto'), // 🛡️ CSS robusto
-                padding: getSafeStyle(cardStyles.cardPadding, '2rem'), // 🛡️ CSS robusto
+                width: `calc((100% - ${(cardsPerView - 1) * 1.5}rem) / ${cardsPerView})`,
+                minWidth: `calc((100% - ${(cardsPerView - 1) * 1.5}rem) / ${cardsPerView})`,
+                flexShrink: 0,
+                minHeight: getSafeStyle(cardStyles.cardMinHeight, 'auto'),
+                padding: getSafeStyle(cardStyles.cardPadding, '2rem'),
                 transition: 'all 0.3s ease'
               } as React.CSSProperties}
               onMouseEnter={(e) => {
@@ -537,34 +577,75 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
               )}
             </div>
           ))}
+          </div>
         </div>
 
-        {/* Botón "Ver más..." según maqueta */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-center">
-          <Link
-            to="/servicios"
-            role="button"
-            aria-label="Ver más servicios - Ir a la página de servicios"
-            className="group relative inline-block px-8 py-3 rounded-full overflow-hidden transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75"
-            style={{
-              background: viewMoreButtonStyles.background,
-              color: viewMoreButtonStyles.textColor,
-              border: viewMoreButtonStyles.borderColor !== 'transparent' 
-                ? `1px solid ${viewMoreButtonStyles.borderColor}` 
-                : 'none',
-              fontWeight: '600',
-              fontSize: '0.875rem',
-              boxShadow: '0 4px 15px rgba(117, 40, 238, 0.3)'
-            }}
-          >
-            <span className="relative flex items-center space-x-2">
-              <span>{viewMoreButtonStyles.text || 'Ver más...'}</span>
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </span>
-          </Link>
-        </div>
+        {/* Controles de navegación del carrusel */}
+        {solutions.length > cardsPerView && (
+          <div className="flex items-center justify-center gap-4 mt-12">
+            {/* Botón Anterior */}
+            <button
+              onClick={handlePrev}
+              disabled={currentIndex === 0 || isTransitioning}
+              className="group p-3 rounded-full transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75"
+              style={{
+                background: viewMoreButtonStyles.background,
+                color: viewMoreButtonStyles.textColor,
+                border: viewMoreButtonStyles.borderColor !== 'transparent' 
+                  ? `1px solid ${viewMoreButtonStyles.borderColor}` 
+                  : 'none',
+                boxShadow: currentIndex === 0 ? 'none' : '0 4px 15px rgba(117, 40, 238, 0.3)'
+              }}
+              aria-label="Ver tarjetas anteriores"
+            >
+              <ChevronLeft size={24} className="transition-transform duration-300 group-hover:-translate-x-1" />
+            </button>
+
+            {/* Indicadores de posición */}
+            <div className="flex gap-2">
+              {Array.from({ length: Math.ceil(solutions.length / cardsPerView) }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (!isTransitioning) {
+                      setIsTransitioning(true);
+                      setCurrentIndex(idx);
+                      setTimeout(() => setIsTransitioning(false), 300);
+                    }
+                  }}
+                  className="transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75"
+                  style={{
+                    width: currentIndex === idx ? '32px' : '8px',
+                    height: '8px',
+                    background: currentIndex === idx 
+                      ? viewMoreButtonStyles.background 
+                      : theme === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.2)',
+                    boxShadow: currentIndex === idx ? '0 2px 8px rgba(117, 40, 238, 0.4)' : 'none'
+                  }}
+                  aria-label={`Ir a la página ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Botón Siguiente */}
+            <button
+              onClick={handleNext}
+              disabled={currentIndex >= Math.max(0, solutions.length - cardsPerView) || isTransitioning}
+              className="group p-3 rounded-full transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75"
+              style={{
+                background: viewMoreButtonStyles.background,
+                color: viewMoreButtonStyles.textColor,
+                border: viewMoreButtonStyles.borderColor !== 'transparent' 
+                  ? `1px solid ${viewMoreButtonStyles.borderColor}` 
+                  : 'none',
+                boxShadow: currentIndex >= Math.max(0, solutions.length - cardsPerView) ? 'none' : '0 4px 15px rgba(117, 40, 238, 0.3)'
+              }}
+              aria-label="Ver más tarjetas"
+            >
+              <ChevronRight size={24} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
+          </div>
+        )}
       </div>
       
 
