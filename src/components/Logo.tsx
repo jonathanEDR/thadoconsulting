@@ -53,16 +53,16 @@ const Logo = ({
   const logoSrc = (() => {
     switch (variant) {
       case 'white':
-        return '/logotemaoscuro.png';  // Logo para fondos oscuros (texto claro)
+        return '/LOGO_PARA_FONDO_OSCURO.svg';  // Logo para fondos oscuros (texto claro)
       case 'dark':
-        return '/logotemaclaro.png';  // Logo para fondos claros (texto oscuro)
+        return '/LOGO_PARA_FONDO_BLANCO.svg';  // Logo para fondos claros (texto oscuro)
       case 'auto':
       default:
         // Tema claro (light) → Logo con texto oscuro para contraste
         // Tema oscuro (dark) → Logo con texto claro para contraste
         return theme === 'light' 
-          ? '/logotemaclaro.png'  // Logo para tema claro
-          : '/logotemaoscuro.png';  // Logo para tema oscuro
+          ? '/LOGO_PARA_FONDO_BLANCO.svg'  // Logo para tema claro
+          : '/LOGO_PARA_FONDO_OSCURO.svg';  // Logo para tema oscuro
     }
   })();
 

@@ -10,6 +10,14 @@ const SignupPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="w-full max-w-md p-8">
+        {/* Logo THADO Consulting */}
+        <div className="flex justify-center mb-6">
+          <img 
+            src="/LOGO_PARA_FONDO_OSCURO.svg" 
+            alt="THADO Consulting" 
+            className="h-12 w-auto"
+          />
+        </div>
         <SignUp 
           routing="hash"
           signInUrl="/login"
@@ -76,6 +84,8 @@ const SignupPage = () => {
               showOptionalFields: false,
               socialButtonsPlacement: "top",
               socialButtonsVariant: "blockButton",
+              logoImageUrl: "/LOGO_PARA_FONDO_OSCURO.svg",
+              logoPlacement: "inside",
             },
             variables: {
               // ⚡ Variables de color personalizadas

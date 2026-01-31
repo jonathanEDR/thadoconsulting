@@ -15,10 +15,10 @@ const CONFIG = {
   apiUrl: 'https://thadoconsulting-back.onrender.com',
   siteUrl: 'https://www.thadoconsulting.com',
   siteName: 'THADO Consulting Blog',
-  defaultImage: 'https://www.thadoconsulting.com/FAVICON.png',
+  defaultImage: 'https://www.thadoconsulting.com/FAVICON.svg',
   twitterHandle: '@thadoconsulting',
   // Imagen para Google Search Results (favicon grande)
-  googleFavicon: 'https://www.thadoconsulting.com/FAVICON.png'
+  googleFavicon: 'https://www.thadoconsulting.com/FAVICON.svg'
 };
 
 /**

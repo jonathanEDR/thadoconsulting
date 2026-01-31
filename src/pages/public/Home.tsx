@@ -434,7 +434,7 @@ const HomeOptimized = () => {
               {/* Logo favicon en el centro */}
               <div className="absolute inset-2 rounded-full bg-white shadow-xl flex items-center justify-center overflow-hidden">
                 <img
-                  src="/FAVICON.png"
+                  src="/FAVICON.svg"
                   alt="Cargando..."
                   className="w-3/4 h-3/4 object-contain"
                 />

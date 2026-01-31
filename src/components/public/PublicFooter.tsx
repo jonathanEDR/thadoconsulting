@@ -6,10 +6,12 @@ import type { PageData } from '../../types/cms';
 import { getCmsApiUrl, logApiCall, testBackendConnection } from '../../utils/apiHelper';
 import { useClerkDetection } from '../../hooks/useClerkDetection';
 import { useCategoriasList } from '../../hooks/useCategoriasCache';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const PublicFooter = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState<PageData | null>(null);
+  const { theme } = useTheme();
 
   // Hook para detectar usuario autenticado (mejorado para producción)
   const { userData, getUserInitials, isLoading } = useClerkDetection();
@@ -83,12 +85,15 @@ const PublicFooter = () => {
 
   const contactData = pageData?.content?.contact;
   
+  // Imagen de fondo según el tema
+  const backgroundImage = theme === 'dark' ? '/6-oscuro.png' : '/8.png';
+  
   return (
     <footer className="relative theme-transition theme-border" 
             style={{
               borderTopWidth: '1px',
               borderTopColor: `color-mix(in srgb, var(--color-primary) 20%, transparent)`,
-              backgroundImage: 'url(/8.png)',
+              backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'

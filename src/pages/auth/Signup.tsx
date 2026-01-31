@@ -9,8 +9,8 @@ const Signup = () => {
 
   // Logo según el tema
   const logoSrc = theme === 'dark'
-    ? '/logotemaoscuro.png'  // Logo claro para tema oscuro
-    : '/logotemaclaro.png';   // Logo oscuro para tema claro
+    ? '/LOGO_PARA_FONDO_OSCURO.svg'  // Logo claro para tema oscuro
+    : '/LOGO_PARA_FONDO_BLANCO.svg';   // Logo oscuro para tema claro
 
   // Asegurar que el tema se haya cargado antes de renderizar
   useEffect(() => {

@@ -272,13 +272,13 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                   <div className="flex items-center gap-2">
                     <div className="flex-shrink-0">
                       <img 
-                        src={globalConfig.logoUrl} 
+                        src={isDarkMode ? '/LOGO_PARA_FONDO_OSCURO.svg' : '/LOGO_PARA_FONDO_BLANCO.svg'}
                         alt={globalConfig.logoAlt} 
-                        className="h-8 w-auto filter brightness-0 invert"
+                        className="h-8 w-auto"
                       />
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1">"
                     {/* Botón ir al Home (página pública) */}
                     <button
                       onClick={() => navigate('/')}

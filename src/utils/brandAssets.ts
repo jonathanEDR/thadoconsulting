@@ -5,20 +5,20 @@
 
 // URLs de la mascota/logo de THADO AI
 export const THADO_AI_MASCOT = {
-  // Imagen principal PNG (logo)
-  png: '',
+  // Imagen principal SVG (logo)
+  png: '/FAVICON.svg',
 
   // Iconos SVG para diferentes temas
   svg: {
-    light: '',
-    dark: ''
+    light: '/FAVICON.svg',
+    dark: '/FAVICON.svg'
   },
 
   // Alt text para accesibilidad
   alt: 'THADO AI Asistente Contable',
 
   // Fallback local
-  fallback: '/FAVICON.png'
+  fallback: '/FAVICON.svg'
 };
 
 // Colores de marca THADO AI

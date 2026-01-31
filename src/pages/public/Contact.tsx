@@ -206,7 +206,7 @@ const Contact = () => {
               "@type": "Organization",
               "name": "THADO Consulting",
               "url": "https://www.thadoconsulting.com",
-              "logo": "https://www.thadoconsulting.com/FAVICON.png",
+              "logo": "https://www.thadoconsulting.com/FAVICON.svg",
               "email": "contacto@thadoconsulting.pe",
               "address": {
                 "@type": "PostalAddress",

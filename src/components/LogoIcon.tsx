@@ -25,7 +25,7 @@ const LogoIcon = ({
   return (
     <div className={`relative group ${className}`}>
       <img 
-        src="/FAVICON.png"
+        src="/FAVICON.svg"
         alt="THADO Consulting"
         className={`
           ${sizeClasses[size]}
