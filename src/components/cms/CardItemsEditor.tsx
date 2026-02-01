@@ -181,32 +181,35 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 border border-gray-100 dark:border-gray-700/50 ${className}`}>
+    <div className={`bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-4 border border-gray-100 dark:border-gray-700/50 ${className}`}>
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center">
-            📝 Contenido de las Tarjetas
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center">
+            📝 <span className="hidden sm:inline ml-1">Contenido de las Tarjetas</span>
           </h2>
           {hasUnsavedChanges && (
             <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-300 text-xs font-medium rounded-full">
-              ⚠️ Cambios sin guardar
+              <span className="sm:hidden">⚠️</span>
+              <span className="hidden sm:inline">⚠️ Cambios sin guardar</span>
             </span>
           )}
         </div>
         <div className="flex gap-2">
           <button
             onClick={addItem}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+            className="px-2 sm:px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-1"
+            title="Agregar Solución"
           >
-            ➕ Agregar Solución
+            ➕ <span className="hidden sm:inline">Agregar Solución</span>
           </button>
           <button
             onClick={saveChanges}
             disabled={!hasUnsavedChanges || isSaving}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+            className="px-2 sm:px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-1"
+            title="Guardar"
           >
-            {isSaving ? '⏳ Guardando...' : '💾 Guardar'}
+            {isSaving ? '⏳' : '💾'} <span className="hidden sm:inline">{isSaving ? 'Guardando...' : 'Guardar'}</span>
           </button>
         </div>
       </div>
@@ -220,27 +223,29 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
           >
             {/* Header de la tarjeta */}
             <div
-              className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex justify-between items-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               onClick={() => toggleCard(index)}
             >
-              <div className="flex items-center gap-3">
-                <span className="text-lg">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-base flex-shrink-0">
                   {expandedCard === index ? '▼' : '▶'}
                 </span>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200">
-                  Tarjeta #{index + 1}: {item.title || `Sin título`}
+                <h3 className="font-semibold text-sm sm:text-base text-gray-800 dark:text-gray-200 truncate">
+                  <span className="sm:hidden">#{index + 1}</span>
+                  <span className="hidden sm:inline">Tarjeta #{index + 1}:</span> {item.title || `Sin título`}
                 </h3>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 {localItems.length > 1 && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       removeItem(index);
                     }}
-                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors"
+                    className="px-2 sm:px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded transition-colors"
+                    title="Eliminar"
                   >
-                    🗑️ Eliminar
+                    🗑️ <span className="hidden sm:inline">Eliminar</span>
                   </button>
                 )}
               </div>
@@ -248,8 +253,8 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
 
             {/* Contenido expandible */}
             {expandedCard === index && (
-              <div className="p-6 bg-white dark:bg-gray-800">
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <div className="p-4 bg-white dark:bg-gray-800">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                   
                   {/* Columna izquierda: Contenido de texto (2/3) */}
                   <div className="xl:col-span-2 space-y-4">
@@ -308,77 +313,10 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
                       )}
                     </div>
 
-                    {/* Gradiente (opcional) */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        🎨 Gradiente (Tailwind)
-                      </label>
-                      <input
-                        type="text"
-                        value={item.gradient}
-                        onChange={(e) => updateItem(index, 'gradient', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="from-purple-500 to-purple-700"
-                      />
-                    </div>
-
-                    {/* Configuración del Botón "Conocer más" */}
-                    <div className="bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-700/50">
-                      <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
-                        🔗 Botón "Conocer más"
-                      </h4>
-                      
-                      {/* Toggle mostrar/ocultar */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={item.showButton !== false}
-                            onChange={(e) => updateItem(index, 'showButton', e.target.checked)}
-                            className="sr-only peer"
-                          />
-                          <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                        </label>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
-                          {item.showButton !== false ? 'Botón visible' : 'Botón oculto'}
-                        </span>
-                      </div>
-
-                      {/* Campos del botón (solo si está visible) */}
-                      {item.showButton !== false && (
-                        <div className="space-y-3">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-                              Texto del botón
-                            </label>
-                            <input
-                              type="text"
-                              value={item.buttonText || 'Conocer más'}
-                              onChange={(e) => updateItem(index, 'buttonText', e.target.value)}
-                              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                              placeholder="Conocer más"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-                              Enlace del botón
-                            </label>
-                            <input
-                              type="text"
-                              value={item.buttonLink || '/servicios'}
-                              onChange={(e) => updateItem(index, 'buttonLink', e.target.value)}
-                              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                              placeholder="/servicios o https://..."
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    
                   </div>
 
-                  {/* Columna derecha: Selector de Iconos (1/3) */}
-                  <div className="xl:col-span-1">
+                  {/* Columna derecha: Selector de Iconos + Gradiente (1/3) */}
+                  <div className="xl:col-span-1 space-y-3">
                     <IconSelector
                       iconName={item.iconName || 'Circle'}
                       iconColorLight={item.iconColorLight || '#6366f1'}
@@ -389,66 +327,123 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
                       title="🎨 Icono de la Tarjeta"
                       description="Selecciona un icono vectorial de Lucide React"
                     />
+
+                    {/* Gradiente (opcional) */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        🎨 Gradiente (Tailwind)
+                      </label>
+                      <input
+                        type="text"
+                        value={item.gradient}
+                        onChange={(e) => updateItem(index, 'gradient', e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="from-purple-500 to-purple-700"
+                      />
+                    </div>
+
+                    {/* Configuración del Botón "Conocer más" */}
+                    <div className="bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20 p-3 rounded-lg border border-purple-200 dark:border-purple-700/50">
+                      <h4 className="text-xs font-bold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-1">
+                        🔗 Botón "Conocer más"
+                      </h4>
+
+                      {/* Toggle mostrar/ocultar */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={item.showButton !== false}
+                            onChange={(e) => updateItem(index, 'showButton', e.target.checked)}
+                            className="sr-only peer"
+                          />
+                          <div className="w-9 h-5 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                        </label>
+                        <span className="text-xs text-gray-700 dark:text-gray-300">
+                          {item.showButton !== false ? 'Visible' : 'Oculto'}
+                        </span>
+                      </div>
+
+                      {/* Campos del botón (solo si está visible) */}
+                      {item.showButton !== false && (
+                        <div className="space-y-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-0.5">
+                              Texto
+                            </label>
+                            <input
+                              type="text"
+                              value={item.buttonText || 'Conocer más'}
+                              onChange={(e) => updateItem(index, 'buttonText', e.target.value)}
+                              className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              placeholder="Conocer más"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-0.5">
+                              Enlace
+                            </label>
+                            <input
+                              type="text"
+                              value={item.buttonLink || '/servicios'}
+                              onChange={(e) => updateItem(index, 'buttonLink', e.target.value)}
+                              className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              placeholder="/servicios o https://..."
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                 </div>
 
                   {/* Preview - Abarca toda la fila */}
-                  <div className="xl:col-span-3 mt-6">
-                    <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                  <div className="mt-4">
+                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
                       👁️ Vista Previa
                     </h4>
-                    <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg p-4 border">
-                      <div className="flex items-start gap-4">
-                        {/* Preview de iconos */}
-                        <div className="flex gap-2">
-                          {item.iconName && (
-                            <>
-                              <div className="text-center">
-                                <div className="w-12 h-12 rounded border bg-white p-2 flex items-center justify-center">
-                                  <DynamicIcon 
-                                    name={item.iconName} 
-                                    size={28} 
-                                    color={item.iconColorLight || '#6366f1'}
-                                    strokeWidth={2}
-                                  />
-                                </div>
-                                <span className="text-xs text-gray-600 dark:text-gray-400">🌞</span>
-                              </div>
-                              <div className="text-center">
-                                <div className="w-12 h-12 rounded border bg-gray-800 p-2 flex items-center justify-center">
-                                  <DynamicIcon 
-                                    name={item.iconName} 
-                                    size={28} 
-                                    color={item.iconColorDark || '#818cf8'}
-                                    strokeWidth={2}
-                                  />
-                                </div>
-                                <span className="text-xs text-gray-400">🌙</span>
-                              </div>
-                            </>
-                          )}
-                          {!item.iconName && (
-                            <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded flex items-center justify-center text-gray-500">
+                    <div className={`bg-gradient-to-br ${item.gradient || 'from-gray-500 to-gray-700'} rounded-lg p-4 border border-white/20`}>
+                      <div className="flex items-start gap-3">
+                        {/* Preview de icono */}
+                        <div className="flex-shrink-0">
+                          {item.iconName ? (
+                            <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm p-2 flex items-center justify-center">
+                              <DynamicIcon
+                                name={item.iconName}
+                                size={22}
+                                color="#ffffff"
+                                strokeWidth={2}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center text-white text-sm">
                               📄
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Preview de texto */}
-                        <div className="flex-1">
-                          <div 
-                            className="font-semibold text-gray-800 dark:text-gray-200 mb-1 text-sm"
-                            dangerouslySetInnerHTML={{ 
-                              __html: DOMPurify.sanitize(item.title || '<em>Sin título</em>') 
+                        <div className="flex-1 min-w-0">
+                          <div
+                            className="font-semibold text-white text-sm mb-0.5 [&_p]:m-0"
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(item.title || '<em>Sin título</em>')
                             }}
                           />
-                          <div 
-                            className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed"
-                            dangerouslySetInnerHTML={{ 
-                              __html: DOMPurify.sanitize(item.description || '<em>Sin descripción</em>') 
+                          <div
+                            className="text-xs text-white/80 leading-relaxed line-clamp-2 [&_p]:m-0"
+                            dangerouslySetInnerHTML={{
+                              __html: DOMPurify.sanitize(item.description || '<em>Sin descripción</em>')
                             }}
                           />
+                          {item.showButton !== false && (
+                            <div className="mt-2">
+                              <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full border border-white/30">
+                                {item.buttonText || 'Conocer más'} →
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -461,7 +456,7 @@ const CardItemsEditor: React.FC<CardItemsEditorProps> = ({
       </div>
 
       {/* Resumen de tarjetas */}
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
         <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
           <span>📊 Total de soluciones: {localItems.length}</span>
           <span>

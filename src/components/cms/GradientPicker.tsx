@@ -11,9 +11,7 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
   value,
   onChange,
   label,
-  darkMode = false
 }) => {
-  // Extraer colores del gradiente (si es un gradiente)
   const extractColors = (gradient: string): [string, string, string] => {
     const colorRegex = /#[0-9A-Fa-f]{6}|#[0-9A-Fa-f]{3}|rgba?\([^)]+\)/g;
     const matches = gradient.match(colorRegex);
@@ -22,11 +20,9 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
       return [matches[0], matches[1], '135deg'];
     }
 
-    // Valores por defecto
     return ['#8B5CF6', '#06B6D4', '135deg'];
   };
 
-  // Extraer dirección del gradiente
   const extractAngle = (gradient: string): string => {
     const angleMatch = gradient.match(/(\d+)deg/);
     return angleMatch ? angleMatch[1] + 'deg' : '135deg';
@@ -38,12 +34,11 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
   const [isSolid, setIsSolid] = useState(!value.includes('gradient'));
   const timeoutRef = useRef<number | null>(null);
 
-  // Sincronizar el estado cuando cambie el valor externo
   useEffect(() => {
     const newColors = extractColors(value);
     const newAngle = extractAngle(value);
     const newIsSolid = !value.includes('gradient');
-    
+
     setColor1(newColors[0]);
     setColor2(newColors[1]);
     setAngle(newAngle);
@@ -56,12 +51,10 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
     const a = newAngle || angle;
     const s = solid !== undefined ? solid : isSolid;
 
-    // Limpiar timeout anterior
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Esperar 300ms antes de llamar onChange
     timeoutRef.current = window.setTimeout(() => {
       if (s) {
         onChange(c1);
@@ -95,21 +88,21 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
   };
 
   return (
-    <div className="space-y-3">
-      <label className={`block text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
         {label}
       </label>
 
       {/* Tipo: Sólido o Degradado */}
-      <div className="flex gap-4 mb-3">
+      <div className="flex gap-3 mb-1">
         <label className="flex items-center cursor-pointer">
           <input
             type="radio"
             checked={isSolid}
             onChange={() => handleTypeChange(true)}
-            className="mr-2"
+            className="mr-1.5"
           />
-          <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <span className="text-xs text-gray-700 dark:text-gray-300">
             Sólido
           </span>
         </label>
@@ -118,29 +111,29 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
             type="radio"
             checked={!isSolid}
             onChange={() => handleTypeChange(false)}
-            className="mr-2"
+            className="mr-1.5"
           />
-          <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <span className="text-xs text-gray-700 dark:text-gray-300">
             Degradado
           </span>
         </label>
       </div>
 
       {/* Selectores de color */}
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-2 items-center">
         <div className="flex-1 w-full min-w-0">
           <div className="flex gap-2 items-center w-full min-w-0">
             <input
               type="color"
               value={color1}
               onChange={handleColor1Change}
-              className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+              className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
             />
             <input
               type="text"
               value={color1}
               onChange={handleColor1Change}
-              className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+              className="flex-1 min-w-0 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs"
               placeholder="#8B5CF6"
             />
           </div>
@@ -148,20 +141,20 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
 
         {!isSolid && (
           <>
-            <span className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">→</span>
             <div className="flex-1 w-full min-w-0">
               <div className="flex gap-2 items-center w-full min-w-0">
                 <input
                   type="color"
                   value={color2}
                   onChange={handleColor2Change}
-                  className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                  className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={color2}
                   onChange={handleColor2Change}
-                  className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+                  className="flex-1 min-w-0 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs"
                   placeholder="#06B6D4"
                 />
               </div>
@@ -172,30 +165,25 @@ const GradientPicker: React.FC<GradientPickerProps> = ({
 
       {/* Dirección del degradado */}
       {!isSolid && (
-        <div>
-          <label className={`block text-xs font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Dirección
-          </label>
-          <select
-            value={angle}
-            onChange={handleAngleChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
-          >
-            <option value="0deg">↓ Arriba a Abajo (0°)</option>
-            <option value="45deg">↘ Diagonal (45°)</option>
-            <option value="90deg">→ Izquierda a Derecha (90°)</option>
-            <option value="135deg">↘ Diagonal (135°)</option>
-            <option value="180deg">↑ Abajo a Arriba (180°)</option>
-            <option value="225deg">↖ Diagonal (225°)</option>
-            <option value="270deg">← Derecha a Izquierda (270°)</option>
-            <option value="315deg">↗ Diagonal (315°)</option>
-          </select>
-        </div>
+        <select
+          value={angle}
+          onChange={handleAngleChange}
+          className="w-full px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs"
+        >
+          <option value="0deg">↓ Arriba a Abajo (0°)</option>
+          <option value="45deg">↘ Diagonal (45°)</option>
+          <option value="90deg">→ Izq a Der (90°)</option>
+          <option value="135deg">↘ Diagonal (135°)</option>
+          <option value="180deg">↑ Abajo a Arriba (180°)</option>
+          <option value="225deg">↖ Diagonal (225°)</option>
+          <option value="270deg">← Der a Izq (270°)</option>
+          <option value="315deg">↗ Diagonal (315°)</option>
+        </select>
       )}
 
       {/* Preview */}
       <div
-        className="h-10 rounded-lg border border-gray-300 dark:border-gray-600"
+        className="h-6 rounded-lg border border-gray-300 dark:border-gray-600"
         style={{
           background: isSolid ? color1 : `linear-gradient(${angle}, ${color1}, ${color2})`
         }}

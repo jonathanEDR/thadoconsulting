@@ -12,6 +12,7 @@ import PublicHeader from '../../components/public/PublicHeader';
 import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
 import ContactModal from '../../components/public/ContactModal';
+import PageLoader from '../../components/common/PageLoader';
 import { useServicioDetail } from '../../hooks/useServiciosCache';
 import { useCmsData } from '../../hooks/cms/useCmsData';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -145,9 +146,6 @@ export const ServicioDetail: React.FC = () => {
   const heroConfig = servicioDetailConfig.hero || {};
   const accordionConfig = servicioDetailConfig.accordion || {};
   const ctaConfig = servicioDetailConfig.cta || {};
-
-  // 🔍 DEBUG: Ver qué configuración llega al frontend
-  // console.log('🎨 [ServicioDetail] heroConfig.content:', heroConfig.content);
 
   // Función para toggle del panel acordeón
   const togglePanel = (panelId: PanelType) => {
@@ -337,56 +335,6 @@ export const ServicioDetail: React.FC = () => {
     };
   };
 
-  // Función helper para generar estilos de fondo desde configuración CMS
-  const getBackgroundStyle = (bgConfig: any) => {
-    if (!bgConfig || bgConfig.type === 'none') {
-      return {};
-    }
-
-    const style: any = {};
-
-    if (bgConfig.type === 'color') {
-      style.backgroundColor = bgConfig.color || '#ffffff';
-    } else if (bgConfig.type === 'gradient') {
-      style.backgroundImage = `linear-gradient(to bottom right, ${bgConfig.gradientFrom || '#f3f4f6'}, ${bgConfig.gradientTo || '#e5e7eb'})`;
-    } else if (bgConfig.type === 'image') {
-      // Seleccionar imagen según el tema actual (light o dark)
-      const imageUrl = theme === 'dark' ? bgConfig.imageDark : bgConfig.imageLight;
-      
-      // Si no hay imagen para el tema actual, usar la del otro tema como fallback
-      const fallbackUrl = theme === 'dark' ? bgConfig.imageLight : bgConfig.imageDark;
-      const finalImageUrl = imageUrl || fallbackUrl || bgConfig.imageUrl; // imageUrl para compatibilidad con versión anterior
-      
-      // console.log(`🎨 [getBackgroundStyle] Tema: ${theme}, imageLight: ${bgConfig.imageLight}, imageDark: ${bgConfig.imageDark}, final: ${finalImageUrl}`);
-      
-      if (finalImageUrl) {
-        style.backgroundImage = `url(${finalImageUrl})`;
-        style.backgroundSize = 'cover';
-        style.backgroundPosition = 'center';
-        style.backgroundRepeat = 'no-repeat';
-      } else {
-        // console.warn('⚠️ [getBackgroundStyle] No se encontró URL de imagen válida');
-      }
-    }
-
-    return style;
-  };
-
-  // Función helper para generar overlay
-  const getOverlayStyle = (bgConfig: any): React.CSSProperties | undefined => {
-    if (!bgConfig || (bgConfig.type !== 'image' && bgConfig.type !== 'gradient')) {
-      return undefined;
-    }
-
-    const opacity = (bgConfig.overlayOpacity || 0) / 100;
-    if (opacity === 0) return undefined;
-
-    return {
-      backgroundColor: bgConfig.overlayColor || '#000000',
-      opacity,
-    };
-  };
-
   // ============================================
   // HOOK DE CACHE - REEMPLAZA USEEFFECT + API CALL
   // ============================================
@@ -496,25 +444,38 @@ export const ServicioDetail: React.FC = () => {
   };
 
   if (loading) {
+    return <PageLoader fullScreen message="Cargando servicio..." size="lg" />;
+  }
+
+  // ✅ IMPORTANTE: Mostrar error SOLO si hay un error explícito, no solo porque servicio sea null
+  // Esto evita el flash de "no encontrado" antes de que cargue
+  if (error) {
+    // ✅ SEO FIX: Durante pre-renderizado, NO mostrar "Servicio no encontrado"
+    // El contenido estático ya fue generado por prerender-services.js
+    if (isPrerendering) {
+      return null; // Permite que el HTML estático permanezca visible
+    }
+    
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
         <PublicHeader />
         <div className="pt-20 pb-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-96 animate-fade-in">
-              <div className="text-center">
-                <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-                <p className="text-gray-600 dark:text-gray-400 text-lg animate-pulse">Cargando servicio...</p>
-              </div>
-            </div>
-            
-            {/* Skeleton del contenido */}
-            <div className="max-w-4xl mx-auto mt-12 space-y-6 animate-pulse">
-              <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-2xl shimmer"></div>
-              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded shimmer"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded shimmer"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-4/5 shimmer"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 shimmer"></div>
+            <div className="text-center py-20 animate-scale-in">
+              <div className="text-8xl mb-6 animate-bounce">🚫</div>
+              <h1 className="text-4xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                {error || 'Servicio no encontrado'}
+              </h1>
+              <p className="text-lg mb-8" style={{ color: 'var(--color-text-secondary)' }}>
+                El servicio que buscas no está disponible o no existe.
+              </p>
+              <Link
+                to="/servicios"
+                className="inline-flex items-center px-6 py-3 text-white rounded-lg transition-colors font-semibold"
+                style={{ background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)' }}
+              >
+                ← Volver a servicios
+              </Link>
             </div>
           </div>
         </div>
@@ -523,32 +484,18 @@ export const ServicioDetail: React.FC = () => {
     );
   }
 
-  if (error || !servicio) {
-    // ✅ SEO FIX: Durante pre-renderizado, NO mostrar "Servicio no encontrado"
-    // El contenido estático ya fue generado por prerender-services.js
-    if (isPrerendering) {
-      return null; // Permite que el HTML estático permanezca visible
-    }
-    
+  // ✅ Si no hay error pero tampoco hay servicio, mostrar loading (no error)
+  if (!servicio) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
         <PublicHeader />
         <div className="pt-20 pb-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center py-20 animate-scale-in">
-              <div className="text-8xl mb-6 animate-bounce">🚫</div>
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                {error || 'Servicio no encontrado'}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
-                El servicio que buscas no está disponible o no existe.
-              </p>
-              <Link
-                to="/servicios"
-                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-semibold"
-              >
-                ← Volver a servicios
-              </Link>
+            <div className="flex justify-center items-center h-96 animate-fade-in">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 mx-auto mb-4" style={{ borderColor: 'var(--color-primary)' }}></div>
+                <p className="text-lg animate-pulse" style={{ color: 'var(--color-text-secondary)' }}>Cargando servicio...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -562,7 +509,7 @@ export const ServicioDetail: React.FC = () => {
     document.querySelector('meta[name="description"][data-rh="true"]') !== null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 animate-fade-in">
+    <div className="min-h-screen animate-fade-in" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* ✅ SEO directo del servicio - Prioriza campos SEO configurados */}
       {/* ⚠️ Solo actualiza meta tags si NO están pre-renderizados (evita duplicación) */}
       {!isPrerendered && (
@@ -620,29 +567,21 @@ export const ServicioDetail: React.FC = () => {
       <PublicHeader />
       
       {/* ============================================ */}
-      {/* SECCIÓN 1: HERO CON FONDO CONFIGURABLE */}
+      {/* SECCIÓN 1: HERO - USA FONDO DEL TEMA */}
       {/* ============================================ */}
       <section 
         className="pt-20 pb-12 relative"
-        style={getBackgroundStyle(heroConfig.background)}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        {/* Overlay configurable */}
-        {getOverlayStyle(heroConfig.background) !== undefined && (
-          <div 
-            className="absolute inset-0 pointer-events-none"
-            style={getOverlayStyle(heroConfig.background)}
-          />
-        )}
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Breadcrumb con animación */}
           <nav className="mb-8 animate-fade-in-down">
-            <ol className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-              <li><Link to="/" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300">Inicio</Link></li>
+            <ol className="flex items-center space-x-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <li><Link to="/" className="transition-colors duration-300" style={{ color: 'inherit' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-secondary)'}>Inicio</Link></li>
               <li>{'>'}</li>
-              <li><Link to="/servicios" className="hover:text-gray-900 dark:hover:text-white transition-colors">Servicios</Link></li>
+              <li><Link to="/servicios" className="transition-colors" style={{ color: 'inherit' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-text)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-secondary)'}>Servicios</Link></li>
               <li>{'>'}</li>
-              <li className="text-gray-900 dark:text-white">{servicio.titulo}</li>
+              <li style={{ color: 'var(--color-text)' }}>{servicio.titulo}</li>
             </ol>
           </nav>
 
@@ -652,11 +591,11 @@ export const ServicioDetail: React.FC = () => {
               {/* Categoría con animación */}
               {heroConfig.content?.showCategoryTag !== false && (
                 <div className="mb-4 animate-fade-in delay-100">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 transition-all duration-300 hover:scale-105">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105" style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 15%, transparent)', color: 'var(--color-primary)' }}>
                     {typeof servicio.categoria === 'string' ? servicio.categoria : servicio.categoria?.nombre || 'Sin categoría'}
                   </span>
                   {servicio.destacado && (
-                    <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 transition-all duration-300 hover:scale-105">
+                    <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105" style={{ backgroundColor: 'color-mix(in srgb, #FCD34D 20%, transparent)', color: '#D97706' }}>
                       ★ Destacado
                     </span>
                   )}
@@ -783,11 +722,11 @@ export const ServicioDetail: React.FC = () => {
               {(servicio.tiempoEntrega || servicio.garantia || servicio.soporte) && (
                 <div className="flex flex-wrap gap-3 mb-8">
                   {servicio.tiempoEntrega && (
-                    <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/50 px-4 py-2 rounded-full border border-blue-300 dark:border-blue-700">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: 'color-mix(in srgb, #3B82F6 10%, transparent)', borderColor: 'color-mix(in srgb, #3B82F6 30%, transparent)' }}>
                       <span className="text-lg">⏱️</span>
                       <div>
-                        <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">Entrega:</span>
-                        <span className="ml-1 text-sm font-semibold text-blue-900 dark:text-blue-100">
+                        <span className="text-xs font-medium" style={{ color: '#2563EB' }}>Entrega:</span>
+                        <span className="ml-1 text-sm font-semibold" style={{ color: '#1E40AF' }}>
                           {servicio.tiempoEntrega}
                         </span>
                       </div>
@@ -795,11 +734,11 @@ export const ServicioDetail: React.FC = () => {
                   )}
                   
                   {servicio.garantia && (
-                    <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/50 px-4 py-2 rounded-full border border-green-300 dark:border-green-700">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: 'color-mix(in srgb, #10B981 10%, transparent)', borderColor: 'color-mix(in srgb, #10B981 30%, transparent)' }}>
                       <span className="text-lg">🛡️</span>
                       <div>
-                        <span className="text-xs text-green-700 dark:text-green-300 font-medium">Garantía:</span>
-                        <span className="ml-1 text-sm font-semibold text-green-900 dark:text-green-100">
+                        <span className="text-xs font-medium" style={{ color: '#059669' }}>Garantía:</span>
+                        <span className="ml-1 text-sm font-semibold" style={{ color: '#047857' }}>
                           {servicio.garantia}
                         </span>
                       </div>
@@ -807,11 +746,11 @@ export const ServicioDetail: React.FC = () => {
                   )}
                   
                   {servicio.soporte && (
-                    <div className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/50 px-4 py-2 rounded-full border border-purple-300 dark:border-purple-700">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: 'color-mix(in srgb, var(--color-secondary) 10%, transparent)', borderColor: 'color-mix(in srgb, var(--color-secondary) 30%, transparent)' }}>
                       <span className="text-lg">💬</span>
                       <div>
-                        <span className="text-xs text-purple-700 dark:text-purple-300 font-medium">Soporte:</span>
-                        <span className="ml-1 text-sm font-semibold text-purple-900 dark:text-purple-100 capitalize">
+                        <span className="text-xs font-medium" style={{ color: 'var(--color-secondary)' }}>Soporte:</span>
+                        <span className="ml-1 text-sm font-semibold capitalize" style={{ color: 'color-mix(in srgb, var(--color-secondary) 80%, #000000)' }}>
                           {servicio.soporte}
                         </span>
                       </div>
@@ -891,12 +830,18 @@ export const ServicioDetail: React.FC = () => {
                   className="w-full h-96 object-cover rounded-2xl shadow-2xl"
                 />
               ) : (
-                <div className="w-full h-96 bg-gradient-to-br from-purple-100 dark:from-purple-600/20 to-blue-100 dark:to-blue-600/20 rounded-2xl flex items-center justify-center border border-gray-300 dark:border-gray-700">
+                <div 
+                  className="w-full h-96 rounded-2xl flex items-center justify-center border"
+                  style={{
+                    background: 'linear-gradient(to bottom right, color-mix(in srgb, var(--color-primary) 15%, transparent), color-mix(in srgb, var(--color-secondary) 15%, transparent))',
+                    borderColor: 'var(--color-border)'
+                  }}
+                >
                   <div className="text-center">
                     <div className="text-6xl mb-4">
                       {servicio.icono || '🚀'}
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">Imagen del servicio</p>
+                    <p style={{ color: 'var(--color-text-secondary)' }}>Imagen del servicio</p>
                   </div>
                 </div>
               )}
@@ -906,20 +851,12 @@ export const ServicioDetail: React.FC = () => {
       </section>
 
       {/* ============================================ */}
-      {/* SECCIÓN 2: ACORDEÓN CON FONDO CONFIGURABLE */}
+      {/* SECCIÓN 2: ACORDEÓN - USA FONDO DEL TEMA */}
       {/* ============================================ */}
       <section 
         className="py-12 relative"
-        style={getBackgroundStyle(accordionConfig.background)}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
-        {/* Overlay configurable */}
-        {getOverlayStyle(accordionConfig.background) !== undefined && (
-          <div 
-            className="absolute inset-0 pointer-events-none"
-            style={getOverlayStyle(accordionConfig.background)}
-          />
-        )}
-        
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           {/* Título de la sección - Configurable desde CMS */}
@@ -1909,27 +1846,14 @@ export const ServicioDetail: React.FC = () => {
       </section>
 
       {/* ============================================ */}
-      {/* SECCIÓN 3: CTA CON FONDO CONFIGURABLE */}
+      {/* SECCIÓN 3: CTA - USA GRADIENTE DEL TEMA */}
       {/* ============================================ */}
       <section 
         className="py-20 relative"
         style={{
-          backgroundImage: ctaConfig.background?.imageUrl 
-            ? `url(${ctaConfig.background.imageUrl})` 
-            : 'linear-gradient(135deg, #9333ea 0%, #2563eb 100%)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundImage: `linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)`,
         }}
       >
-        {/* Overlay oscuro sobre la imagen */}
-        {ctaConfig.background?.imageUrl && (
-          <div 
-            className="absolute inset-0 bg-black pointer-events-none"
-            style={{ opacity: ctaConfig.background?.overlay ?? 0.5 }}
-          />
-        )}
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 
             className={`${ctaConfig.title?.fontSize || 'text-4xl'} ${ctaConfig.title?.fontWeight || 'font-bold'} mb-6`}

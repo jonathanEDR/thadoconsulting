@@ -2,15 +2,12 @@ import { Helmet } from 'react-helmet-async';
 import PublicHeader from '../../components/public/PublicHeader';
 import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
-import { useTheme } from '../../contexts/ThemeContext';
 
 /**
  * Pagina de Politica de Privacidad
  * Contiene informacion sobre como THADO Consulting maneja los datos personales
  */
 const PrivacyPolicy = () => {
-  const { theme } = useTheme();
-
   return (
     <>
       <Helmet>
@@ -41,52 +38,47 @@ const PrivacyPolicy = () => {
         <link rel="canonical" href="https://www.thadoconsulting.com/privacidad" />
       </Helmet>
 
-      <div className={`min-h-screen w-full overflow-x-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <div className="min-h-screen w-full overflow-x-hidden" style={{ backgroundColor: 'var(--color-background)' }}>
         <PublicHeader />
 
         {/* Hero Section */}
         <section
           className="relative min-h-[40vh] flex items-center justify-center overflow-hidden"
           style={{
-            backgroundColor: theme === 'dark' ? '#111827' : '#F9FAFB'
+            backgroundColor: 'var(--color-background)'
           }}
         >
           <div className="relative z-10 container mx-auto px-4 py-24 text-center">
             <h1
-              className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 ${
-                theme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}
-              style={{ fontFamily: "'Montserrat', sans-serif" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ fontFamily: "'Montserrat', sans-serif", color: 'var(--color-text)' }}
             >
               Politica de Privacidad
             </h1>
             <p
-              className={`text-lg md:text-xl max-w-2xl mx-auto ${
-                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-              }`}
+              className="text-lg md:text-xl max-w-2xl mx-auto"
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               Tu privacidad es importante para nosotros. Aqui explicamos como recopilamos,
               usamos y protegemos tu informacion personal.
             </p>
-            <p className={`text-sm mt-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className="text-sm mt-4" style={{ color: 'var(--color-text-secondary)', opacity: 0.7 }}>
               Ultima actualizacion: Enero 2025
             </p>
           </div>
         </section>
 
         {/* Contenido Principal */}
-        <section className={`py-16 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <section className="py-16" style={{ backgroundColor: 'var(--color-cardBg)' }}>
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
 
               {/* Seccion 1 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   1. Informacion que Recopilamos
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     En THADO Consulting recopilamos informacion que nos proporcionas directamente cuando:
                   </p>
@@ -107,12 +99,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 2 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  2. Uso de la Informacion
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  2. Como Usamos tu Informacion
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Utilizamos la informacion recopilada para:
                   </p>
@@ -130,12 +120,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 3 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  3. Proteccion de Datos
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  4. Seguridad de los Datos
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Implementamos medidas de seguridad tecnicas y organizativas para proteger
                     tu informacion personal contra acceso no autorizado, alteracion, divulgacion
@@ -153,12 +141,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 4 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  4. Compartir Informacion
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  3. Compartir Informacion con Terceros
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     No vendemos ni alquilamos tu informacion personal a terceros.
                     Podemos compartir tu informacion en las siguientes circunstancias:
@@ -174,12 +160,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 5 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  5. Cookies y Tecnologias Similares
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  6. Cookies y Tecnologias Similares
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Utilizamos cookies y tecnologias similares para mejorar tu experiencia,
                     analizar el trafico y personalizar el contenido. Puedes configurar tu
@@ -191,12 +175,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 6 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  6. Tus Derechos
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  5. Tus Derechos
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Tienes derecho a:
                   </p>
@@ -217,12 +199,10 @@ const PrivacyPolicy = () => {
 
               {/* Seccion 7 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  7. Cambios en esta Politica
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
+                  7. Cambios a esta Politica
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Podemos actualizar esta politica de privacidad periodicamente.
                     Te notificaremos sobre cambios significativos publicando la nueva
@@ -233,15 +213,11 @@ const PrivacyPolicy = () => {
               </div>
 
               {/* Seccion 8 - Contacto */}
-              <div className={`p-6 rounded-2xl ${
-                theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-100'
-              }`}>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+              <div className="p-6 rounded-2xl" style={{ backgroundColor: 'color-mix(in srgb, var(--color-cardBg) 80%, var(--color-border))' }}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   8. Contacto
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Si tienes preguntas sobre esta politica de privacidad o sobre como
                     manejamos tu informacion personal, puedes contactarnos:
@@ -251,7 +227,10 @@ const PrivacyPolicy = () => {
                       <strong>Email:</strong>{' '}
                       <a
                         href="mailto:contacto@thadoconsulting.pe"
-                        className="text-purple-500 hover:text-purple-400 transition-colors"
+                        className="transition-colors"
+                        style={{ color: 'var(--color-primary)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                       >
                         contacto@thadoconsulting.pe
                       </a>

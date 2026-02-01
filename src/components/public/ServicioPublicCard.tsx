@@ -258,15 +258,21 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
       className={`
         group relative transition-all duration-500 hover-lift overflow-hidden flex flex-col
         ${isTransparent 
-          ? 'bg-white/10 dark:bg-gray-900/40 backdrop-blur-sm border border-white/20 dark:border-gray-700/50' 
-          : 'bg-white dark:bg-gray-900 shadow-lg border border-gray-100 dark:border-gray-800'
+          ? 'backdrop-blur-sm border' 
+          : 'shadow-lg border'
         }
         ${featured ? 'ring-2 ring-purple-500 ring-opacity-50 hover-glow' : ''}
         ${className}
       `}
       style={{
         borderRadius: cardConfig?.borderRadius || '0.75rem',
-        minHeight: content.minCardHeight || undefined
+        minHeight: content.minCardHeight || undefined,
+        backgroundColor: isTransparent 
+          ? 'color-mix(in srgb, var(--color-cardBg) 10%, transparent)' 
+          : 'var(--color-cardBg)',
+        borderColor: isTransparent
+          ? 'color-mix(in srgb, var(--color-border) 20%, transparent)'
+          : 'var(--color-border)'
       }}
     >
       {/* Badge de destacado - solo si está configurado para mostrarse */}

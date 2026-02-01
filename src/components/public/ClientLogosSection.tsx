@@ -128,7 +128,7 @@ const ClientLogosSection: React.FC<ClientLogosSectionProps> = ({ data }) => {
       ref={sectionRef}
       className="relative overflow-hidden w-full"
       style={{ 
-        background: 'transparent', // Sin fondo
+        background: `linear-gradient(to bottom, color-mix(in srgb, var(--color-background) 95%, var(--color-primary)), var(--color-background))`,
         border: 'none', // Sin borde
         boxShadow: 'none', // Sin sombra
         padding: '0', // Sin padding en la sección

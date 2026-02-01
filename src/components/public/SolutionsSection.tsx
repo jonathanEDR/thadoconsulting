@@ -339,7 +339,7 @@ const SolutionsSection = ({ data, themeConfig }: SolutionsSectionProps) => {
   return (
     <section className="relative py-20 theme-transition overflow-hidden w-full"
              style={{
-               background: `linear-gradient(to bottom, color-mix(in srgb, var(--color-card-bg) 95%, var(--color-primary)), var(--color-card-bg))`
+               background: `linear-gradient(to bottom, color-mix(in srgb, var(--color-background) 95%, var(--color-primary)), var(--color-background))`
              }}>
       
       {/* Background Image (si existe) - CALIDAD HD SIN FILTROS */}

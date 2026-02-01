@@ -11,7 +11,6 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
   value,
   onChange,
   label,
-  darkMode = false
 }) => {
   // Parsear RGBA o color hex
   const parseColor = (colorString: string): { r: number; g: number; b: number; a: number; hex: string } => {
@@ -71,19 +70,16 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
     const o = newOpacity !== undefined ? newOpacity : opacity;
     const t = transparent !== undefined ? transparent : isTransparent;
 
-    // Limpiar timeout anterior
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Esperar 300ms antes de llamar onChange
     timeoutRef.current = window.setTimeout(() => {
       if (t) {
         onChange('transparent');
         return;
       }
 
-      // Convertir hex a rgb
       const r = parseInt(c.slice(1, 3), 16);
       const g = parseInt(c.slice(3, 5), 16);
       const b = parseInt(c.slice(5, 7), 16);
@@ -115,8 +111,8 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
   };
 
   return (
-    <div className="space-y-3">
-      <label className={`block text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
         {label}
       </label>
 
@@ -128,7 +124,7 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
           onChange={handleTransparentToggle}
           className="mr-2"
         />
-        <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <span className="text-xs text-gray-600 dark:text-gray-300">
           Fondo transparente
         </span>
       </label>
@@ -140,13 +136,13 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
             type="color"
             value={color}
             onChange={handleColorChange}
-            className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+            className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
           />
           <input
             type="text"
             value={color}
             onChange={handleColorChange}
-            className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+            className="flex-1 min-w-0 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs"
             placeholder="#000000"
           />
         </div>
@@ -155,11 +151,11 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
       {/* Slider de opacidad */}
       {!isTransparent && (
         <div>
-          <div className="flex justify-between items-center mb-2">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-1">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Opacidad
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {Math.round(opacity * 100)}%
             </span>
           </div>
@@ -183,8 +179,7 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
       )}
 
       {/* Preview */}
-      <div className="relative h-12 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden">
-        {/* Patrón de tablero de ajedrez para mostrar transparencia */}
+      <div className="relative h-8 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -194,11 +189,10 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
               linear-gradient(45deg, transparent 75%, #ccc 75%),
               linear-gradient(-45deg, transparent 75%, #ccc 75%)
             `,
-            backgroundSize: '20px 20px',
-            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+            backgroundSize: '16px 16px',
+            backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px'
           }}
         />
-        {/* Color con opacidad */}
         <div
           className="absolute inset-0"
           style={{
@@ -207,8 +201,8 @@ const ColorWithOpacity: React.FC<ColorWithOpacityProps> = ({
         />
       </div>
 
-      <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-        Resultado: <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{value}</code>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-xs">{value}</code>
       </p>
     </div>
   );

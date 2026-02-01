@@ -15,55 +15,133 @@ export const SimpleButtonConfig: React.FC<SimpleButtonConfigProps> = ({
   onChange
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const PRESET_STYLES_UPDATED = [
-    {
-      name: '🟣 Morado Sólido',
-      style: {
-        text: value.text || 'Botón',
-        background: '#8B5CF6',
-        textColor: '#FFFFFF',
-        borderColor: 'transparent'
-      }
-    },
-    {
-      name: '🌊 Gradiente Morado-Cyan',
-      style: {
-        text: value.text || 'Botón',
-        background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)',
-        textColor: '#FFFFFF',
-        borderColor: 'transparent'
-      }
-    },
-    {
-      name: '🔲 Solo Borde',
-      style: {
-        text: value.text || 'Botón',
-        background: 'transparent',
-        textColor: '#8B5CF6',
-        borderColor: '#8B5CF6'
-      }
-    },
-    {
-      name: '🌈 Borde Gradiente',
-      style: {
-        text: value.text || 'Botón',
-        background: 'transparent',
-        textColor: '#8B5CF6',
-        borderColor: 'linear-gradient(90deg, #8B5CF6, #06B6D4)'
-      }
+  
+  // Parse initial values from saved config
+  const parseBackgroundColor = (bg: string): { color1: string, color2: string, isGradient: boolean, isTransparent: boolean } => {
+    if (bg === 'transparent') return { color1: '#8B5CF6', color2: '#06B6D4', isGradient: false, isTransparent: true };
+    if (bg?.includes('gradient')) {
+      // Extract colors from gradient string
+      const matches = bg.match(/#[0-9A-Fa-f]{6}/g);
+      return {
+        color1: matches?.[0] || '#8B5CF6',
+        color2: matches?.[1] || '#06B6D4',
+        isGradient: true,
+        isTransparent: false
+      };
     }
-  ];
-
-  const applyPreset = (preset: typeof PRESET_STYLES_UPDATED[0]) => {
-    onChange(preset.style);
+    return { color1: bg || '#8B5CF6', color2: '#06B6D4', isGradient: false, isTransparent: false };
   };
+
+  const parseBorderColor = (border: string): { color1: string, color2: string, isGradient: boolean, isTransparent: boolean } => {
+    if (border === 'transparent') return { color1: '#8B5CF6', color2: '#06B6D4', isGradient: false, isTransparent: true };
+    if (border?.includes('gradient')) {
+      const matches = border.match(/#[0-9A-Fa-f]{6}/g);
+      return {
+        color1: matches?.[0] || '#8B5CF6',
+        color2: matches?.[1] || '#06B6D4',
+        isGradient: true,
+        isTransparent: false
+      };
+    }
+    return { color1: border || '#8B5CF6', color2: '#06B6D4', isGradient: false, isTransparent: false };
+  };
+
+  const bgConfig = parseBackgroundColor(value.background || 'transparent');
+  const borderConfig = parseBorderColor(value.borderColor || 'transparent');
+
+  const [useTransparentBg, setUseTransparentBg] = useState(bgConfig.isTransparent);
+  const [useGradientBg, setUseGradientBg] = useState(bgConfig.isGradient);
+  const [gradientColor1, setGradientColor1] = useState(bgConfig.color1);
+  const [gradientColor2, setGradientColor2] = useState(bgConfig.color2);
+  
+  const [useTransparentBorder, setUseTransparentBorder] = useState(borderConfig.isTransparent);
+  const [useGradientBorder, setUseGradientBorder] = useState(borderConfig.isGradient);
+  const [borderGradientColor1, setBorderGradientColor1] = useState(borderConfig.color1);
+  const [borderGradientColor2, setBorderGradientColor2] = useState(borderConfig.color2);
 
   const handleCustomChange = (property: keyof ButtonStyle, newValue: string) => {
     onChange({
       ...value,
       [property]: newValue
     });
+  };
+
+  const handleTransparentBgToggle = (checked: boolean) => {
+    setUseTransparentBg(checked);
+    if (checked) {
+      setUseGradientBg(false);
+      onChange({ ...value, background: 'transparent' });
+    } else {
+      onChange({ ...value, background: gradientColor1 });
+    }
+  };
+
+  const handleGradientBgToggle = (checked: boolean) => {
+    setUseGradientBg(checked);
+    if (checked) {
+      setUseTransparentBg(false);
+      const gradient = `linear-gradient(135deg, ${gradientColor1} 0%, ${gradientColor2} 100%)`;
+      onChange({ ...value, background: gradient });
+    } else {
+      onChange({ ...value, background: gradientColor1 });
+    }
+  };
+
+  const handleGradientColor1Change = (color: string) => {
+    setGradientColor1(color);
+    if (useGradientBg) {
+      const gradient = `linear-gradient(135deg, ${color} 0%, ${gradientColor2} 100%)`;
+      onChange({ ...value, background: gradient });
+    } else {
+      onChange({ ...value, background: color });
+    }
+  };
+
+  const handleGradientColor2Change = (color: string) => {
+    setGradientColor2(color);
+    if (useGradientBg) {
+      const gradient = `linear-gradient(135deg, ${gradientColor1} 0%, ${color} 100%)`;
+      onChange({ ...value, background: gradient });
+    }
+  };
+
+  const handleTransparentBorderToggle = (checked: boolean) => {
+    setUseTransparentBorder(checked);
+    if (checked) {
+      setUseGradientBorder(false);
+      onChange({ ...value, borderColor: 'transparent' });
+    } else {
+      onChange({ ...value, borderColor: borderGradientColor1 });
+    }
+  };
+
+  const handleGradientBorderToggle = (checked: boolean) => {
+    setUseGradientBorder(checked);
+    if (checked) {
+      setUseTransparentBorder(false);
+      const gradient = `linear-gradient(90deg, ${borderGradientColor1}, ${borderGradientColor2})`;
+      onChange({ ...value, borderColor: gradient });
+    } else {
+      onChange({ ...value, borderColor: borderGradientColor1 });
+    }
+  };
+
+  const handleBorderGradientColor1Change = (color: string) => {
+    setBorderGradientColor1(color);
+    if (useGradientBorder) {
+      const gradient = `linear-gradient(90deg, ${color}, ${borderGradientColor2})`;
+      onChange({ ...value, borderColor: gradient });
+    } else {
+      onChange({ ...value, borderColor: color });
+    }
+  };
+
+  const handleBorderGradientColor2Change = (color: string) => {
+    setBorderGradientColor2(color);
+    if (useGradientBorder) {
+      const gradient = `linear-gradient(90deg, ${borderGradientColor1}, ${color})`;
+      onChange({ ...value, borderColor: gradient });
+    }
   };
 
   return (
@@ -129,172 +207,189 @@ export const SimpleButtonConfig: React.FC<SimpleButtonConfigProps> = ({
 
       {/* Panel Expandido */}
       {isExpanded && (
-        <div className="p-4 border-t border-gray-700 dark:border-gray-600">
-          {/* Estilos Predefinidos */}
-          <div className="mb-6">
-            <h6 className="text-sm font-medium text-gray-300 dark:text-gray-200 mb-3">🎨 Estilos Rápidos</h6>
-            <div className="grid grid-cols-2 gap-2">
-              {PRESET_STYLES_UPDATED.map((preset, index) => (
-                <button
-                  key={index}
-                  onClick={() => applyPreset(preset)}
-                  className="p-3 rounded-lg border border-gray-600 dark:border-gray-500 hover:border-purple-500 dark:hover:border-purple-400 transition-all text-left bg-gray-700 dark:bg-gray-800"
-                >
-                  <div className="flex items-center space-x-2 mb-2">
-                    <div
-                      className="w-4 h-4 rounded border"
-                      style={{
-                        background: preset.style.background,
-                        borderColor: preset.style.borderColor
-                      }}
-                    />
-                    <span className="text-xs text-gray-300 dark:text-gray-200">{preset.name}</span>
-                  </div>
-                  {preset.style.borderColor?.includes('gradient') ? (
-                    // Preview con borde gradiente
-                    <div
-                      className="w-full px-2 py-1 rounded text-xs text-center"
-                      style={{
-                        background: preset.style.background === 'transparent'
-                          ? `linear-gradient(#374151, #374151) padding-box, ${preset.style.borderColor} border-box`
-                          : preset.style.background,
-                        color: preset.style.textColor,
-                        border: '2px solid transparent'
-                      }}
-                    >
-                      Preview
-                    </div>
-                  ) : (
-                    // Preview normal
-                    <div
-                      className="w-full px-2 py-1 rounded text-xs text-center border-2"
-                      style={{
-                        background: preset.style.background,
-                        color: preset.style.textColor,
-                        borderColor: preset.style.borderColor
-                      }}
-                    >
-                      Preview
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
+        <div className="p-4 border-t border-gray-700 dark:border-gray-600 space-y-6">
+          {/* Texto del Botón */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 dark:text-gray-200 mb-2">📝 Texto del Botón</label>
+            <input
+              type="text"
+              value={value.text || ''}
+              onChange={(e) => handleCustomChange('text', e.target.value)}
+              placeholder="Ingresa el texto del botón"
+              className="w-full px-3 py-2 bg-gray-700 dark:bg-gray-600 border border-gray-600 dark:border-gray-500 rounded-lg text-white text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            />
           </div>
 
-          {/* Personalización Simple */}
-          <div className="space-y-4">
-            <h6 className="text-sm font-medium text-gray-300 dark:text-gray-200">⚙️ Personalización</h6>
+          {/* Configuración de Fondo */}
+          <div className="bg-gray-750 dark:bg-gray-800 p-4 rounded-lg border border-gray-700">
+            <h6 className="text-sm font-semibold text-gray-200 mb-3">🎨 Fondo del Botón</h6>
             
-            {/* Texto del Botón */}
-            <div>
-              <label className="block text-xs text-gray-400 dark:text-gray-300 mb-2">📝 Texto del Botón</label>
+            {/* Checkbox: Fondo Transparente */}
+            <label className="flex items-center space-x-2 mb-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useTransparentBg}
+                onChange={(e) => handleTransparentBgToggle(e.target.checked)}
+                className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+              />
+              <span className="text-sm text-gray-300">Fondo Transparente</span>
+            </label>
+
+            {/* Checkbox: Usar Gradiente */}
+            {!useTransparentBg && (
+              <label className="flex items-center space-x-2 mb-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useGradientBg}
+                  onChange={(e) => handleGradientBgToggle(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                />
+                <span className="text-sm text-gray-300">Usar Gradiente</span>
+              </label>
+            )}
+
+            {/* Selectores de Color */}
+            {!useTransparentBg && (
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">
+                    {useGradientBg ? 'Color Inicial' : 'Color de Fondo'}
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="color"
+                      value={gradientColor1}
+                      onChange={(e) => handleGradientColor1Change(e.target.value)}
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={gradientColor1}
+                      onChange={(e) => handleGradientColor1Change(e.target.value)}
+                      placeholder="#8B5CF6"
+                      className="flex-1 px-3 py-2 bg-gray-600 dark:bg-gray-700 border border-gray-500 rounded text-white text-xs"
+                    />
+                  </div>
+                </div>
+
+                {useGradientBg && (
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Color Final</label>
+                    <div className="flex space-x-2">
+                      <input
+                        type="color"
+                        value={gradientColor2}
+                        onChange={(e) => handleGradientColor2Change(e.target.value)}
+                        className="w-12 h-10 rounded cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={gradientColor2}
+                        onChange={(e) => handleGradientColor2Change(e.target.value)}
+                        placeholder="#06B6D4"
+                        className="flex-1 px-3 py-2 bg-gray-600 dark:bg-gray-700 border border-gray-500 rounded text-white text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Color de Texto */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 dark:text-gray-200 mb-2">✏️ Color del Texto</label>
+            <div className="flex space-x-2">
+              <input
+                type="color"
+                value={value.textColor || '#FFFFFF'}
+                onChange={(e) => handleCustomChange('textColor', e.target.value)}
+                className="w-12 h-10 rounded cursor-pointer"
+              />
               <input
                 type="text"
-                value={value.text || ''}
-                onChange={(e) => handleCustomChange('text', e.target.value)}
-                placeholder="Ingresa el texto del botón"
-                className="w-full px-3 py-2 bg-gray-600 dark:bg-gray-700 border border-gray-500 dark:border-gray-600 rounded-lg text-white text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                value={value.textColor || ''}
+                onChange={(e) => handleCustomChange('textColor', e.target.value)}
+                placeholder="#FFFFFF"
+                className="flex-1 px-3 py-2 bg-gray-700 dark:bg-gray-600 border border-gray-600 dark:border-gray-500 rounded text-white text-sm"
               />
-            </div>
-            
-            {/* Color de Fondo */}
-            <div>
-              <label className="block text-xs text-gray-400 dark:text-gray-300 mb-2">Fondo</label>
-              <div className="flex space-x-2">
-                <input
-                  type="color"
-                  value={value.background?.includes('gradient') ? '#8B5CF6' : value.background || '#8B5CF6'}
-                  onChange={(e) => handleCustomChange('background', e.target.value)}
-                  className="w-12 h-8 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={value.background || ''}
-                  onChange={(e) => handleCustomChange('background', e.target.value)}
-                  placeholder="transparent, #8B5CF6, linear-gradient(...)"
-                  className="flex-1 px-3 py-2 bg-gray-700 dark:bg-gray-600 border border-gray-600 dark:border-gray-500 rounded text-white dark:text-gray-100 text-xs"
-                />
-              </div>
-            </div>
-
-            {/* Color de Texto */}
-            <div>
-              <label className="block text-xs text-gray-400 dark:text-gray-300 mb-2">Texto</label>
-              <div className="flex space-x-2">
-                <input
-                  type="color"
-                  value={value.textColor || '#FFFFFF'}
-                  onChange={(e) => handleCustomChange('textColor', e.target.value)}
-                  className="w-12 h-8 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={value.textColor || ''}
-                  onChange={(e) => handleCustomChange('textColor', e.target.value)}
-                  placeholder="#FFFFFF"
-                  className="flex-1 px-3 py-2 bg-gray-700 dark:bg-gray-600 border border-gray-600 dark:border-gray-500 rounded text-white dark:text-gray-100 text-xs"
-                />
-              </div>
-            </div>
-
-            {/* Color de Borde */}
-            <div>
-              <label className="block text-xs text-gray-400 dark:text-gray-300 mb-2">Borde</label>
-              <div className="flex space-x-2">
-                <input
-                  type="color"
-                  value={value.borderColor?.includes('gradient') ? '#8B5CF6' : value.borderColor === 'transparent' ? '#8B5CF6' : value.borderColor || '#8B5CF6'}
-                  onChange={(e) => handleCustomChange('borderColor', e.target.value)}
-                  className="w-12 h-8 rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={value.borderColor || ''}
-                  onChange={(e) => handleCustomChange('borderColor', e.target.value)}
-                  placeholder="transparent, #8B5CF6, linear-gradient(...)"
-                  className="flex-1 px-3 py-2 bg-gray-700 dark:bg-gray-600 border border-gray-600 dark:border-gray-500 rounded text-white dark:text-gray-100 text-xs"
-                />
-              </div>
             </div>
           </div>
 
-          {/* Vista Previa Interactiva */}
-          <div className="mt-6 p-4 bg-gray-900 rounded-lg">
-            <label className="block text-xs text-gray-400 mb-3">Vista Previa</label>
-            <div className="flex justify-center">
-              {value.borderColor?.includes('gradient') ? (
-                // Botón con borde gradiente
-                <button
-                  className="px-6 py-3 rounded-full font-medium transition-all duration-200 hover:scale-105"
-                  style={{
-                    background: value.background === 'transparent'
-                      ? `linear-gradient(#111827, #111827) padding-box, ${value.borderColor} border-box`
-                      : value.background,
-                    color: value.textColor || '#8B5CF6',
-                    border: '2px solid transparent'
-                  }}
-                >
-                  {value.text || (title.includes('Contacto') ? 'CONTÁCTENOS' : 
-                   title.includes('Principal') ? 'Ver Servicios' : 
-                   'Ir al Dashboard')}
-                </button>
-              ) : (
-                // Botón normal
-                <button
-                  className="px-6 py-3 rounded-full font-medium border-2 transition-all duration-200 hover:scale-105"
-                  style={{
-                    background: value.background || 'transparent',
-                    color: value.textColor || '#8B5CF6',
-                    borderColor: value.borderColor || 'transparent'
-                  }}
-                >
-                  {value.text || (title.includes('Contacto') ? 'CONTÁCTENOS' : 
-                   title.includes('Principal') ? 'Ver Servicios' : 
-                   'Ir al Dashboard')}
-                </button>
-              )}
-            </div>
+          {/* Configuración de Borde */}
+          <div className="bg-gray-750 dark:bg-gray-800 p-4 rounded-lg border border-gray-700">
+            <h6 className="text-sm font-semibold text-gray-200 mb-3">🔲 Borde del Botón</h6>
+            
+            {/* Checkbox: Borde Transparente */}
+            <label className="flex items-center space-x-2 mb-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useTransparentBorder}
+                onChange={(e) => handleTransparentBorderToggle(e.target.checked)}
+                className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+              />
+              <span className="text-sm text-gray-300">Borde Transparente</span>
+            </label>
+
+            {/* Checkbox: Usar Gradiente en Borde */}
+            {!useTransparentBorder && (
+              <label className="flex items-center space-x-2 mb-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useGradientBorder}
+                  onChange={(e) => handleGradientBorderToggle(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                />
+                <span className="text-sm text-gray-300">Usar Gradiente</span>
+              </label>
+            )}
+
+            {/* Selectores de Color de Borde */}
+            {!useTransparentBorder && (
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1">
+                    {useGradientBorder ? 'Color Inicial' : 'Color de Borde'}
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="color"
+                      value={borderGradientColor1}
+                      onChange={(e) => handleBorderGradientColor1Change(e.target.value)}
+                      className="w-12 h-10 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={borderGradientColor1}
+                      onChange={(e) => handleBorderGradientColor1Change(e.target.value)}
+                      placeholder="#8B5CF6"
+                      className="flex-1 px-3 py-2 bg-gray-600 dark:bg-gray-700 border border-gray-500 rounded text-white text-xs"
+                    />
+                  </div>
+                </div>
+
+                {useGradientBorder && (
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">Color Final</label>
+                    <div className="flex space-x-2">
+                      <input
+                        type="color"
+                        value={borderGradientColor2}
+                        onChange={(e) => handleBorderGradientColor2Change(e.target.value)}
+                        className="w-12 h-10 rounded cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={borderGradientColor2}
+                        onChange={(e) => handleBorderGradientColor2Change(e.target.value)}
+                        placeholder="#06B6D4"
+                        className="flex-1 px-3 py-2 bg-gray-600 dark:bg-gray-700 border border-gray-500 rounded text-white text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -37,24 +37,7 @@ export const AllNewsSection: React.FC<AllNewsSectionProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = config.postsPerPage || 6;
 
-  // Calcular colores según tema
-  const bgColor = isDarkMode 
-    ? (config.sectionBgColorDark || '#0f172a')
-    : (config.sectionBgColorLight || '#ffffff');
-    
-  const titleColor = isDarkMode
-    ? (config.sectionTitleColorDark || '#ffffff')
-    : (config.sectionTitleColorLight || '#111827');
-    
-  const iconColor = isDarkMode
-    ? (config.sectionIconColorDark || '#60a5fa')
-    : (config.sectionIconColorLight || '#2563eb');
-    
-  const iconBg = isDarkMode
-    ? (config.sectionIconBgDark || 'rgba(37, 99, 235, 0.2)')
-    : (config.sectionIconBgLight || '#dbeafe');
-
-  // Sidebar colors
+  // Sidebar colors (solo se usan las que se necesitan actualmente)
   const sidebarConfig = config.sidebar || {};
   const categoriesTitleColor = isDarkMode
     ? (sidebarConfig.categoriesTitleColorDark || '#ffffff')
@@ -73,14 +56,6 @@ export const AllNewsSection: React.FC<AllNewsSectionProps> = ({
     : (sidebarConfig.tagTextColor || '#4b5563');
 
   const fontFamily = config.fontFamily || 'Montserrat';
-
-  // Imagen de fondo
-  const bgImage = isDarkMode
-    ? config.sectionBgImageDark
-    : config.sectionBgImageLight;
-  const bgOverlay = isDarkMode
-    ? (config.sectionBgOverlayDark ?? 0)
-    : (config.sectionBgOverlayLight ?? 0);
 
   // Paginación
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -147,46 +122,27 @@ export const AllNewsSection: React.FC<AllNewsSectionProps> = ({
     <section 
       className="relative py-16"
       style={{ 
-        backgroundColor: bgColor,
+        backgroundColor: 'var(--color-background)',
         fontFamily: `'${fontFamily}', sans-serif`
       }}
     >
-      {/* Imagen de fondo si existe */}
-      {bgImage && (
-        <>
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${bgImage})` }}
-          />
-          {bgOverlay > 0 && (
-            <div 
-              className="absolute inset-0"
-              style={{ 
-                backgroundColor: isDarkMode ? '#000000' : '#ffffff',
-                opacity: bgOverlay / 100 
-              }}
-            />
-          )}
-        </>
-      )}
-
       <div className="container mx-auto px-4 relative z-10">
         {/* Título de sección */}
         <div className="flex items-center gap-4 mb-10">
           {config.showIcon !== false && (
             <div 
               className="w-12 h-12 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: iconBg }}
+              style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' }}
             >
               <Newspaper 
                 className="w-6 h-6"
-                style={{ color: iconColor }}
+                style={{ color: 'var(--color-primary)' }}
               />
             </div>
           )}
           <h2 
             className="text-3xl font-bold"
-            style={{ color: titleColor }}
+            style={{ color: 'var(--color-text)' }}
           >
             {config.sectionTitle || 'Todas las Noticias'}
           </h2>
@@ -387,7 +343,7 @@ export const AllNewsSection: React.FC<AllNewsSectionProps> = ({
                     ? config.paginationDark 
                     : config.paginationLight;
                   
-                  const activeBg = paginationStyles?.activeBg || config.paginationActiveBg || iconColor;
+                  const activeBg = paginationStyles?.activeBg || config.paginationActiveBg || '#60a5fa';
                   const activeText = paginationStyles?.activeText || config.paginationActiveText || '#ffffff';
                   const useGradient = paginationStyles?.activeUseGradient || false;
                   const gradientFrom = paginationStyles?.activeGradientFrom || '#8b5cf6';

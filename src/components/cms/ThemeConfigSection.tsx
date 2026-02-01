@@ -13,6 +13,34 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
   updateContent,
   updateSimpleButtonStyle
 }) => {
+  // Valores por defecto de Thado Consulting
+  const defaultLightColors = {
+    primary: '#2554a3',
+    secondary: '#3462af',
+    background: '#FFFFFF',
+    text: '#1F2937',
+    cardBg: '#F9FAFB',
+    textSecondary: '#626871',
+    border: '#E5E7EB'
+  };
+  
+  const defaultDarkColors = {
+    primary: '#3462af',
+    secondary: '#5a8fd4',
+    background: '#111827',
+    text: '#F9FAFB',
+    cardBg: '#1F2937',
+    textSecondary: '#D1D5DB',
+    border: '#374151'
+  };
+
+  // Helper para obtener valor con fallback
+  const getThemeValue = (mode: 'lightMode' | 'darkMode', field: keyof typeof defaultLightColors): string => {
+    const defaults = mode === 'lightMode' ? defaultLightColors : defaultDarkColors;
+    const value = pageData.theme?.[mode]?.[field];
+    return (value && value !== '') ? value : defaults[field];
+  };
+
   const updateThemeColor = (mode: 'lightMode' | 'darkMode', field: keyof ThemeColors, value: string) => {
     updateContent(`theme.${mode}.${field}`, value);
   };
@@ -47,16 +75,16 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.lightMode?.primary || '#8B5CF6'}
+                  value={getThemeValue('lightMode', 'primary')}
                   onChange={(e) => updateThemeColor('lightMode', 'primary', e.target.value)}
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
                 <input
                   type="text"
-                  value={pageData.theme?.lightMode?.primary || '#8B5CF6'}
+                  value={getThemeValue('lightMode', 'primary')}
                   onChange={(e) => updateThemeColor('lightMode', 'primary', e.target.value)}
                   className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                  placeholder="#8B5CF6"
+                  placeholder="#2554a3"
                 />
               </div>
             </div>
@@ -67,16 +95,16 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.lightMode?.secondary || '#06B6D4'}
+                  value={getThemeValue('lightMode', 'secondary')}
                   onChange={(e) => updateThemeColor('lightMode', 'secondary', e.target.value)}
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
                   <input
                     type="text"
-                    value={pageData.theme?.lightMode?.secondary || '#06B6D4'}
+                    value={getThemeValue('lightMode', 'secondary')}
                     onChange={(e) => updateThemeColor('lightMode', 'secondary', e.target.value)}
                     className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
-                    placeholder="#06B6D4"
+                    placeholder="#3462af"
                   />
               </div>
             </div>
@@ -87,13 +115,13 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.lightMode?.background || '#FFFFFF'}
+                  value={getThemeValue('lightMode', 'background')}
                   onChange={(e) => updateThemeColor('lightMode', 'background', e.target.value)}
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
                   <input
                     type="text"
-                    value={pageData.theme?.lightMode?.background || '#FFFFFF'}
+                    value={getThemeValue('lightMode', 'background')}
                     onChange={(e) => updateThemeColor('lightMode', 'background', e.target.value)}
                     className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
                     placeholder="#FFFFFF"
@@ -107,17 +135,57 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.lightMode?.text || '#1F2937'}
+                  value={getThemeValue('lightMode', 'text')}
                   onChange={(e) => updateThemeColor('lightMode', 'text', e.target.value)}
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
                   <input
                     type="text"
-                    value={pageData.theme?.lightMode?.text || '#1F2937'}
+                    value={getThemeValue('lightMode', 'text')}
                     onChange={(e) => updateThemeColor('lightMode', 'text', e.target.value)}
                     className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
                     placeholder="#1F2937"
                   />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Fondo de Secciones
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={getThemeValue('lightMode', 'cardBg')}
+                  onChange={(e) => updateThemeColor('lightMode', 'cardBg', e.target.value)}
+                  className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={getThemeValue('lightMode', 'cardBg')}
+                  onChange={(e) => updateThemeColor('lightMode', 'cardBg', e.target.value)}
+                  className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                  placeholder="#F9FAFB"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Texto Secundario
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={getThemeValue('lightMode', 'textSecondary')}
+                  onChange={(e) => updateThemeColor('lightMode', 'textSecondary', e.target.value)}
+                  className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={getThemeValue('lightMode', 'textSecondary')}
+                  onChange={(e) => updateThemeColor('lightMode', 'textSecondary', e.target.value)}
+                  className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                  placeholder="#626871"
+                />
               </div>
             </div>
           </div>
@@ -145,16 +213,16 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.darkMode?.primary || '#A78BFA'}
+                  value={getThemeValue('darkMode', 'primary')}
                   onChange={(e) => updateThemeColor('darkMode', 'primary', e.target.value)}
                   className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
                 />
                 <input
                   type="text"
-                  value={pageData.theme?.darkMode?.primary || '#A78BFA'}
+                  value={getThemeValue('darkMode', 'primary')}
                   onChange={(e) => updateThemeColor('darkMode', 'primary', e.target.value)}
                   className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
-                  placeholder="#A78BFA"
+                  placeholder="#3462af"
                 />
               </div>
             </div>
@@ -165,16 +233,16 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.darkMode?.secondary || '#22D3EE'}
+                  value={getThemeValue('darkMode', 'secondary')}
                   onChange={(e) => updateThemeColor('darkMode', 'secondary', e.target.value)}
                   className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
                 />
                 <input
                   type="text"
-                  value={pageData.theme?.darkMode?.secondary || '#22D3EE'}
+                  value={getThemeValue('darkMode', 'secondary')}
                   onChange={(e) => updateThemeColor('darkMode', 'secondary', e.target.value)}
                   className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
-                  placeholder="#22D3EE"
+                  placeholder="#5a8fd4"
                 />
               </div>
             </div>
@@ -185,13 +253,13 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.darkMode?.background || '#111827'}
+                  value={getThemeValue('darkMode', 'background')}
                   onChange={(e) => updateThemeColor('darkMode', 'background', e.target.value)}
                   className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
                 />
                 <input
                   type="text"
-                  value={pageData.theme?.darkMode?.background || '#111827'}
+                  value={getThemeValue('darkMode', 'background')}
                   onChange={(e) => updateThemeColor('darkMode', 'background', e.target.value)}
                   className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
                   placeholder="#111827"
@@ -205,16 +273,56 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={pageData.theme?.darkMode?.text || '#F9FAFB'}
+                  value={getThemeValue('darkMode', 'text')}
                   onChange={(e) => updateThemeColor('darkMode', 'text', e.target.value)}
                   className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
                 />
                 <input
                   type="text"
-                  value={pageData.theme?.darkMode?.text || '#F9FAFB'}
+                  value={getThemeValue('darkMode', 'text')}
                   onChange={(e) => updateThemeColor('darkMode', 'text', e.target.value)}
                   className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
                   placeholder="#F9FAFB"
+                />
+              </div>
+            </div>
+            <div className="min-w-0">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Fondo de Secciones
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={getThemeValue('darkMode', 'cardBg')}
+                  onChange={(e) => updateThemeColor('darkMode', 'cardBg', e.target.value)}
+                  className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={getThemeValue('darkMode', 'cardBg')}
+                  onChange={(e) => updateThemeColor('darkMode', 'cardBg', e.target.value)}
+                  className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
+                  placeholder="#1F2937"
+                />
+              </div>
+            </div>
+            <div className="min-w-0">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Texto Secundario
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={getThemeValue('darkMode', 'textSecondary')}
+                  onChange={(e) => updateThemeColor('darkMode', 'textSecondary', e.target.value)}
+                  className="w-12 h-10 border border-gray-600 rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={getThemeValue('darkMode', 'textSecondary')}
+                  onChange={(e) => updateThemeColor('darkMode', 'textSecondary', e.target.value)}
+                  className="w-full min-w-0 flex-1 px-3 py-2 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-800 text-white text-sm"
+                  placeholder="#D1D5DB"
                 />
               </div>
             </div>
@@ -226,7 +334,7 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
   {/* Grid responsivo para las tarjetas de botones */}
   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 mt-8 w-full">
           {/* Tema Claro */}
-          <div className="flex-1 min-w-0 w-full bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-200 min-w-0">
+          <div className="flex-1 min-w-0 w-full bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-200">
             <div className="flex items-center mb-6">
               <div className="bg-white rounded-full p-3 mr-3 shadow-sm min-w-0">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -272,7 +380,7 @@ const ThemeConfigSection: React.FC<ThemeConfigSectionProps> = ({
             </div>
           </div>
           {/* Tema Oscuro */}
-          <div className="flex-1 min-w-0 w-full bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-gray-700 min-w-0">
+          <div className="flex-1 min-w-0 w-full bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-gray-700">
             <div className="flex items-center mb-6">
               <div className="bg-gray-700 rounded-full p-3 mr-3 shadow-sm min-w-0">
                 <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

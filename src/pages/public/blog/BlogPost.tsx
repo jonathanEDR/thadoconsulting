@@ -15,6 +15,7 @@ import { useBlogPost } from '../../../hooks/blog';
 import { usePostContent } from '../../../hooks/blog/usePostContent';
 import { useCmsData } from '../../../hooks/cms/useCmsData';
 import { useTheme } from '../../../contexts/ThemeContext';
+import PageLoader from '../../../components/common/PageLoader';
 import { BlogArticleSchema, BreadcrumbSchema } from '../../../components/seo/SchemaOrg';
 import { BRAND_AUTHOR } from '../../../config/brandConstants';
 import { 
@@ -69,17 +70,7 @@ const BlogPostEnhanced: React.FC = () => {
   }, [post]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-        <div className="container mx-auto px-4 max-w-4xl animate-pulse space-y-6">
-          <div className="bg-gray-200 dark:bg-gray-700 h-8 w-24 rounded"></div>
-          <div className="bg-gray-200 dark:bg-gray-700 h-12 w-3/4 rounded"></div>
-          <div className="bg-gray-200 dark:bg-gray-700 h-6 w-1/2 rounded"></div>
-          <div className="bg-gray-200 dark:bg-gray-700 h-96 rounded"></div>
-          {[...Array(8)].map((_, i) => (<div key={i} className="bg-gray-200 dark:bg-gray-700 h-4 rounded"></div>))}
-        </div>
-      </div>
-    );
+    return <PageLoader fullScreen message="Cargando artículo..." size="lg" />;
   }
 
   // ✅ SEO FIX: Durante pre-renderizado, NO mostrar "Artículo no encontrado"
@@ -114,11 +105,7 @@ const BlogPostEnhanced: React.FC = () => {
   return (
     <div 
       className="min-h-screen flex flex-col"
-      style={{
-        backgroundColor: theme === 'dark' 
-          ? (contentConfig.background?.dark || '#0f0f0f')
-          : (contentConfig.background?.light || '#f9fafb')
-      }}
+      style={{ backgroundColor: 'var(--color-background)' }}
     >
       {/* Barra de progreso de lectura */}
       {progressConfig.enabled !== false && (
@@ -261,21 +248,13 @@ const BlogPostEnhanced: React.FC = () => {
       {summaryBarConfig.enabled !== false && (
         <div 
           className="relative z-[5]"
-          style={{
-            backgroundColor: theme === 'dark' 
-              ? (summaryBarConfig.styles?.dark?.background || contentConfig.background?.dark || '#0f0f0f')
-              : (summaryBarConfig.styles?.light?.background || contentConfig.background?.light || '#f9fafb')
-          }}
+          style={{ backgroundColor: 'var(--color-background)' }}
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div 
               className="flex items-center justify-between py-4"
               style={{
-                borderBottom: `1px solid ${
-                  theme === 'dark' 
-                    ? (summaryBarConfig.styles?.dark?.borderColor || '#374151')
-                    : (summaryBarConfig.styles?.light?.borderColor || '#e5e7eb')
-                }`
+                borderBottom: `1px solid var(--color-border)`
               }}
             >
             {/* Excerpt */}
@@ -335,11 +314,7 @@ const BlogPostEnhanced: React.FC = () => {
       {/* Main Content Section with Background Image */}
       <div 
         className="relative flex-1"
-        style={{
-          backgroundColor: theme === 'dark' 
-            ? (contentConfig.background?.dark || '#0f0f0f')
-            : (contentConfig.background?.light || '#f9fafb')
-        }}
+        style={{ backgroundColor: 'var(--color-background)' }}
       >
         {/* Contenido principal */}
         <section className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-8 lg:py-12">

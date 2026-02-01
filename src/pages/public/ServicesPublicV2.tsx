@@ -12,6 +12,7 @@ import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
 import { ServicioPublicCard } from '../../components/public/ServicioPublicCard';
 import { ServicesAccordionList } from '../../components/public/ServicesAccordionList';
+import PageLoader from '../../components/common/PageLoader';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useServiciosList } from '../../hooks/useServiciosCache';
 import { useCategoriasList } from '../../hooks/useCategoriasCache';
@@ -55,6 +56,7 @@ const ServicesPublicV2 = () => {
   
   // 🆕 Estado para datos del CMS (hero, etc.)
   const [pageData, setPageData] = useState<any>(null);
+  const [initialLoading, setInitialLoading] = useState(true); // 🆕 Loading inicial de página
   
   // 🎠 Estado para el carrusel de servicios destacados
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -86,6 +88,8 @@ const ServicesPublicV2 = () => {
         // console.warn('⚠️ [Services] No se pudieron cargar datos del CMS:', error);
         // Usar valores por defecto si no hay datos
         setPageData(null);
+      } finally {
+        setInitialLoading(false); // 🆕 Terminar loading inicial
       }
     };
 
@@ -224,6 +228,11 @@ const ServicesPublicV2 = () => {
   // RENDER
   // ============================================
 
+  // 🆕 Loading inicial de página completa con logo
+  if (initialLoading) {
+    return <PageLoader fullScreen message="Cargando servicios..." size="lg" />;
+  }
+
   return (
     <>
       {/* ✅ SEO usando configuración centralizada */}
@@ -286,7 +295,7 @@ const ServicesPublicV2 = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen w-full overflow-x-hidden" style={{ background: 'var(--color-background)' }}>
         <PublicHeader />
         
         {/* 🖼️ Hero Section con imagen de fondo del CMS - SIN margen inferior para eliminar línea */}
@@ -470,16 +479,15 @@ const ServicesPublicV2 = () => {
                   // Obtener color de fondo
                   const getBackgroundColor = () => {
                     if (isTransparent) return 'transparent';
-                    return isDark 
-                      ? (styles?.backgroundColorDark || '#1e293b')
-                      : (styles?.backgroundColor || '#ffffff');
+                    // Usar variable CSS en lugar de colores hardcodeados
+                    return 'var(--color-cardBg)';
                   };
                   
                   // Si el fondo es transparente y hay borde gradiente, usar técnica de mask
                   if (isTransparent && borderStyle === 'gradient') {
                     return (
                       <div 
-                        className="sticky top-24 relative"
+                        className="sticky top-24"
                         style={{
                           borderRadius: borderRadius,
                           padding: borderWidth,
@@ -1265,36 +1273,26 @@ const ServicesPublicV2 = () => {
               {/* CONTENIDO PRINCIPAL - Grid de Servicios */}
               <div className="flex-1 min-w-0">{/* min-w-0 previene overflow */}
 
-                {/* Estado de carga con skeleton */}
+                {/* Estado de carga con PageLoader profesional - Solo logo */}
                 {loading && (
                   <div className="animate-fade-in">
-                    <div className="text-center py-12">
-                      <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-                      <p className="text-gray-600 dark:text-gray-400 animate-pulse">Cargando servicios...</p>
-                    </div>
-                    
-                    {/* Skeleton cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-lg animate-pulse">
-                          <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl mb-4 shimmer"></div>
-                          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded mb-3 shimmer"></div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded mb-2 shimmer"></div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3 shimmer"></div>
-                        </div>
-                      ))}
-                    </div>
+                    <PageLoader 
+                      message="Cargando servicios..." 
+                      size="md"
+                      showSpinner={true}
+                    />
                   </div>
                 )}
 
                 {/* Estado de error con animación */}
                 {error && (
-                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center mb-8 animate-scale-in">
+                  <div className="border rounded-lg p-6 text-center mb-8 animate-scale-in" style={{ backgroundColor: 'color-mix(in srgb, #EF4444 10%, var(--color-background))', borderColor: 'color-mix(in srgb, #EF4444 30%, transparent)' }}>
                     <div className="text-4xl mb-2 animate-bounce">❌</div>
-                    <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>
+                    <p className="font-medium" style={{ color: '#DC2626' }}>{error}</p>
                     <button
                       onClick={() => recargarConInvalidacion()}
-                      className="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-all duration-300 hover:scale-105"
+                      className="mt-4 text-white px-6 py-2 rounded-lg transition-all duration-300 hover:scale-105"
+                      style={{ background: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)' }}
                     >
                       🔄 Recargar servicios
                     </button>
@@ -1331,12 +1329,12 @@ const ServicesPublicV2 = () => {
                     <div className="relative">
                       {/* Gradiente izquierdo para indicar más contenido */}
                       {showLeftArrow && (
-                        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent pointer-events-none z-10" />
+                        <div className="absolute left-0 top-0 bottom-0 w-16 pointer-events-none z-10" style={{ background: 'linear-gradient(to right, var(--color-background), transparent)' }} />
                       )}
                       
                       {/* Gradiente derecho para indicar más contenido */}
                       {showRightArrow && (
-                        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent pointer-events-none z-10" />
+                        <div className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none z-10" style={{ background: 'linear-gradient(to left, var(--color-background), transparent)' }} />
                       )}
                       
                       {/* Contenedor del carrusel */}

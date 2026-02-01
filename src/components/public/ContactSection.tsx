@@ -282,9 +282,7 @@ const ContactSection = ({ data, categorias = [], transparentBackground = false }
         <div 
           className="absolute inset-0"
           style={{
-            background: currentTheme === 'light'
-              ? 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
-              : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+            background: `linear-gradient(to bottom, color-mix(in srgb, var(--color-background) 95%, var(--color-primary)), var(--color-background))`,
           }}
         />
       )}

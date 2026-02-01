@@ -324,11 +324,11 @@ const CmsManager: React.FC = () => {
   return (
     <div className="min-h-screen w-full">
       {/* Header */}
-      <div className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 mb-6 border border-gray-100 dark:border-gray-700/50">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-4 mb-4 border border-gray-100 dark:border-gray-700/50">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div className="flex-1">
-            <div className="flex items-center gap-4 mb-2">
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3">
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
                 🎛️ Gestor de Contenido CMS
                 {hasGlobalChanges && (
                   <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300 text-sm font-medium rounded-full animate-pulse">
@@ -337,7 +337,7 @@ const CmsManager: React.FC = () => {
                 )}
               </h1>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 mb-3">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
               Administra el contenido, SEO y temas de tu página web
             </p>
             
@@ -349,7 +349,7 @@ const CmsManager: React.FC = () => {
             )}
             
             {/* 🆕 Selector de Página */}
-            <div className="flex items-center gap-3 mt-3">
+            <div className="flex items-center gap-3 mt-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 📑 Página a editar:
               </label>
@@ -383,31 +383,31 @@ const CmsManager: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="flex flex-row flex-wrap items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-row flex-wrap items-center gap-2 w-full sm:w-auto">
             {/* Status Badge */}
-            <div className={`px-3 py-1 rounded-full text-sm font-medium border ${getSaveStatusColor()}`}>
-              {hasGlobalChanges ? '📝 Cambios pendientes' : getSaveStatusText()}
+            <div className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${getSaveStatusColor()}`}>
+              <span className="sm:hidden">{hasGlobalChanges ? '📝' : getSaveStatusText().charAt(0)}</span>
+              <span className="hidden sm:inline">{hasGlobalChanges ? '📝 Cambios pendientes' : getSaveStatusText()}</span>
             </div>
             {/* Action Button */}
             <button
               onClick={handleManualSave}
               disabled={isLoading || !hasGlobalChanges}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 ${
+              className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-1 sm:gap-2 text-sm ${
                 hasGlobalChanges && !isLoading
                   ? 'bg-green-600 hover:bg-green-700 text-white'
                   : 'bg-gray-400 text-gray-200 cursor-not-allowed'
               }`}
               title={hasGlobalChanges ? 'Guardar cambios pendientes' : 'No hay cambios para guardar'}
-              style={{ minWidth: '120px' }}
             >
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                  Guardando...
+                  <span className="hidden sm:inline">Guardando...</span>
                 </>
               ) : (
                 <>
-                  <span>💾</span> Guardar
+                  <span>💾</span> <span className="hidden sm:inline">Guardar</span>
                 </>
               )}
             </button>
@@ -416,28 +416,28 @@ const CmsManager: React.FC = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 mb-6 border border-gray-100 dark:border-gray-700/50">
-        <div className="flex flex-wrap sm:flex-nowrap overflow-x-auto border-b border-gray-200 dark:border-gray-700 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+      <div className="w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 mb-4 border border-gray-100 dark:border-gray-700/50">
+        <div className="flex flex-nowrap overflow-x-auto border-b border-gray-200 dark:border-gray-700 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex-shrink-0 flex-grow px-4 sm:px-6 py-3 sm:py-4 font-medium transition-colors duration-200 flex items-center gap-2 text-base sm:text-lg ${
+              className={`flex-shrink-0 flex-grow px-2 sm:px-4 py-2 sm:py-2.5 font-medium transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-1.5 text-xs sm:text-base ${
                 activeTab === tab.id
                   ? 'border-b-2 border-purple-500 text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
               }`}
-              style={{ minWidth: '120px' }}
+              title={tab.label}
             >
-              <span className="text-lg">{tab.icon}</span>
-              {tab.label}
+              <span className="text-lg sm:text-base">{tab.icon}</span>
+              <span className="hidden sm:inline">{tab.label}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Tab Content */}
-      <div className="w-full space-y-6">
+      <div className="w-full space-y-4">
         {activeTab === 'content' && (
           <>
             {/* 🎯 Hero Section - Diferente para Blog vs otras páginas */}

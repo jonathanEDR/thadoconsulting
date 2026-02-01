@@ -2,15 +2,12 @@ import { Helmet } from 'react-helmet-async';
 import PublicHeader from '../../components/public/PublicHeader';
 import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
-import { useTheme } from '../../contexts/ThemeContext';
 
 /**
  * Pagina de Terminos y Condiciones
  * Contiene los terminos legales de uso de los servicios de THADO Consulting
  */
 const TermsOfService = () => {
-  const { theme } = useTheme();
-
   return (
     <>
       <Helmet>
@@ -41,51 +38,46 @@ const TermsOfService = () => {
         <link rel="canonical" href="https://www.thadoconsulting.com/terminos" />
       </Helmet>
 
-      <div className={`min-h-screen w-full overflow-x-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <div className="min-h-screen w-full overflow-x-hidden" style={{ backgroundColor: 'var(--color-background)' }}>
         <PublicHeader />
 
         {/* Hero Section */}
         <section
           className="relative min-h-[40vh] flex items-center justify-center overflow-hidden"
           style={{
-            backgroundColor: theme === 'dark' ? '#111827' : '#F9FAFB'
+            backgroundColor: 'var(--color-background)'
           }}
         >
           <div className="relative z-10 container mx-auto px-4 py-24 text-center">
             <h1
-              className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 ${
-                theme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}
-              style={{ fontFamily: "'Montserrat', sans-serif" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ fontFamily: "'Montserrat', sans-serif", color: 'var(--color-text)' }}
             >
               Terminos y Condiciones
             </h1>
             <p
-              className={`text-lg md:text-xl max-w-2xl mx-auto ${
-                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-              }`}
+              className="text-lg md:text-xl max-w-2xl mx-auto"
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               Por favor lee cuidadosamente estos terminos antes de utilizar nuestros servicios.
             </p>
-            <p className={`text-sm mt-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className="text-sm mt-4" style={{ color: 'var(--color-text-secondary)', opacity: 0.7 }}>
               Ultima actualizacion: Enero 2025
             </p>
           </div>
         </section>
 
         {/* Contenido Principal */}
-        <section className={`py-16 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <section className="py-16" style={{ backgroundColor: 'var(--color-cardBg)' }}>
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto space-y-12">
 
               {/* Seccion 1 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   1. Aceptacion de los Terminos
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Al acceder y utilizar los servicios de THADO Consulting, aceptas estar
                     vinculado por estos Terminos y Condiciones. Si no estas de acuerdo
@@ -100,12 +92,10 @@ const TermsOfService = () => {
 
               {/* Seccion 2 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   2. Descripcion de los Servicios
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     THADO Consulting proporciona servicios contables, tributarios,
                     financieros y de consultoría empresarial.
@@ -124,12 +114,10 @@ const TermsOfService = () => {
 
               {/* Seccion 3 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   3. Cuentas de Usuario
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Al crear una cuenta con nosotros, garantizas que:
                   </p>
@@ -149,12 +137,10 @@ const TermsOfService = () => {
 
               {/* Seccion 4 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   4. Propiedad Intelectual
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     El servicio y su contenido original, caracteristicas y funcionalidades
                     son y seguiran siendo propiedad exclusiva de THADO Consulting y sus
@@ -171,12 +157,10 @@ const TermsOfService = () => {
 
               {/* Seccion 5 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   5. Uso Aceptable
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Te comprometes a no utilizar nuestros servicios para:
                   </p>
@@ -194,12 +178,10 @@ const TermsOfService = () => {
 
               {/* Seccion 6 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   6. Pagos y Facturacion
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Los terminos de pago especificos se estableceran en cada contrato
                     de servicio individual. En general:
@@ -215,12 +197,10 @@ const TermsOfService = () => {
 
               {/* Seccion 7 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   7. Limitacion de Responsabilidad
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     En ningún caso THADO Consulting, sus directores, empleados, socios,
                     agentes, proveedores o afiliados seran responsables por danos
@@ -238,12 +218,10 @@ const TermsOfService = () => {
 
               {/* Seccion 8 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   8. Garantias y Soporte
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     THADO Consulting se compromete a:
                   </p>
@@ -262,12 +240,10 @@ const TermsOfService = () => {
 
               {/* Seccion 9 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   9. Terminacion
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Podemos terminar o suspender tu acceso inmediatamente, sin previo
                     aviso ni responsabilidad, por cualquier razon, incluyendo sin
@@ -283,12 +259,10 @@ const TermsOfService = () => {
 
               {/* Seccion 10 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   10. Ley Aplicable
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Estos terminos se regiran e interpretaran de acuerdo con las
                     leyes de la Republica del Peru, sin tener en cuenta sus
@@ -303,12 +277,10 @@ const TermsOfService = () => {
 
               {/* Seccion 11 */}
               <div>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   11. Cambios en los Terminos
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Nos reservamos el derecho de modificar o reemplazar estos terminos
                     en cualquier momento. Los cambios entraran en vigor inmediatamente
@@ -323,15 +295,11 @@ const TermsOfService = () => {
               </div>
 
               {/* Seccion 12 - Contacto */}
-              <div className={`p-6 rounded-2xl ${
-                theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-100'
-              }`}>
-                <h2 className={`text-2xl md:text-3xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+              <div className="p-6 rounded-2xl" style={{ backgroundColor: 'color-mix(in srgb, var(--color-cardBg) 80%, var(--color-border))' }}>
+                <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--color-text)' }}>
                   12. Contacto
                 </h2>
-                <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-4" style={{ color: 'var(--color-text-secondary)' }}>
                   <p>
                     Si tienes alguna pregunta sobre estos Terminos y Condiciones,
                     puedes contactarnos:
@@ -341,7 +309,10 @@ const TermsOfService = () => {
                       <strong>Email:</strong>{' '}
                       <a
                         href="mailto:contacto@thadoconsulting.pe"
-                        className="text-purple-500 hover:text-purple-400 transition-colors"
+                        className="transition-colors"
+                        style={{ color: 'var(--color-primary)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                       >
                         contacto@thadoconsulting.pe
                       </a>

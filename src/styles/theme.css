@@ -1,13 +1,25 @@
 /* Variables CSS para el sistema de temas */
 :root {
-  /* Valores por defecto - se sobrescriben dinámicamente por ThemeContext */
+  /* Valores por defecto MODO OSCURO - se sobrescriben dinámicamente por ThemeContext */
+  /* Sincronizados con la configuración del CMS (darkMode por defecto) */
   --color-primary: #8B5CF6;
   --color-secondary: #06B6D4;
-  --color-background: #FFFFFF;
-  --color-text: #1F2937;
-  --color-text-secondary: #6B7280;
-  --color-card-bg: #F9FAFB;
-  --color-border: #E5E7EB;
+  --color-background: #0F172A;
+  --color-text: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-card-bg: #1E293B;
+  --color-border: #334155;
+}
+
+/* Modo claro - Se activa automáticamente según preferencia del sistema */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: #FFFFFF;
+    --color-text: #1F2937;
+    --color-text-secondary: #6B7280;
+    --color-card-bg: #F9FAFB;
+    --color-border: #E5E7EB;
+  }
 }
 
 /* Estilos utilitarios para temas */

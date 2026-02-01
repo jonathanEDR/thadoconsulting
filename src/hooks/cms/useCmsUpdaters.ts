@@ -15,9 +15,69 @@ export const useCmsUpdaters = (
     const keys = field.split('.');
     // Hacer una copia profunda para evitar mutaciones
     const newData = structuredClone(pageData);
-    let current: any = newData.content;
+    
+    // Determinar si el campo es de tema o de contenido
+    let current: any;
+    let startIndex = 0;
+    
+    if (keys[0] === 'theme') {
+      // Campos de tema van directo en pageData.theme
+      if (!newData.theme) {
+        newData.theme = { 
+          default: 'light', 
+          lightMode: {
+            primary: '#8B5CF6',
+            secondary: '#06B6D4',
+            background: '#FFFFFF',
+            text: '#1F2937',
+            textSecondary: '#6B7280',
+            cardBg: '#F9FAFB',
+            border: '#E5E7EB',
+            buttons: {
+              ctaPrimary: { text: 'Conoce nuestros servicios', background: '#8B5CF6', textColor: '#FFFFFF', borderColor: 'transparent' },
+              contact: { text: 'CONTÁCTANOS', background: 'transparent', textColor: '#8B5CF6', borderColor: '#8B5CF6' },
+              dashboard: { text: 'Ir al Dashboard', background: '#8B5CF6', textColor: '#FFFFFF', borderColor: 'transparent' }
+            }
+          }, 
+          darkMode: {
+            primary: '#A78BFA',
+            secondary: '#22D3EE',
+            background: '#111827',
+            text: '#F9FAFB',
+            textSecondary: '#D1D5DB',
+            cardBg: '#1F2937',
+            border: '#374151',
+            buttons: {
+              ctaPrimary: { text: 'Conoce nuestros servicios', background: '#A78BFA', textColor: '#FFFFFF', borderColor: 'transparent' },
+              contact: { text: 'CONTÁCTANOS', background: 'transparent', textColor: '#A78BFA', borderColor: '#A78BFA' },
+              dashboard: { text: 'Ir al Dashboard', background: '#A78BFA', textColor: '#FFFFFF', borderColor: 'transparent' }
+            }
+          }
+        };
+      }
+      current = newData.theme;
+      startIndex = 1; // Saltar 'theme' en el path
+    } else if (keys[0] === 'seo') {
+      // Campos de SEO van directo en pageData.seo
+      if (!newData.seo) {
+        newData.seo = {
+          metaTitle: '',
+          metaDescription: '',
+          keywords: [],
+          ogTitle: '',
+          ogDescription: '',
+          ogImage: '',
+          twitterCard: ''
+        };
+      }
+      current = newData.seo;
+      startIndex = 1; // Saltar 'seo' en el path
+    } else {
+      // El resto va en content
+      current = newData.content;
+    }
 
-    for (let i = 0; i < keys.length - 1; i++) {
+    for (let i = startIndex; i < keys.length - 1; i++) {
       // Si no existe el objeto, crearlo
       if (!current[keys[i]]) {
         // SOLUCIÓN: Crear estructura específica para styles

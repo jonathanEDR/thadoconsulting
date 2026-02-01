@@ -239,7 +239,7 @@ const Contact = () => {
         {heroBackgroundImage && (
           <div 
             className="absolute inset-0"
-            style={{ backgroundColor: theme === 'dark' ? '#111827' : '#f9fafb' }}
+            style={{ backgroundColor: 'var(--color-background)' }}
           />
         )}
         
@@ -306,7 +306,7 @@ const Contact = () => {
         {!formBackgroundImage && (
           <div 
             className="absolute inset-0"
-            style={{ backgroundColor: theme === 'dark' ? '#111827' : '#ffffff' }}
+            style={{ backgroundColor: 'var(--color-cardBg)' }}
           />
         )}
         
@@ -314,7 +314,7 @@ const Contact = () => {
         {formBackgroundImage && (
           <div 
             className="absolute inset-0"
-            style={{ backgroundColor: theme === 'dark' ? '#111827' : '#ffffff' }}
+            style={{ backgroundColor: 'var(--color-cardBg)' }}
           />
         )}
         
@@ -459,7 +459,7 @@ const Contact = () => {
         {!featuresBackgroundImage && (
           <div 
             className="absolute inset-0"
-            style={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff' }}
+            style={{ backgroundColor: 'var(--color-background)' }}
           />
         )}
         
@@ -467,7 +467,7 @@ const Contact = () => {
         {featuresBackgroundImage && (
           <div 
             className="absolute inset-0"
-            style={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff' }}
+            style={{ backgroundColor: 'var(--color-background)' }}
           />
         )}
         

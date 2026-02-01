@@ -11,11 +11,8 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
   value,
   onChange,
   label,
-  darkMode = false
 }) => {
-  // Parsear el valor de sombra CSS
   const parseShadow = (shadowStr: string): { x: number; y: number; blur: number; spread: number; color: string; opacity: number } => {
-    // Formato: "0 8px 32px rgba(0, 0, 0, 0.1)" o "0 8px 32px 0px rgba(0, 0, 0, 0.1)"
     const match = shadowStr.match(/([-\d]+)px\s+([-\d]+)px\s+([-\d]+)px(?:\s+([-\d]+)px)?\s+rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d.]+)?\)/);
 
     if (match) {
@@ -29,7 +26,6 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
       };
     }
 
-    // Valores por defecto
     return { x: 0, y: 8, blur: 32, spread: 0, color: 'rgb(0, 0, 0)', opacity: 0.1 };
   };
 
@@ -53,14 +49,11 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
   }, [value]);
 
   const updateShadow = () => {
-    // Limpiar timeout anterior
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Esperar 300ms antes de llamar onChange
     timeoutRef.current = window.setTimeout(() => {
-      // Extraer RGB del color
       const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
       if (rgbMatch) {
         const shadow = spread > 0
@@ -71,7 +64,6 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
     }, 300);
   };
 
-  // Convertir RGB a hex para el color picker
   const rgbToHex = (rgb: string): string => {
     const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
     if (match) {
@@ -91,28 +83,28 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      <label className={`block text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
         {label}
       </label>
 
       {/* Preview */}
-      <div className="relative h-24 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden">
+      <div className="relative h-14 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden">
         <div
-          className="w-32 h-16 bg-white dark:bg-gray-700 rounded-lg"
+          className="w-24 h-10 bg-white dark:bg-gray-700 rounded-lg"
           style={{ boxShadow: value }}
         />
       </div>
 
       {/* Controles */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3">
         {/* Desplazamiento X */}
         <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-0.5">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Horizontal
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {x}px
             </span>
           </div>
@@ -131,11 +123,11 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
 
         {/* Desplazamiento Y */}
         <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-0.5">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Vertical
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {y}px
             </span>
           </div>
@@ -154,11 +146,11 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
 
         {/* Desenfoque */}
         <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-0.5">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Desenfoque
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {blur}px
             </span>
           </div>
@@ -177,11 +169,11 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
 
         {/* Extensión */}
         <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-0.5">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Tamaño
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {spread}px
             </span>
           </div>
@@ -200,9 +192,9 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
       </div>
 
       {/* Color y Opacidad */}
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         <div className="flex-1">
-          <label className={`block text-xs font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <label className="block text-xs font-medium mb-0.5 text-gray-600 dark:text-gray-300">
             Color
           </label>
           <div className="flex gap-2">
@@ -213,7 +205,7 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
                 setColor(hexToRgb(e.target.value));
                 setTimeout(updateShadow, 0);
               }}
-              className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+              className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
             />
             <input
               type="text"
@@ -222,17 +214,17 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
                 setColor(hexToRgb(e.target.value));
                 setTimeout(updateShadow, 0);
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+              className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs"
             />
           </div>
         </div>
 
         <div className="flex-1">
-          <div className="flex justify-between items-center mb-1">
-            <label className={`text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="flex justify-between items-center mb-0.5">
+            <label className="text-xs font-medium text-gray-600 dark:text-gray-300">
               Opacidad
             </label>
-            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {Math.round(opacity * 100)}%
             </span>
           </div>
@@ -246,13 +238,13 @@ const ShadowControl: React.FC<ShadowControlProps> = ({
               setOpacity(parseFloat(e.target.value));
               setTimeout(updateShadow, 0);
             }}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mt-3"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mt-2"
           />
         </div>
       </div>
 
-      <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-        Resultado: <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">{value}</code>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-xs">{value}</code>
       </p>
     </div>
   );

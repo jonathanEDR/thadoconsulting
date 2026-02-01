@@ -124,6 +124,24 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return 'light';
   });
 
+  // ✅ CARGAR TEMA DEL CMS AL INICIAR
+  useEffect(() => {
+    const loadThemeFromCMS = async () => {
+      try {
+        const { getPageBySlug } = await import('../services/cmsApi');
+        const homeData = await getPageBySlug('home');
+        
+        if (homeData?.theme) {
+          setThemeConfig(homeData.theme as ThemeConfig);
+        }
+      } catch (error) {
+        console.warn('No se pudo cargar tema del CMS, usando tema por defecto');
+      }
+    };
+
+    loadThemeFromCMS();
+  }, []); // Solo se ejecuta una vez al montar
+
   // Detectar si estamos en una página pública (REACTIVO - se actualiza con cada render)
   const [isPublicPage, setIsPublicPage] = useState(!window.location.pathname.startsWith('/dashboard'));
 
@@ -185,7 +203,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.style.setProperty('--color-background', colors.background);
       root.style.setProperty('--color-text', colors.text);
       root.style.setProperty('--color-text-secondary', colors.textSecondary);
-      root.style.setProperty('--color-card-bg', colors.cardBg);
+      root.style.setProperty('--color-cardBg', colors.cardBg);
+      root.style.setProperty('--color-card-bg', colors.cardBg); // Alias para compatibilidad
       root.style.setProperty('--color-border', colors.border);
 
       // Aplicar variables de botones (NUEVO FORMATO SIMPLIFICADO)

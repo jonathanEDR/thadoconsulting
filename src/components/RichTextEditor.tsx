@@ -341,7 +341,7 @@ const RichTextEditor = ({ value, onChange, placeholder, label }: RichTextEditorP
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[200px] px-4 py-3',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[80px] px-3 py-2',
       },
     },
   });
@@ -611,7 +611,7 @@ const RichTextEditor = ({ value, onChange, placeholder, label }: RichTextEditorP
       </div>
 
       {/* Character count */}
-      <div className="border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
+      <div className="border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-3 py-1 text-xs text-gray-500 dark:text-gray-400">
         {editor.storage.characterCount?.characters() || 0} caracteres
       </div>
     </div>

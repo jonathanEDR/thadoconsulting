@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense, useEffect } from 'react';
+﻿import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ClerkProvider, useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -109,15 +109,90 @@ const AIAnalytics = lazy(() => import('./pages/admin/AIAnalytics'));
 // 🔔 Historial de Notificaciones
 const NotificationsHistory = lazy(() => import('./pages/admin/NotificationsHistory'));
 
-// ⚡ Componente de loading minimalista - Optimizado para LCP
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-    <div className="text-center">
-      <div className="w-12 h-12 border-4 border-purple-600/30 border-t-purple-600 rounded-full animate-spin mx-auto mb-3"></div>
-      <p className="text-gray-500 text-sm">Cargando...</p>
+// ⚡ Componente de loading con logo - Usa variables CSS del tema CMS
+// Detecta el tema del CMS a través de la variable --color-background
+const LoadingSpinner = () => {
+  const [logoSrc, setLogoSrc] = React.useState('/LOGO_PARA_FONDO_OSCURO.svg');
+  
+  React.useEffect(() => {
+    // Detectar tema observando el color de fondo configurado
+    const detectTheme = () => {
+      const bg = getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-background')
+        .trim();
+      
+      // Si el fondo es oscuro, usar logo para fondo oscuro
+      const isDark = bg.includes('0f172a') || bg.includes('0F172A') || bg.includes('#000') || 
+                     bg === '' || bg.includes('1e293b'); // Fallback a oscuro
+      setLogoSrc(isDark ? '/LOGO_PARA_FONDO_OSCURO.svg' : '/LOGO_PARA_FONDO_BLANCO.svg');
+    };
+    
+    detectTheme();
+    // Re-detectar cuando cambie el tema
+    const observer = new MutationObserver(detectTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  return (
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center"
+      style={{ backgroundColor: 'var(--color-background, #0f172a)' }}
+    >
+      {/* Contenedor del logo con spinner */}
+      <div className="relative flex items-center justify-center">
+        {/* Spinner animado - usa color primario del tema */}
+        <div 
+          className="absolute w-44 h-44 animate-spin"
+          style={{
+            border: '3px solid transparent',
+            borderTopColor: 'var(--color-primary, #8B5CF6)',
+            borderRightColor: 'color-mix(in srgb, var(--color-primary, #8B5CF6) 50%, transparent)',
+            borderRadius: '50%'
+          }}
+        />
+        {/* Logo - seleccionado dinámicamente según el tema CMS */}
+        <img
+          src={logoSrc}
+          alt="THADO Consulting"
+          className="w-36 h-36 animate-pulse object-contain z-10"
+          style={{ animationDuration: '2s' }}
+        />
+      </div>
+      {/* Mensaje - usa color de texto del tema */}
+      <p 
+        className="mt-6 text-lg font-medium animate-pulse" 
+        style={{ 
+          color: 'var(--color-text-secondary, #94a3b8)',
+          animationDuration: '1.5s' 
+        }}
+      >
+        Cargando...
+      </p>
+      {/* Barra de progreso - usa color primario del tema */}
+      <div 
+        className="mt-4 h-1 w-32 rounded-full overflow-hidden"
+        style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary, #8B5CF6) 20%, transparent)' }}
+      >
+        <div 
+          className="h-full rounded-full"
+          style={{ 
+            backgroundColor: 'var(--color-primary, #8B5CF6)',
+            animation: 'loadingBar 1.5s ease-in-out infinite' 
+          }}
+        />
+      </div>
+      <style>{`
+        @keyframes loadingBar {
+          0% { width: 0%; margin-left: 0%; }
+          50% { width: 70%; margin-left: 15%; }
+          100% { width: 0%; margin-left: 100%; }
+        }
+      `}</style>
     </div>
-  </div>
-);
+  );
+};
 
 /**
  * Wrapper para rutas del dashboard con providers de autenticación y roles

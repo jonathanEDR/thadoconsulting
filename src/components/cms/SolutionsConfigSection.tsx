@@ -22,11 +22,11 @@ const SolutionsConfigSection: React.FC<SolutionsConfigSectionProps> = ({
   const [collapsed, setCollapsed] = useState(true);
 
   return (
-    <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-6 border border-gray-100 dark:border-gray-700/50">
+    <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg dark:shadow-gray-900/50 p-4 border border-gray-100 dark:border-gray-700/50">
       {/* Encabezado colapsable */}
       <button
         type="button"
-        className="w-full flex items-center justify-between text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded transition-colors"
+        className="w-full flex items-center justify-between text-lg font-bold text-gray-800 dark:text-gray-100 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded transition-colors"
         onClick={() => setCollapsed((prev) => !prev)}
         aria-expanded={!collapsed}
         aria-controls="solutions-section-content"
@@ -44,7 +44,7 @@ const SolutionsConfigSection: React.FC<SolutionsConfigSectionProps> = ({
       {!collapsed && (
         <div id="solutions-section-content">
           {/* Layout principal con 2 columnas: Contenido y Imágenes */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
             
             {/* Columna izquierda: Editores de texto (2/3) */}
             <div className="xl:col-span-2 space-y-4">
@@ -85,14 +85,14 @@ const SolutionsConfigSection: React.FC<SolutionsConfigSectionProps> = ({
 
             {/* Columna derecha: Imágenes de Fondo (1/3) */}
             <div className="xl:col-span-1">
-              <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+              <h4 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center">
                 🖼️ Imágenes de Fondo
               </h4>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 
                 {/* Imagen para Tema Claro */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-700/50">
-                  <div className="flex items-center mb-3">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-700/50">
+                  <div className="flex items-center mb-2">
                     <div className="bg-white dark:bg-gray-800 rounded-full p-2 mr-3 shadow-sm">
                       <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -117,8 +117,8 @@ const SolutionsConfigSection: React.FC<SolutionsConfigSectionProps> = ({
                 </div>
 
                 {/* Imagen para Tema Oscuro */}
-                <div className="bg-gradient-to-br from-slate-900 to-gray-900 dark:from-slate-800/50 dark:to-gray-800/50 p-4 rounded-lg border border-gray-700 dark:border-gray-600">
-                  <div className="flex items-center mb-3">
+                <div className="bg-gradient-to-br from-slate-900 to-gray-900 dark:from-slate-800/50 dark:to-gray-800/50 p-3 rounded-lg border border-gray-700 dark:border-gray-600">
+                  <div className="flex items-center mb-2">
                     <div className="bg-gray-800 dark:bg-gray-700 rounded-full p-2 mr-3 shadow-sm">
                       <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />

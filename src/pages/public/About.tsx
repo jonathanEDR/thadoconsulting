@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify';
 import PublicHeader from '../../components/public/PublicHeader';
 import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
+import PageLoader from '../../components/common/PageLoader';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getPageBySlug } from '../../services/cmsApi';
 
@@ -306,22 +307,7 @@ const About = () => {
     : 1;
 
   if (loading) {
-    return (
-      <div className={`min-h-screen w-full overflow-x-hidden ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
-        <PublicHeader />
-        <main className="container mx-auto px-4 py-32">
-          <div className="max-w-4xl mx-auto">
-            <div className="animate-pulse space-y-8">
-              <div className={`h-12 rounded w-1/2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-              <div className={`h-6 rounded w-3/4 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-              <div className={`h-4 rounded w-full ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-              <div className={`h-4 rounded w-5/6 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-            </div>
-          </div>
-        </main>
-        <PublicFooter />
-      </div>
-    );
+    return <PageLoader fullScreen message="Cargando..." size="lg" />;
   }
 
   const { hero, mission, vision, values, history, whyChooseUs } = pageData?.content || {};
@@ -405,7 +391,7 @@ const About = () => {
         <section 
           className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
           style={{
-            backgroundColor: theme === 'dark' ? '#111827' : '#F9FAFB'
+            backgroundColor: 'var(--color-background)'
           }}
         >
           {/* Imagen de fondo */}
@@ -487,7 +473,7 @@ const About = () => {
           <section 
             className="relative py-16 md:py-24 overflow-hidden"
             style={{
-              backgroundColor: theme === 'dark' ? '#111827' : '#F9FAFB'
+              backgroundColor: 'var(--color-background)'
             }}
           >
             {/* Imagen de fondo compartida para Misión y Visión */}

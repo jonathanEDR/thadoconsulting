@@ -144,7 +144,10 @@ const PublicFooter = () => {
                     <li key={categoria._id}>
                       <Link
                         to={`/servicios?categoria=${categoria.slug}`}
-                        className="text-gray-200 hover:text-purple-400 transition-colors text-sm"
+                        className="text-sm transition-colors"
+                        style={{ color: '#E5E7EB' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
                       >
                         {categoria.icono} {categoria.nombre}
                       </Link>
@@ -153,13 +156,19 @@ const PublicFooter = () => {
                 ) : (
                   // Fallback mientras cargan las categorías
                   <>
-                    <li><Link to="/servicios" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Ver todos los servicios</Link></li>
+                    <li><Link to="/servicios" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Ver todos los servicios</Link></li>
                   </>
                 )}
                 {/* Siempre mostrar link a todos los servicios */}
                 {categorias.length > 0 && (
                   <li className="pt-2 border-t border-gray-700">
-                    <Link to="/servicios" className="text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium">
+                    <Link 
+                      to="/servicios" 
+                      className="text-sm font-medium transition-colors flex items-center"
+                      style={{ color: 'var(--color-primary)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                    >
                       Ver todos →
                     </Link>
                   </li>
@@ -173,11 +182,11 @@ const PublicFooter = () => {
             <div className="flex-1">
               <h3 className="text-white font-semibold mb-4">Recursos</h3>
               <ul className="space-y-2">
-                <li><Link to="/blog" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Blog de Tecnología</Link></li>
-                <li><Link to="/recursos/casos-exito" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Casos de Éxito</Link></li>
-                <li><Link to="/recursos/guias" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Guías y Tutoriales</Link></li>
-                <li><Link to="/recursos/webinars" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Webinars</Link></li>
-                <li><Link to="/nosotros" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Sobre Nosotros</Link></li>
+                <li><Link to="/blog" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Blog de Tecnología</Link></li>
+                <li><Link to="/recursos/casos-exito" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Casos de Éxito</Link></li>
+                <li><Link to="/recursos/guias" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Guías y Tutoriales</Link></li>
+                <li><Link to="/recursos/webinars" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Webinars</Link></li>
+                <li><Link to="/nosotros" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Sobre Nosotros</Link></li>
               </ul>
             </div>
 
@@ -189,7 +198,7 @@ const PublicFooter = () => {
                   <div className="space-y-3">
                     <div className="w-full px-4 py-2 bg-gray-700/50 rounded-lg animate-pulse">
                       <div className="flex items-center justify-center space-x-2">
-                        <div className="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-black-500 border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-gray-300 text-sm">Verificando sesión...</span>
                       </div>
                     </div>
@@ -198,7 +207,10 @@ const PublicFooter = () => {
                   <div className="space-y-3">
                     <button
                       onClick={() => navigate('/dashboard')}
-                      className="w-full flex items-center justify-center space-x-1.5 px-3 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-medium rounded-lg hover:shadow-lg transition-all text-sm"
+                      className="w-full flex items-center justify-center space-x-1.5 px-3 py-2 text-white font-medium rounded-lg hover:shadow-lg transition-all text-sm"
+                      style={{
+                        background: 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)'
+                      }}
                       title={`Ir al dashboard - ${userData.firstName || 'Usuario'}`}
                     >
                       {userData.imageUrl ? (
@@ -230,13 +242,31 @@ const PublicFooter = () => {
                   <>
                     <button
                       onClick={() => navigate('/login')}
-                      className="w-full px-4 py-2 text-gray-200 hover:text-purple-400 transition-colors text-sm text-left border border-gray-600 rounded-lg hover:border-purple-400"
+                      className="w-full px-4 py-2 transition-all duration-300 text-sm text-center border rounded-lg font-medium"
+                      style={{
+                        color: '#E5E7EB',
+                        borderColor: '#6B7280',
+                        background: 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#FFFFFF';
+                        e.currentTarget.style.borderColor = '#6B7280';
+                        e.currentTarget.style.background = 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#E5E7EB';
+                        e.currentTarget.style.borderColor = '#6B7280';
+                        e.currentTarget.style.background = 'transparent';
+                      }}
                     >
                       🔐 Iniciar Sesión
                     </button>
                     <button
                       onClick={() => navigate('/signup')}
-                      className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm"
+                      className="w-full px-4 py-2 text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm"
+                      style={{
+                        background: 'linear-gradient(to right, var(--color-primary), var(--color-secondary))'
+                      }}
                     >
                       🚀 Crear Cuenta
                     </button>
@@ -251,8 +281,8 @@ const PublicFooter = () => {
               <div className="space-y-3 text-sm">
                 {/* 🆕 Dirección */}
                 {(contactData?.address || contactData?.city) && (
-                  <div className="flex items-start space-x-2 text-gray-200">
-                    <svg className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-start space-x-2" style={{ color: '#E5E7EB' }}>
+                    <svg className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -266,29 +296,41 @@ const PublicFooter = () => {
                 )}
 
                 {/* Teléfono - ✅ Usando configuración centralizada */}
-                <div className="flex items-center space-x-2 text-gray-200">
-                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center space-x-2" style={{ color: '#E5E7EB' }}>
+                  <svg className="w-4 h-4" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  <a href={`tel:${contactData?.phone || SITE_CONFIG.contact.phoneClean}`} className="hover:text-purple-400 transition-colors">
+                  <a 
+                    href={`tel:${contactData?.phone || SITE_CONFIG.contact.phoneClean}`} 
+                    className="transition-colors"
+                    style={{ color: '#E5E7EB' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
+                  >
                     {contactData?.phone || SITE_CONFIG.contact.phone}
                   </a>
                 </div>
                 
                 {/* Email - ✅ Usando configuración centralizada */}
-                <div className="flex items-center space-x-2 text-gray-200">
-                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center space-x-2" style={{ color: '#E5E7EB' }}>
+                  <svg className="w-4 h-4" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <a href={`mailto:${contactData?.email || SITE_CONFIG.contact.email}`} className="hover:text-purple-400 transition-colors">
+                  <a 
+                    href={`mailto:${contactData?.email || SITE_CONFIG.contact.email}`} 
+                    className="transition-colors"
+                    style={{ color: '#E5E7EB' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
+                  >
                     {contactData?.email || SITE_CONFIG.contact.email}
                   </a>
                 </div>
 
                 {/* 🆕 Horario de atención */}
                 {contactData?.businessHours && (
-                  <div className="flex items-start space-x-2 text-gray-200">
-                    <svg className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-start space-x-2" style={{ color: '#E5E7EB' }}>
+                    <svg className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
@@ -392,18 +434,27 @@ const PublicFooter = () => {
                         <li key={categoria._id}>
                           <Link
                             to={`/servicios?categoria=${categoria.slug}`}
-                            className="text-gray-200 hover:text-purple-400 transition-colors text-sm"
+                          className="text-sm transition-colors"
+                          style={{ color: '#E5E7EB' }}
+                          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
                           >
                             {categoria.icono} {categoria.nombre}
                           </Link>
                         </li>
                       ))
                     ) : (
-                      <li><Link to="/servicios" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Ver todos los servicios</Link></li>
+                      <li><Link to="/servicios" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Ver todos los servicios</Link></li>
                     )}
                     {categorias.length > 0 && (
                       <li className="pt-2 border-t border-gray-700">
-                        <Link to="/servicios" className="text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium">
+                        <Link 
+                          to="/servicios" 
+                          className="text-sm font-medium transition-colors"
+                          style={{ color: 'var(--color-primary)' }}
+                          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                        >
                           Ver todos →
                         </Link>
                       </li>
@@ -428,7 +479,10 @@ const PublicFooter = () => {
                       <div className="space-y-3">
                         <button
                           onClick={() => navigate('/dashboard')}
-                          className="w-full flex items-center justify-center space-x-1.5 px-3 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-medium rounded-lg hover:shadow-lg transition-all text-sm"
+                          className="w-full flex items-center justify-center space-x-1.5 px-3 py-2 text-white font-medium rounded-lg hover:shadow-lg transition-all text-sm"
+                          style={{
+                            background: 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)'
+                          }}
                         >
                           {userData.imageUrl ? (
                             <img 
@@ -451,13 +505,31 @@ const PublicFooter = () => {
                       <>
                         <button
                           onClick={() => navigate('/login')}
-                          className="w-full px-4 py-2 text-gray-200 hover:text-purple-400 transition-colors text-sm text-left border border-gray-600 rounded-lg hover:border-purple-400"
+                          className="w-full px-4 py-2 transition-all duration-300 text-sm text-center border rounded-lg font-medium"
+                          style={{
+                            color: '#E5E7EB',
+                            borderColor: '#6B7280',
+                            background: 'transparent'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#FFFFFF';
+                            e.currentTarget.style.borderColor = '#6B7280';
+                            e.currentTarget.style.background = 'linear-gradient(135deg, #6B7280 0%, #1F2937 100%)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#E5E7EB';
+                            e.currentTarget.style.borderColor = '#6B7280';
+                            e.currentTarget.style.background = 'transparent';
+                          }}
                         >
                           🔐 Iniciar Sesión
                         </button>
                         <button
                           onClick={() => navigate('/signup')}
-                          className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm"
+                          className="w-full px-4 py-2 text-white font-semibold rounded-lg hover:shadow-lg transition-all text-sm"
+                          style={{
+                            background: 'linear-gradient(to right, var(--color-primary), var(--color-secondary))'
+                          }}
                         >
                           🚀 Crear Cuenta
                         </button>
@@ -473,11 +545,11 @@ const PublicFooter = () => {
                 <div>
                   <h3 className="text-white font-semibold mb-4">Recursos</h3>
                   <ul className="space-y-2">
-                    <li><Link to="/blog" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Blog de Tecnología</Link></li>
-                    <li><Link to="/recursos/casos-exito" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Casos de Éxito</Link></li>
-                    <li><Link to="/recursos/guias" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Guías y Tutoriales</Link></li>
-                    <li><Link to="/recursos/webinars" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Webinars</Link></li>
-                    <li><Link to="/nosotros" className="text-gray-200 hover:text-purple-400 transition-colors text-sm">Sobre Nosotros</Link></li>
+                    <li><Link to="/blog" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Blog de Tecnología</Link></li>
+                    <li><Link to="/recursos/casos-exito" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Casos de Éxito</Link></li>
+                    <li><Link to="/recursos/guias" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Guías y Tutoriales</Link></li>
+                    <li><Link to="/recursos/webinars" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Webinars</Link></li>
+                    <li><Link to="/nosotros" className="text-sm transition-colors" style={{ color: '#E5E7EB' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}>Sobre Nosotros</Link></li>
                   </ul>
                 </div>
                 
@@ -487,8 +559,8 @@ const PublicFooter = () => {
                   <div className="space-y-3 text-sm">
                     {/* 🆕 Dirección para móvil */}
                     {(contactData?.address || contactData?.city) && (
-                      <div className="flex items-start space-x-2 text-gray-200">
-                        <svg className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-start space-x-2" style={{ color: '#E5E7EB' }}>
+                        <svg className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -502,29 +574,41 @@ const PublicFooter = () => {
                     )}
                     
                     {/* Teléfono - ✅ Usando configuración centralizada */}
-                    <div className="flex items-center space-x-2 text-gray-200">
-                      <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex items-center space-x-2" style={{ color: '#E5E7EB' }}>
+                      <svg className="w-4 h-4" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
-                      <a href={`tel:${contactData?.phone || SITE_CONFIG.contact.phoneClean}`} className="hover:text-purple-400 transition-colors">
+                      <a 
+                        href={`tel:${contactData?.phone || SITE_CONFIG.contact.phoneClean}`} 
+                        className="transition-colors"
+                        style={{ color: '#E5E7EB' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
+                      >
                         {contactData?.phone || SITE_CONFIG.contact.phone}
                       </a>
                     </div>
                     
                     {/* Email - ✅ Usando configuración centralizada */}
-                    <div className="flex items-center space-x-2 text-gray-200">
-                      <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex items-center space-x-2" style={{ color: '#E5E7EB' }}>
+                      <svg className="w-4 h-4" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      <a href={`mailto:${contactData?.email || SITE_CONFIG.contact.email}`} className="hover:text-purple-400 transition-colors">
+                      <a 
+                        href={`mailto:${contactData?.email || SITE_CONFIG.contact.email}`} 
+                        className="transition-colors"
+                        style={{ color: '#E5E7EB' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#E5E7EB'}
+                      >
                         {contactData?.email || SITE_CONFIG.contact.email}
                       </a>
                     </div>
 
                     {/* 🆕 Horario de atención para móvil */}
                     {contactData?.businessHours && (
-                      <div className="flex items-start space-x-2 text-gray-200">
-                        <svg className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-start space-x-2" style={{ color: '#E5E7EB' }}>
+                        <svg className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <div>
@@ -608,33 +692,51 @@ const PublicFooter = () => {
         <div className="mt-12 pt-8 border-t border-gray-800 bg-black/90 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
-            <p className="text-gray-400 text-sm">
+            <p className="text-sm" style={{ color: '#9CA3AF' }}>
               © {new Date().getFullYear()} THADO Consulting. Todos los derechos reservados.
             </p>
             
             {/* Enlaces legales */}
             <div className="flex flex-wrap justify-center space-x-6 text-sm">
-              <Link to="/privacidad" className="text-gray-400 hover:text-purple-400 transition-colors">
+              <Link 
+                to="/privacidad" 
+                className="transition-colors"
+                style={{ color: '#9CA3AF' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+              >
                 Política de Privacidad
               </Link>
-              <Link to="/terminos" className="text-gray-400 hover:text-purple-400 transition-colors">
+              <Link 
+                to="/terminos" 
+                className="transition-colors"
+                style={{ color: '#9CA3AF' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+              >
                 Términos de Servicio
               </Link>
-              <a href="/sitemap.xml" className="text-gray-400 hover:text-purple-400 transition-colors">
+              <a 
+                href="/sitemap.xml" 
+                className="transition-colors"
+                style={{ color: '#9CA3AF' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+              >
                 Sitemap
               </a>
             </div>
 
             {/* 🆕 Badges de confianza */}
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-1 text-green-400">
+              <div className="flex items-center space-x-1" style={{ color: 'var(--color-primary)' }}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
                 <span className="text-xs">SSL Seguro</span>
               </div>
               
-              <div className="flex items-center space-x-1 text-blue-400">
+              <div className="flex items-center space-x-1" style={{ color: 'var(--color-secondary)' }}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>

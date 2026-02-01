@@ -17,12 +17,13 @@ export const useCmsData = (pageSlug: string = 'home') => {
     loadPageData();
   }, [pageSlug]);
 
-  // Sincronizar el tema con el contexto cuando cambian los datos
+  // ✅ IMPORTANTE: Solo la página 'home' puede establecer el tema global
+  // Las demás páginas usan el tema ya cargado desde ThemeContext
   useEffect(() => {
-    if (pageData?.theme) {
+    if (pageSlug === 'home' && pageData?.theme) {
       setThemeConfig(pageData.theme as any);
     }
-  }, [pageData?.theme, setThemeConfig]);
+  }, [pageData?.theme, setThemeConfig, pageSlug]);
 
   const loadPageData = async () => {
     try {
