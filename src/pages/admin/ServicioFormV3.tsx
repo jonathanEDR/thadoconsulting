@@ -11,6 +11,7 @@ import { useTabNavigation, type Tab } from '../../components/common/TabNavigator
 import { useNotification } from '../../hooks/useNotification';
 import { type Categoria } from '../../services/categoriasApi';
 import { CreateCategoriaModal } from '../../components/categorias/CreateCategoriaModal';
+import PageLoader from '../../components/common/PageLoader';
 const ServicesCanvasModal = lazy(() => import('../../components/admin/services/ServicesCanvasModal'));
 import { Sparkles } from 'lucide-react';
 import { servicioToServiceContext } from '../../hooks/useServicesCanvas';
@@ -1214,14 +1215,7 @@ export const ServicioFormV3: React.FC = () => {
   // ============================================
 
   if (loadingData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-400 text-lg">Cargando servicio...</p>
-        </div>
-      </div>
-    );
+    return <PageLoader fullScreen message="Cargando servicio..." size="lg" />;
   }
 
   // ============================================

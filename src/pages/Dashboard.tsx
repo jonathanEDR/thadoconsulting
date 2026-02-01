@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SignedIn, useUser } from '@clerk/clerk-react';
 import SmartDashboardLayout from '../components/SmartDashboardLayout';
-import { Button, LoadingSpinner } from '../components/UI';
+import { Button } from '../components/UI';
+import PageLoader from '../components/common/PageLoader';
 import { useSeo } from '../hooks/useSeo';
 import { getBackendUrl } from '../utils/apiConfig';
 
@@ -237,7 +238,7 @@ export default function Dashboard() {
             </div>
 
             {loading ? (
-              <LoadingSpinner text="Verificando conexión..." />
+              <PageLoader message="Verificando conexión..." size="sm" />
             ) : error ? (
               <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-red-700">
                 <div className="flex items-start gap-3">
@@ -406,7 +407,7 @@ export default function Dashboard() {
                 </div>
               </div>
             ) : (
-              <LoadingSpinner text="Cargando información del proyecto..." />
+              <PageLoader message="Cargando información del proyecto..." size="md" />
             )}
           </div>
         </div>

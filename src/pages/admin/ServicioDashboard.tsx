@@ -6,6 +6,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useServicios } from '../../hooks/useServicios';
+import PageLoader from '../../components/common/PageLoader';
 import { MetricCard, MiniChartCard } from '../../components/dashboard/MetricCard';
 import {
   BarChartCard,
@@ -155,14 +156,7 @@ export const ServicioDashboard = () => {
   // ============================================
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">Cargando dashboard...</p>
-        </div>
-      </div>
-    );
+    return <PageLoader fullScreen message="Cargando dashboard..." size="lg" />;
   }
 
   if (error) {

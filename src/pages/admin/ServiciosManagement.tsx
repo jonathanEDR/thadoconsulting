@@ -18,7 +18,7 @@ import { FiltersPanel } from '../../components/servicios/FiltersPanel';
 import { SortSelector } from '../../components/servicios/SortSelector';
 import { ServicioCard } from '../../components/servicios/ServicioCard';
 import { SearchWithAutocomplete } from '../../components/common/SearchWithAutocomplete';
-import { SkeletonGrid } from '../../components/common/Skeleton';
+import PageLoader from '../../components/common/PageLoader';
 import { CreateServicioModal } from '../../components/servicios/CreateServicioModal';
 import GestionCategoriasModal from '../../components/servicios/GestionCategoriasModal';
 import ServicesCanvasModal from '../../components/admin/services/ServicesCanvasModal';
@@ -476,7 +476,7 @@ export const ServiciosManagementOptimized = () => {
             )}
 
             {loading ? (
-              <SkeletonGrid items={12} columns={viewMode === 'grid' ? 3 : 1} />
+              <PageLoader message="Cargando servicios..." size="md" />
             ) : visibleData.length === 0 ? (
               <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700">
                 <div className="text-6xl mb-4">🔍</div>

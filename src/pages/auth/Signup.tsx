@@ -2,6 +2,7 @@ import { SignUp } from '@clerk/clerk-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import PageLoader from '../../components/common/PageLoader';
 
 const Signup = () => {
   const { theme } = useTheme();
@@ -134,16 +135,7 @@ const Signup = () => {
 
   // Mostrar loading mientras se aplica el tema
   if (isLoading) {
-    return (
-      <div 
-        className="min-h-screen flex items-center justify-center p-4"
-        style={{
-          backgroundColor: '#000000' // Fondo negro por defecto
-        }}
-      >
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-      </div>
-    );
+    return <PageLoader fullScreen message="Cargando..." size="lg" />;
   }
 
   return (

@@ -3,7 +3,8 @@ import { useCRM } from '../../hooks/useCRM';
 import { useAuth } from '../../contexts/AuthContext';
 import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { StatusBadge, PriorityBadge, OrigenBadge } from '../../components/crm/Badges';
-import { Button, LoadingSpinner, Card } from '../../components/UI';
+import { Button, Card } from '../../components/UI';
+import PageLoader from '../../components/common/PageLoader';
 import { LeadFormModal } from '../../components/crm/LeadFormModal';
 import { LeadDetailModal } from '../../components/crm/LeadDetailModal';
 import { LeadFiltersComponent } from '../../components/crm/LeadFilters';
@@ -285,9 +286,7 @@ const LeadsManagement: React.FC = () => {
           )}
 
           {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <LoadingSpinner size="lg" text="Cargando leads..." />
-            </div>
+            <PageLoader message="Cargando leads..." size="md" />
           ) : leads.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📭</div>

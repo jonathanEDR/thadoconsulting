@@ -19,6 +19,7 @@ import { useDashboardFeaturedPostsConfig } from '../hooks/cms/useDashboardFeatur
 import { useDashboardSidebarConfig } from '../hooks/cms/useDashboardSidebarConfig';
 import DynamicIcon from '../components/ui/DynamicIcon';
 import { BRAND_AUTHOR } from '../config/brandConstants';
+import PageLoader from '../components/common/PageLoader';
 
 // ============================================
 // CACHE PARA POSTS DESTACADOS
@@ -244,17 +245,7 @@ export default function ClientDashboard() {
             </div>
 
           {loading ? (
-            <div className="animate-pulse">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1 space-y-4">
-                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
-                </div>
-                <div className="w-full md:w-1/2 bg-gray-200 dark:bg-gray-700 h-80 rounded-lg"></div>
-              </div>
-            </div>
+            <PageLoader message="Cargando contenido..." size="md" />
           ) : featuredPosts.length > 0 ? (
             <div className="relative">
               {/* Carousel container */}

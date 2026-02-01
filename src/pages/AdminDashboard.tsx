@@ -12,7 +12,7 @@ import { adminService } from '../services/adminService';
 import SmartDashboardLayout from '../components/SmartDashboardLayout';
 import RoleBadge from '../components/RoleBadge';
 import { Permission, type UserStats, formatUserName } from '../types/roles';
-import { LoadingSpinner } from '../components/UI';
+import PageLoader from '../components/common/PageLoader';
 import { useDashboardHeaderGradient } from '../hooks/cms/useDashboardHeaderGradient';
 
 export default function AdminDashboard() {
@@ -119,9 +119,7 @@ export default function AdminDashboard() {
             </h2>
 
             {isLoadingStats ? (
-              <div className="flex justify-center py-12">
-                <LoadingSpinner />
-              </div>
+              <PageLoader message="Cargando estadísticas..." size="md" />
             ) : statsError ? (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
                 <p className="text-red-700 dark:text-red-300">{statsError}</p>
