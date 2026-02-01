@@ -13,6 +13,7 @@ interface CardsDesignConfigSectionProps {
 
 const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
   pageData,
+  updateContent,
   setHasGlobalChanges
 }) => {
   const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>('light');
@@ -254,28 +255,65 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
 
   // Solo cargar datos reales de BD, NO defaults automáticos
   const [justSaved, setJustSaved] = useState(false);
+  
+  // 🔥 Referencia para trackear si el usuario ha hecho cambios
+  const [userHasModified, setUserHasModified] = useState(false);
 
+  // 🔥 CORREGIDO: Solo cargar datos cuando cambia la SECCIÓN, no cuando cambia pageData
+  // Esto evita que se sobrescriban los cambios del usuario
   useEffect(() => {
-    // No actualizar si acabamos de guardar (evitar sobreescritura)
-    if (justSaved) {
+    // No actualizar si el usuario ha modificado algo o acabamos de guardar
+    if (justSaved || userHasModified) {
       return;
     }
     
-    // Cargar datos guardados o usar defaults de la sección actual
-    const data = initialData?.light || currentDefaults.light;
-    setLightStyles(data);
-  }, [initialData, activeSection, justSaved]);
+    // Solo actualizar cuando hay datos reales del servidor
+    if (initialData?.light) {
+      setLightStyles(initialData.light);
+    } else {
+      // Si no hay datos del servidor, usar defaults
+      setLightStyles(currentDefaults.light);
+    }
+  }, [activeSection]); // 🔥 Solo depende de activeSection, NO de initialData
 
   useEffect(() => {
-    // No actualizar si acabamos de guardar (evitar sobreescritura)
-    if (justSaved) {
+    // No actualizar si el usuario ha modificado algo o acabamos de guardar
+    if (justSaved || userHasModified) {
       return;
     }
     
-    // Cargar datos guardados o usar defaults de la sección actual
-    const data = initialData?.dark || currentDefaults.dark;
-    setDarkStyles(data);
-  }, [initialData, activeSection, justSaved]);
+    // Solo actualizar cuando hay datos reales del servidor
+    if (initialData?.dark) {
+      setDarkStyles(initialData.dark);
+    } else {
+      // Si no hay datos del servidor, usar defaults
+      setDarkStyles(currentDefaults.dark);
+    }
+  }, [activeSection]); // 🔥 Solo depende de activeSection, NO de initialData
+  
+  // 🔥 NUEVO: Efecto separado para sincronizar cuando llegan datos del servidor
+  // (por ejemplo, después de recargar la página)
+  useEffect(() => {
+    // Solo sincronizar si NO hay modificaciones del usuario y NO acabamos de guardar
+    if (userHasModified || justSaved) {
+      return;
+    }
+    
+    // Sincronizar con datos del servidor si existen
+    if (initialData?.light && Object.keys(initialData.light).length > 0) {
+      setLightStyles(prev => {
+        // Solo actualizar si los datos son diferentes (evitar loops)
+        const isDifferent = JSON.stringify(prev) !== JSON.stringify(initialData.light);
+        return isDifferent ? initialData.light : prev;
+      });
+    }
+    if (initialData?.dark && Object.keys(initialData.dark).length > 0) {
+      setDarkStyles(prev => {
+        const isDifferent = JSON.stringify(prev) !== JSON.stringify(initialData.dark);
+        return isDifferent ? initialData.dark : prev;
+      });
+    }
+  }, [initialData]);
 
   const currentStyles = activeTheme === 'light' ? lightStyles : darkStyles;
   
@@ -286,6 +324,9 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
   } as StrictCardDesignStyles;
 
   const updateCardStyle = (field: keyof CardDesignStyles, value: string | boolean) => {
+    // 🔥 Marcar que el usuario ha modificado (evita sobrescritura por efectos)
+    setUserHasModified(true);
+    
     if (activeTheme === 'light') {
       setLightStyles(prev => {
         const newStyles = { ...prev, [field]: value };
@@ -312,17 +353,24 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
 
       const sectionKey = getSectionKey(activeSection);
       
+      // Construir el nuevo cardsDesign
+      const newCardsDesign = {
+        light: { ...lightStyles },
+        dark: { ...darkStyles }
+      };
+      
       // Construir objeto completo con los datos actuales del estado
       const updatedContent = {
         ...pageData.content,
         [sectionKey]: {
           ...pageData.content[sectionKey as keyof typeof pageData.content],
-          cardsDesign: {
-            light: { ...lightStyles },
-            dark: { ...darkStyles }
-          }
+          cardsDesign: newCardsDesign
         }
       };
+      
+      // 🔥 IMPORTANTE: Actualizar el estado del padre PRIMERO para mantener sincronizado
+      // Esto asegura que cuando cambiemos de sección, los datos estén actualizados
+      updateContent(`${sectionKey}.cardsDesign`, newCardsDesign);
       
       // Usar updatePage que maneja autenticación automáticamente
       await updatePage('home', {
@@ -332,8 +380,16 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
         isPublished: pageData.isPublished
       });
       
+      // 🔥 Limpiar cache local para forzar recarga de datos frescos
+      try {
+        localStorage.removeItem('cmsCache_page-home');
+      } catch (e) {
+        console.error('Error limpiando cache:', e);
+      }
+      
       // Marcar que acabamos de guardar para evitar recargas automáticas
       setJustSaved(true);
+      setUserHasModified(false); // 🔥 Resetear flag de modificación
       setHasUnsavedChanges(false);
       setHasGlobalChanges(false);
       
@@ -354,7 +410,14 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
     };
   }, [lightStyles, darkStyles, activeSection, justSaved]);
 
+  // 🔥 NUEVO: Resetear userHasModified cuando cambia de sección
+  useEffect(() => {
+    setUserHasModified(false);
+    setHasUnsavedChanges(false);
+  }, [activeSection]);
+
   const resetToDefaults = () => {
+    setUserHasModified(true); // 🔥 También marcar como modificado
     if (activeTheme === 'light') {
       setLightStyles(currentDefaults.light);
     } else {
@@ -368,6 +431,7 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
     console.log('✨ Aplicando transparencia para sección:', activeSection);
     console.log('📋 Defaults que se van a aplicar:', currentDefaults);
     
+    setUserHasModified(true); // 🔥 Marcar como modificado
     setLightStyles(currentDefaults.light);
     setDarkStyles(currentDefaults.dark);
     setHasUnsavedChanges(true);
@@ -631,7 +695,16 @@ const CardsDesignConfigSection: React.FC<CardsDesignConfigSectionProps> = ({
                 <div className="flex gap-2 mb-4">
                   <input
                     type="color"
-                    value={safeCurrentStyles.border?.replace('rgba', '').replace('rgb', '').match(/#[0-9a-fA-F]{6}/)?.[0] || '#e5e7eb'}
+                    value={(() => {
+                      const borderValue = safeCurrentStyles.border || '#e5e7eb';
+                      // Si es un color hexadecimal simple, usarlo directamente
+                      if (borderValue.startsWith('#')) {
+                        return borderValue;
+                      }
+                      // Si es un gradiente o rgba, intentar extraer el primer color
+                      const hexMatch = borderValue.match(/#[0-9a-fA-F]{6}/);
+                      return hexMatch ? hexMatch[0] : '#e5e7eb';
+                    })()}
                     onChange={(e) => updateCardStyle('border', e.target.value)}
                     className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600"
                   />

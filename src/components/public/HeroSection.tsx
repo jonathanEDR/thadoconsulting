@@ -125,7 +125,7 @@ const HeroSection = ({ data }: HeroSectionProps) => {
         <div className={`space-y-3 sm:space-y-4 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          {/* Main Title - Colores optimizados según maqueta */}
+          {/* Main Title - Colores desde CMS */}
           <div className="max-w-3xl mx-auto">
             <div
               className={`text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold theme-transition transition-all duration-1000 ${
@@ -133,9 +133,9 @@ const HeroSection = ({ data }: HeroSectionProps) => {
               }`}
               style={{
                 lineHeight: '1.2',
-                color: currentTheme === 'light' 
-                  ? '#1F2937' // Gris oscuro elegante para tema claro (como en maqueta)
-                  : '#FFFFFF', // Blanco para tema oscuro
+                color: currentTheme === 'light'
+                  ? heroData.styles?.light?.titleColor
+                  : heroData.styles?.dark?.titleColor,
                 fontWeight: '700',
                 textShadow: currentTheme === 'light' 
                   ? '1px 1px 2px rgba(0,0,0,0.1)' // Sombra muy sutil para tema claro
@@ -145,7 +145,7 @@ const HeroSection = ({ data }: HeroSectionProps) => {
             />
           </div>
 
-          {/* Subtitle - Colores optimizados según maqueta */}
+          {/* Subtitle - Colores desde CMS */}
           <div className="max-w-2xl mx-auto space-y-2">
             <div
               className={`text-sm sm:text-sm md:text-base theme-transition transition-all duration-1000 delay-300 ${
@@ -153,9 +153,9 @@ const HeroSection = ({ data }: HeroSectionProps) => {
               }`}
               style={{
                 lineHeight: '1.4',
-                color: currentTheme === 'light' 
-                  ? '#7528ee' // Color violeta para subtítulo en tema claro (más visible)
-                  : '#D1D5DB', // Gris claro para tema oscuro
+                color: currentTheme === 'light'
+                  ? heroData.styles?.light?.subtitleColor
+                  : heroData.styles?.dark?.subtitleColor,
                 fontWeight: '500',
                 textShadow: currentTheme === 'light' 
                   ? '0.5px 0.5px 1px rgba(0,0,0,0.1)' // Sombra muy ligera para tema claro
@@ -169,9 +169,9 @@ const HeroSection = ({ data }: HeroSectionProps) => {
               }`}
               style={{
                 lineHeight: '1.5',
-                color: currentTheme === 'light' 
-                  ? '#7528ee' // Gris medio más legible para descripción en tema claro
-                  : '#9CA3AF', // Gris claro para tema oscuro
+                color: currentTheme === 'light'
+                  ? heroData.styles?.light?.descriptionColor
+                  : heroData.styles?.dark?.descriptionColor,
                 fontWeight: '400',
                 textShadow: currentTheme === 'light' 
                   ? 'none' // Sin sombra para texto de descripción en tema claro
