@@ -292,6 +292,40 @@ export const ServicioDetail: React.FC = () => {
     };
   };
 
+  // Función helper para obtener estilos de las tarjetas del hero (precio, duración)
+  const getHeroCardStyles = () => {
+    const cards = heroConfig.cards;
+    
+    // Valores por defecto
+    const defaultLight = {
+      background: 'rgba(255, 255, 255, 0.8)',
+      borderColor: '#d1d5db',
+      textColor: '#111827',
+      labelColor: '#6b7280',
+    };
+    
+    const defaultDark = {
+      background: 'rgba(31, 41, 55, 0.5)',
+      borderColor: '#374151',
+      textColor: '#ffffff',
+      labelColor: '#9ca3af',
+    };
+
+    if (!cards) {
+      return theme === 'dark' ? defaultDark : defaultLight;
+    }
+
+    const themeStyles = theme === 'dark' ? cards.dark : cards.light;
+    const defaults = theme === 'dark' ? defaultDark : defaultLight;
+
+    return {
+      background: themeStyles?.background || defaults.background,
+      borderColor: themeStyles?.borderColor || defaults.borderColor,
+      textColor: themeStyles?.textColor || defaults.textColor,
+      labelColor: themeStyles?.labelColor || defaults.labelColor,
+    };
+  };
+
   // Helper para obtener el icono de un panel desde la configuración del CMS
   const getPanelIcon = (panelId: string): string => {
     const cmsPanel = accordionConfig.panels?.find((p: any) => p.id === panelId);
@@ -615,12 +649,24 @@ export const ServicioDetail: React.FC = () => {
                   fontFamily: heroConfig.content?.title?.fontFamily || 'Montserrat',
                   ...(heroConfig.content?.titleGradient?.enabled
                     ? {
-                        backgroundImage: `linear-gradient(to right, ${heroConfig.content.titleGradient.from}, ${heroConfig.content.titleGradient.to})`,
+                        backgroundImage: `linear-gradient(to right, ${
+                          theme === 'dark' 
+                            ? (heroConfig.content.titleGradient.dark?.from || heroConfig.content.titleGradient.from || '#a78bfa')
+                            : (heroConfig.content.titleGradient.light?.from || heroConfig.content.titleGradient.from || '#8b5cf6')
+                        }, ${
+                          theme === 'dark'
+                            ? (heroConfig.content.titleGradient.dark?.to || heroConfig.content.titleGradient.to || '#22d3ee')
+                            : (heroConfig.content.titleGradient.light?.to || heroConfig.content.titleGradient.to || '#06b6d4')
+                        })`,
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
                       }
-                    : {})
+                    : {
+                        color: theme === 'dark' 
+                          ? (heroConfig.content?.title?.colorDark || '#ffffff')
+                          : (heroConfig.content?.title?.color || '#111827')
+                      })
                 }}
               >
                 {servicio.titulo}
@@ -638,7 +684,9 @@ export const ServicioDetail: React.FC = () => {
                   }`}
                   style={{
                     fontFamily: heroConfig.content?.subtitle?.fontFamily || 'Montserrat',
-                    color: heroConfig.content?.subtitle?.color || (theme === 'dark' ? '#d1d5db' : '#374151')
+                    color: theme === 'dark' 
+                      ? (heroConfig.content?.subtitle?.colorDark || '#d1d5db')
+                      : (heroConfig.content?.subtitle?.color || '#374151')
                   }}
                 >
                   {servicio.descripcionCorta}
@@ -646,77 +694,56 @@ export const ServicioDetail: React.FC = () => {
               )}
 
               {/* Precio y duración con animación */}
-              {heroConfig.content?.showPrice !== false && (
-                <div className="flex flex-wrap gap-4 mb-8 animate-fade-in delay-400">
-                  <div
-                    className="backdrop-blur-sm rounded-lg px-6 py-4 border hover-lift transition-all duration-300"
-                    style={{
-                      background: theme === 'dark'
-                        ? heroConfig.cards?.dark.background || 'rgba(31, 41, 55, 0.5)'
-                        : heroConfig.cards?.light.background || 'rgba(255, 255, 255, 0.8)',
-                      borderColor: theme === 'dark'
-                        ? heroConfig.cards?.dark.borderColor || '#374151'
-                        : heroConfig.cards?.light.borderColor || '#d1d5db',
-                    }}
-                  >
-                    <div
-                      className="text-sm mb-1"
-                      style={{
-                        color: theme === 'dark'
-                          ? heroConfig.cards?.dark.labelColor || '#9ca3af'
-                          : heroConfig.cards?.light.labelColor || '#6b7280',
-                      }}
-                    >
-                      Precio
-                    </div>
-                    <div
-                      className="text-2xl font-bold"
-                      style={{
-                        color: theme === 'dark'
-                          ? heroConfig.cards?.dark.textColor || '#ffffff'
-                          : heroConfig.cards?.light.textColor || '#111827',
-                      }}
-                    >
-                      {formatPrice(servicio)}
-                    </div>
-                  </div>
-                  
-                  {getDurationText(servicio) && (
+              {heroConfig.content?.showPrice !== false && (() => {
+                const cardStyles = getHeroCardStyles();
+                return (
+                  <div className="flex flex-wrap gap-4 mb-8 animate-fade-in delay-400">
                     <div
                       className="backdrop-blur-sm rounded-lg px-6 py-4 border hover-lift transition-all duration-300"
                       style={{
-                        background: theme === 'dark'
-                          ? heroConfig.cards?.dark.background || 'rgba(31, 41, 55, 0.5)'
-                          : heroConfig.cards?.light.background || 'rgba(255, 255, 255, 0.8)',
-                        borderColor: theme === 'dark'
-                          ? heroConfig.cards?.dark.borderColor || '#374151'
-                          : heroConfig.cards?.light.borderColor || '#d1d5db',
+                        background: cardStyles.background,
+                        borderColor: cardStyles.borderColor,
                       }}
                     >
                       <div
                         className="text-sm mb-1"
-                        style={{
-                          color: theme === 'dark'
-                            ? heroConfig.cards?.dark.labelColor || '#9ca3af'
-                            : heroConfig.cards?.light.labelColor || '#6b7280',
-                        }}
+                        style={{ color: cardStyles.labelColor }}
                       >
-                        Duración
+                        Precio
                       </div>
                       <div
-                        className="text-lg font-semibold"
-                        style={{
-                          color: theme === 'dark'
-                            ? heroConfig.cards?.dark.textColor || '#ffffff'
-                            : heroConfig.cards?.light.textColor || '#111827',
-                        }}
+                        className="text-2xl font-bold"
+                        style={{ color: cardStyles.textColor }}
                       >
-                        {servicio.duracion?.valor} {servicio.duracion?.unidad}
+                        {formatPrice(servicio)}
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
+                    
+                    {getDurationText(servicio) && (
+                      <div
+                        className="backdrop-blur-sm rounded-lg px-6 py-4 border hover-lift transition-all duration-300"
+                        style={{
+                          background: cardStyles.background,
+                          borderColor: cardStyles.borderColor,
+                        }}
+                      >
+                        <div
+                          className="text-sm mb-1"
+                          style={{ color: cardStyles.labelColor }}
+                        >
+                          Duración
+                        </div>
+                        <div
+                          className="text-lg font-semibold"
+                          style={{ color: cardStyles.textColor }}
+                        >
+                          {servicio.duracion?.valor} {servicio.duracion?.unidad}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Badges informativos adicionales */}
               {(servicio.tiempoEntrega || servicio.garantia || servicio.soporte) && (

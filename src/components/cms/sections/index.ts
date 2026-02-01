@@ -3,5 +3,5 @@
  * Exportación centralizada de componentes de sección
  */
 
-export { HeroConfigSection } from './HeroConfigSection';
-export { AccordionConfigSection } from './AccordionConfigSection';
+export { HeroConfigSectionCompact } from './HeroConfigSectionCompact';
+export { default as AccordionConfigSectionCompact } from './AccordionConfigSectionCompact';

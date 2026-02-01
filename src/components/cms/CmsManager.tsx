@@ -17,15 +17,15 @@ import CardsDesignConfigSection from './CardsDesignConfigSection';
 import ContactConfigSection from './ContactConfigSection';
 import ContactFormEditor from './ContactFormEditor';
 import ChatbotConfigSection from './ChatbotConfigSection';
-import ServicesFilterConfigSection from './ServicesFilterConfigSection';
-import ServicesGridConfigSection from './ServicesGridConfigSection';
+import ServicesFilterConfigSectionCompact from './ServicesFilterConfigSectionCompact';
+import ServicesGridConfigSectionCompact from './ServicesGridConfigSectionCompact';
 import ServicesAccordionConfigSection from './ServicesAccordionConfigSection';
-import BlogHeroConfigSection from './BlogHeroConfigSection';
+import BlogHeroConfigSectionCompact from './sections/BlogHeroConfigSectionCompact';
 import FeaturedPostsConfigSection from './FeaturedPostsConfigSection';
 import AllNewsConfigSection from './AllNewsConfigSection';
-import BlogCtaConfigSection from './BlogCtaConfigSection';
-import ServicioDetailConfigSection from './ServicioDetailConfigSection';
-import BlogPostDetailConfigSection from './BlogPostDetailConfigSection';
+import BlogCtaConfigSectionCompact from './sections/BlogCtaConfigSectionCompact';
+import ServicioDetailConfigSectionCompact from './ServicioDetailConfigSectionCompact';
+import BlogPostDetailConfigSectionCompact from './sections/BlogPostDetailConfigSectionCompact';
 import SidebarConfigSection from './SidebarConfigSection';
 import DashboardFeaturedPostsConfigSection from './DashboardFeaturedPostsConfigSection';
 import { defaultChatbotConfig } from '../../config/defaultChatbotConfig';
@@ -443,8 +443,8 @@ const CmsManager: React.FC = () => {
             {/* 🎯 Hero Section - Diferente para Blog vs otras páginas */}
             {selectedPage === 'blog' ? (
               <>
-                {/* 📰 Hero específico para Blog */}
-                <BlogHeroConfigSection
+                {/* 📰 Hero específico para Blog (VERSIÓN COMPACTA) */}
+                <BlogHeroConfigSectionCompact
                   pageData={pageData}
                   updateContent={handleUpdateContent}
                 />
@@ -458,8 +458,8 @@ const CmsManager: React.FC = () => {
                   config={pageData.content?.allNews || {}}
                   onChange={(config) => handleUpdateContent('allNews', config)}
                 />
-                {/* 📢 Sección CTA (Último Llamado) */}
-                <BlogCtaConfigSection
+                {/* 📢 Sección CTA (Último Llamado) - VERSIÓN COMPACTA */}
+                <BlogCtaConfigSectionCompact
                   config={pageData.content?.blogCta || {}}
                   onChange={(config) => handleUpdateContent('blogCta', config)}
                 />
@@ -469,7 +469,6 @@ const CmsManager: React.FC = () => {
               <HeroConfigSection
                 pageData={pageData}
                 updateContent={handleUpdateContent}
-                updateTextStyle={handleUpdateTextStyle}
               />
             ) : null}
             
@@ -550,14 +549,14 @@ const CmsManager: React.FC = () => {
             {/* 🛠️ SECCIONES ESPECÍFICAS PARA SERVICES */}
             {selectedPage === 'services' && (
               <>
-                {/* Configuración de Filtros de Servicios */}
-                <ServicesFilterConfigSection
+                {/* Configuración de Filtros de Servicios - Versión Compacta */}
+                <ServicesFilterConfigSectionCompact
                   pageData={pageData}
                   updateContent={handleUpdateContent}
                 />
                 
-                {/* Configuración de Sección y Tarjetas de Servicios */}
-                <ServicesGridConfigSection
+                {/* Configuración de Sección y Tarjetas de Servicios - Versión Compacta */}
+                <ServicesGridConfigSectionCompact
                   pageData={pageData}
                   updateContent={handleUpdateContent}
                 />
@@ -593,7 +592,7 @@ const CmsManager: React.FC = () => {
             {/* 📄 SECCIONES ESPECÍFICAS PARA SERVICIO DETALLE */}
             {selectedPage === 'servicio-detail' && (
               <>
-                <ServicioDetailConfigSection
+                <ServicioDetailConfigSectionCompact
                   config={pageData?.content?.servicioDetailConfig || {}}
                   onChange={(newConfig) => handleUpdateContent('servicioDetailConfig', newConfig)}
                 />
@@ -643,7 +642,7 @@ const CmsManager: React.FC = () => {
             {/* 📝 SECCIONES ESPECÍFICAS PARA BLOG POST DETAIL */}
             {selectedPage === 'blog-post-detail' && (
               <>
-                <BlogPostDetailConfigSection
+                <BlogPostDetailConfigSectionCompact
                   config={pageData?.content?.blogPostDetailConfig || {}}
                   onChange={(newConfig) => handleUpdateContent('blogPostDetailConfig', newConfig)}
                 />

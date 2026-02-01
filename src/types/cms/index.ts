@@ -10,11 +10,19 @@ export interface TextStyles {
     titleColor?: string;
     subtitleColor?: string;
     descriptionColor?: string;
+    titleHighlightColor?: string;
+    ctaBackgroundColor?: string;
+    ctaTextColor?: string;
+    ctaHoverColor?: string;
   };
   dark?: {
     titleColor?: string;
     subtitleColor?: string;
     descriptionColor?: string;
+    titleHighlightColor?: string;
+    ctaBackgroundColor?: string;
+    ctaTextColor?: string;
+    ctaHoverColor?: string;
   };
 }
 
@@ -122,12 +130,16 @@ export interface SolutionItem {
 
 export interface HeroContent {
   title: string;
+  titleHighlight?: string;
   subtitle: string;
   description: string;
   ctaText: string;
   ctaLink: string;
   backgroundImage?: BackgroundImage;
   backgroundImageAlt?: string;
+  backgroundOverlay?: number;
+  gradientFrom?: string;
+  gradientTo?: string;
   styles?: TextStyles;
 }
 

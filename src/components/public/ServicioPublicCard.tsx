@@ -97,6 +97,20 @@ interface CardDesignConfig {
   descriptionFontWeight?: string;
   // Nueva configuración de contenido
   contentConfig?: CardContentConfig;
+  // Configuración de borde
+  borderWidth?: string;
+  borderStyle?: string;
+  borderColor?: string;
+  borderColorDark?: string;
+  // Configuración de sombra
+  shadow?: string;
+  shadowDark?: string;
+  // Configuración de hover
+  hoverScale?: string;
+  hoverBorderColor?: string;
+  hoverBorderColorDark?: string;
+  hoverShadow?: string;
+  hoverShadowDark?: string;
 }
 
 interface ServicioPublicCardProps {
@@ -256,23 +270,57 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
   return (
     <div 
       className={`
-        group relative transition-all duration-500 hover-lift overflow-hidden flex flex-col
-        ${isTransparent 
-          ? 'backdrop-blur-sm border' 
-          : 'shadow-lg border'
-        }
-        ${featured ? 'ring-2 ring-purple-500 ring-opacity-50 hover-glow' : ''}
+        group relative transition-all duration-500 overflow-hidden flex flex-col
+        ${featured ? 'ring-2 ring-opacity-50' : ''}
         ${className}
       `}
       style={{
+        // Border configuration from CMS
+        borderWidth: cardConfig?.borderWidth || '1px',
+        borderStyle: cardConfig?.borderStyle || 'solid',
+        borderColor: currentTheme === 'dark' 
+          ? (cardConfig?.borderColorDark || '#374151')
+          : (cardConfig?.borderColor || '#e5e7eb'),
         borderRadius: cardConfig?.borderRadius || '0.75rem',
+        
+        // Shadow configuration from CMS
+        boxShadow: currentTheme === 'dark'
+          ? (cardConfig?.shadowDark || '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)')
+          : (cardConfig?.shadow || '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'),
+        
+        // Background
         minHeight: content.minCardHeight || undefined,
         backgroundColor: isTransparent 
           ? 'color-mix(in srgb, var(--color-cardBg) 10%, transparent)' 
           : 'var(--color-cardBg)',
-        borderColor: isTransparent
-          ? 'color-mix(in srgb, var(--color-border) 20%, transparent)'
-          : 'var(--color-border)'
+        
+        // Hover effects will be applied via onMouseEnter/Leave
+        transition: 'all 0.3s ease-in-out',
+      }}
+      onMouseEnter={(e) => {
+        const scale = cardConfig?.hoverScale || '1.02';
+        const hoverBorder = currentTheme === 'dark'
+          ? (cardConfig?.hoverBorderColorDark || '#A78BFA')
+          : (cardConfig?.hoverBorderColor || '#8B5CF6');
+        const hoverShadow = currentTheme === 'dark'
+          ? (cardConfig?.hoverShadowDark || '0 20px 25px -5px rgba(167, 139, 250, 0.2), 0 10px 10px -5px rgba(167, 139, 250, 0.08)')
+          : (cardConfig?.hoverShadow || '0 20px 25px -5px rgba(139, 92, 246, 0.1), 0 10px 10px -5px rgba(139, 92, 246, 0.04)');
+        
+        e.currentTarget.style.transform = `scale(${scale})`;
+        e.currentTarget.style.borderColor = hoverBorder;
+        e.currentTarget.style.boxShadow = hoverShadow;
+      }}
+      onMouseLeave={(e) => {
+        const normalBorder = currentTheme === 'dark'
+          ? (cardConfig?.borderColorDark || '#374151')
+          : (cardConfig?.borderColor || '#e5e7eb');
+        const normalShadow = currentTheme === 'dark'
+          ? (cardConfig?.shadowDark || '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)')
+          : (cardConfig?.shadow || '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)');
+        
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.borderColor = normalBorder;
+        e.currentTarget.style.boxShadow = normalShadow;
       }}
     >
       {/* Badge de destacado - solo si está configurado para mostrarse */}

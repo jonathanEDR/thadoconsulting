@@ -138,6 +138,8 @@ export interface BackgroundConfig {
 export interface HeroContentConfig {
   titleGradient?: {
     enabled: boolean;
+    from?: string;  // Legacy
+    to?: string;    // Legacy
     light?: { from: string; to: string; };
     dark?: { from: string; to: string; };
   };
@@ -149,13 +151,16 @@ export interface HeroContentConfig {
     fontWeight?: string;
     fontFamily?: string;
     lineHeight?: string;
+    color?: string;       // Color del título en modo claro
+    colorDark?: string;   // Color del título en modo oscuro
   };
   subtitle?: {
     text?: string;
     fontSize?: string;
     fontWeight?: string;
     fontFamily?: string;
-    color?: string;
+    color?: string;       // Color del subtítulo en modo claro
+    colorDark?: string;   // Color del subtítulo en modo oscuro
     lineHeight?: string;
   };
 }
@@ -434,12 +439,15 @@ export const DEFAULT_HERO_CONFIG = {
       fontWeight: 'font-bold',
       fontFamily: 'Montserrat',
       lineHeight: 'leading-tight',
+      color: '#111827',       // Color del título en modo claro
+      colorDark: '#ffffff',   // Color del título en modo oscuro
     },
     subtitle: {
       fontSize: 'text-xl',
       fontWeight: 'font-normal',
       fontFamily: 'Montserrat',
-      color: '#6B7280',
+      color: '#374151',       // Color del subtítulo en modo claro
+      colorDark: '#d1d5db',   // Color del subtítulo en modo oscuro
       lineHeight: 'leading-relaxed',
     },
   },
