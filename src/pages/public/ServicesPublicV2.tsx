@@ -513,8 +513,10 @@ const ServicesPublicV2 = () => {
                   // Obtener color de fondo
                   const getBackgroundColor = () => {
                     if (isTransparent) return 'transparent';
-                    // Usar variable CSS en lugar de colores hardcodeados
-                    return 'var(--color-cardBg)';
+                    // Usar el color configurado en el CMS según el tema
+                    return isDark 
+                      ? (styles?.backgroundColorDark || '#1e293b')
+                      : (styles?.backgroundColor || '#ffffff');
                   };
                   
                   // Si el fondo es transparente y hay borde gradiente, usar técnica de mask
@@ -921,14 +923,24 @@ const ServicesPublicV2 = () => {
                     );
                   }
                   
-                  // Caso normal: fondo sólido o sin borde gradiente
+                  // Caso normal: fondo sólido o borde sólido/sin borde
                   return (
                     <div 
                       className="sticky top-24 overflow-hidden"
                       style={{
                         borderRadius: borderRadius,
-                        padding: borderWidth,
-                        background: getBorderBackground(),
+                        // Para borde sólido o sin borde, usar border CSS
+                        ...(borderStyle === 'solid' ? {
+                          border: `${borderWidth} solid ${getBorderBackground()}`,
+                          background: getBackgroundColor()
+                        } : borderStyle === 'none' ? {
+                          border: 'none',
+                          background: getBackgroundColor()
+                        } : {
+                          // Para gradiente con fondo no transparente, usar padding + background
+                          padding: borderWidth,
+                          background: getBorderBackground()
+                        }),
                         minHeight: styles?.panelMinHeight !== 'auto' ? styles?.panelMinHeight : undefined,
                         boxShadow: styles?.shadow === 'none' ? 'none' :
                                    styles?.shadow === 'sm' ? '0 1px 2px rgba(0,0,0,0.05)' :
@@ -940,8 +952,10 @@ const ServicesPublicV2 = () => {
                       <div 
                         style={{
                           padding: styles?.panelPadding || '1.5rem',
-                          borderRadius: `calc(${borderRadius} - ${borderWidth})`,
-                          backgroundColor: getBackgroundColor()
+                          // Solo ajustar borderRadius si hay padding (caso gradiente)
+                          borderRadius: borderStyle === 'gradient' ? `calc(${borderRadius} - ${borderWidth})` : borderRadius,
+                          // Solo aplicar backgroundColor si es gradiente (porque ya está en el padre para sólido)
+                          backgroundColor: borderStyle === 'gradient' ? getBackgroundColor() : undefined
                         }}
                       >
                         {/* Sección BUSCAR */}
