@@ -166,32 +166,41 @@ export default function CommentForm({
       <div 
         className={`
           rounded-lg border-2 transition-colors
-          ${!styles?.formBackground ? 'bg-white dark:bg-gray-800' : ''}
-          ${error ? 'border-red-300 dark:border-red-600' : ''}
+          ${error ? 'border-red-500' : ''}
           ${isReply ? 'shadow-sm' : 'shadow-md'}
         `}
         style={{
-          background: styles?.formBackground || undefined,
+          background: styles?.formBackground || '#ffffff',
           borderColor: error 
-            ? undefined 
+            ? '#ef4444' 
             : isFocused 
               ? (styles?.formFocusBorder || '#3b82f6')
-              : (styles?.formBorder || undefined),
+              : (styles?.formBorder || '#d1d5db'),
         }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       >
         {/* Header (si es respuesta o edición) */}
         {(isReply || isEditing) && (
-          <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div 
+            className="flex items-center justify-between px-4 py-2 border-b"
+            style={{
+              background: styles?.footerBackground || '#f9fafb',
+              borderColor: styles?.formBorder || '#e5e7eb'
+            }}
+          >
+            <span 
+              className="text-sm font-medium"
+              style={{ color: styles?.textareaText || '#374151' }}
+            >
               {isEditing ? '✏️ Editando comentario' : '↩️ Respondiendo'}
             </span>
             {onCancel && (
               <button
                 type="button"
                 onClick={handleCancel}
-                className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="p-1 transition-opacity hover:opacity-70"
+                style={{ color: styles?.textareaText || '#9ca3af' }}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -201,13 +210,25 @@ export default function CommentForm({
 
         {/* Campos de invitado (solo si no está autenticado) */}
         {!isSignedIn && !isEditing && (
-          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-800 dark:text-blue-300 mb-3">
+          <div 
+            className="p-4 border-b"
+            style={{
+              background: styles?.footerBackground || '#eff6ff',
+              borderColor: styles?.formBorder || '#dbeafe'
+            }}
+          >
+            <p 
+              className="text-sm mb-3"
+              style={{ color: styles?.textareaText || '#1e40af' }}
+            >
               Comentando como invitado
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label 
+                  className="flex items-center gap-2 text-sm font-medium mb-1"
+                  style={{ color: styles?.textareaText || '#374151' }}
+                >
                   <User size={14} />
                   Nombre *
                 </label>
@@ -217,11 +238,19 @@ export default function CommentForm({
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="Tu nombre"
                   required={!isSignedIn}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                  style={{
+                    borderColor: styles?.formBorder || '#d1d5db',
+                    background: styles?.textareaBackground || '#ffffff',
+                    color: styles?.textareaText || '#111827'
+                  }}
                 />
               </div>
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label 
+                  className="flex items-center gap-2 text-sm font-medium mb-1"
+                  style={{ color: styles?.textareaText || '#374151' }}
+                >
                   <Mail size={14} />
                   Email *
                 </label>
@@ -231,11 +260,19 @@ export default function CommentForm({
                   onChange={(e) => setGuestEmail(e.target.value)}
                   placeholder="tu@email.com"
                   required={!isSignedIn}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                  style={{
+                    borderColor: styles?.formBorder || '#d1d5db',
+                    background: styles?.textareaBackground || '#ffffff',
+                    color: styles?.textareaText || '#111827'
+                  }}
                 />
               </div>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+            <p 
+              className="text-xs mt-2"
+              style={{ color: styles?.textareaText ? `${styles.textareaText}88` : '#6b7280' }}
+            >
               Tu email no será publicado
             </p>
           </div>
@@ -243,39 +280,47 @@ export default function CommentForm({
 
         {/* Textarea */}
         <div 
-          className={`p-4 ${!styles?.textareaBackground ? '' : ''}`}
-          style={{ background: styles?.textareaBackground || undefined }}
+          className="p-4"
+          style={{ background: styles?.textareaBackground || '#ffffff' }}
         >
+          <style>{`
+            .comment-textarea::placeholder {
+              color: ${styles?.textareaText ? `${styles.textareaText}66` : 'rgb(156, 163, 175)'};
+              opacity: 0.6;
+            }
+          `}</style>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder={placeholder}
             rows={isReply ? 3 : 4}
             maxLength={MAX_LENGTH}
-            className="w-full resize-none border-0 focus:ring-0 bg-transparent placeholder-gray-400 dark:placeholder-gray-500"
-            style={{ color: styles?.textareaText || undefined }}
+            className="w-full resize-none border-0 focus:ring-0 bg-transparent comment-textarea"
+            style={{ color: styles?.textareaText || '#111827' }}
             disabled={isSubmitting}
           />
         </div>
 
         {/* Footer */}
         <div 
-          className={`flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-600 ${!styles?.footerBackground ? 'bg-gray-50 dark:bg-gray-700' : ''}`}
-          style={{ background: styles?.footerBackground || undefined }}
+          className="flex items-center justify-between px-4 py-3 border-t"
+          style={{ 
+            background: styles?.footerBackground || '#f9fafb',
+            borderColor: styles?.formBorder || '#e5e7eb'
+          }}
         >
           {/* Contador de caracteres */}
           <div className="text-sm">
-            <span className={`
-              font-medium
-              ${charCount < MIN_LENGTH ? 'text-gray-400 dark:text-gray-500' :
-                charCount > MAX_LENGTH * 0.9 ? 'text-orange-600 dark:text-orange-400' :
-                'text-gray-600 dark:text-gray-300'}
-            `}>
+            <span className="font-medium" style={{
+              color: charCount < MIN_LENGTH ? (styles?.textareaText ? `${styles.textareaText}66` : '#9ca3af') :
+                     charCount > MAX_LENGTH * 0.9 ? '#ea580c' :
+                     styles?.textareaText || '#4b5563'
+            }}>
               {charCount}
             </span>
-            <span className="text-gray-400 dark:text-gray-500"> / {MAX_LENGTH}</span>
+            <span style={{ color: styles?.textareaText ? `${styles.textareaText}66` : '#9ca3af' }}> / {MAX_LENGTH}</span>
             {charCount < MIN_LENGTH && (
-              <span className="ml-2 text-xs text-gray-400 dark:text-gray-500">
+              <span className="ml-2 text-xs" style={{ color: styles?.textareaText ? `${styles.textareaText}66` : '#9ca3af' }}>
                 (mínimo {MIN_LENGTH})
               </span>
             )}
@@ -288,7 +333,11 @@ export default function CommentForm({
                 type="button"
                 onClick={handleCancel}
                 disabled={isSubmitting}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium rounded-lg transition-all hover:opacity-80 disabled:opacity-50"
+                style={{ 
+                  color: styles?.textareaText || '#374151',
+                  background: 'transparent'
+                }}
               >
                 Cancelar
               </button>
@@ -300,16 +349,11 @@ export default function CommentForm({
               className={`
                 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg
                 transition-all duration-200
-                ${canSubmit
-                  ? !styles?.buttonBackground && !styles?.buttonBorder 
-                    ? 'bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 hover:shadow-md' 
-                    : 'hover:opacity-90 hover:shadow-md'
-                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                }
+                ${canSubmit ? 'hover:opacity-90 hover:shadow-md' : 'cursor-not-allowed opacity-50'}
                 ${styles?.buttonBorder && !styles?.buttonBackground ? 'border-2' : ''}
               `}
               style={canSubmit ? {
-                background: styles?.buttonBackground || (styles?.buttonBorder ? 'transparent' : undefined),
+                background: styles?.buttonBackground || '#2563eb',
                 borderImage: styles?.buttonBorder?.startsWith('linear-gradient') 
                   ? `${styles.buttonBorder} 1` 
                   : undefined,
@@ -318,8 +362,11 @@ export default function CommentForm({
                   : undefined,
                 borderWidth: styles?.buttonBorder ? '2px' : undefined,
                 borderStyle: styles?.buttonBorder ? 'solid' : undefined,
-                color: styles?.buttonText || undefined,
-              } : undefined}
+                color: styles?.buttonText || '#ffffff',
+              } : {
+                background: styles?.formBorder || '#d1d5db',
+                color: styles?.textareaText ? `${styles.textareaText}66` : '#6b7280'
+              }}
             >
               {isSubmitting ? (
                 <>
@@ -338,7 +385,14 @@ export default function CommentForm({
 
         {/* Mensaje de error */}
         {error && (
-          <div className="flex items-start gap-2 px-4 py-3 bg-red-50 dark:bg-red-900/20 border-t border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
+          <div 
+            className="flex items-start gap-2 px-4 py-3 border-t text-sm"
+            style={{
+              background: '#fef2f2',
+              borderColor: '#fecaca',
+              color: '#b91c1c'
+            }}
+          >
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -347,9 +401,9 @@ export default function CommentForm({
 
       {/* Nota de políticas (solo en formulario principal) */}
       {!isReply && !isEditing && (
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-2 text-xs" style={{ color: styles?.textareaText ? `${styles.textareaText}88` : '#6b7280' }}>
           Al comentar, aceptas nuestras{' '}
-          <a href="/politicas" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <a href="/politicas" className="hover:underline" style={{ color: styles?.formFocusBorder || '#2563eb' }}>
             políticas de comunidad
           </a>
           . Los comentarios están sujetos a moderación.

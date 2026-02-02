@@ -104,26 +104,26 @@ export default function CommentItem({
     }
   };
 
-  // Estilos según el estado
-  const statusColors: Record<string, string> = {
-    approved: '',
-    pending: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
-    rejected: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
-    spam: 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600',
-    hidden: 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+  // Estilos según el estado (mantenemos estos fijos para claridad visual)
+  const statusColors: Record<string, { bg: string; border: string }> = {
+    approved: { bg: '', border: '' },
+    pending: { bg: '#fef3c7', border: '#fcd34d' },
+    rejected: { bg: '#fee2e2', border: '#fca5a5' },
+    spam: { bg: '#f3f4f6', border: '#d1d5db' },
+    hidden: { bg: '#f3f4f6', border: '#d1d5db' }
   };
 
   // Estilos dinámicos del contenedor
   const containerStyle: React.CSSProperties = comment.status === 'approved' ? {
-    backgroundColor: styles?.cardBackground || undefined,
-    borderColor: styles?.cardBorder || undefined,
-  } : {};
+    backgroundColor: styles?.cardBackground || '#ffffff',
+    borderColor: styles?.cardBorder || '#e5e7eb',
+  } : {
+    backgroundColor: statusColors[comment.status].bg,
+    borderColor: statusColors[comment.status].border,
+  };
 
   const containerClass = `
     comment-item
-    ${comment.status !== 'approved' ? statusColors[comment.status] : ''}
-    ${comment.status === 'approved' && !styles?.cardBackground ? 'bg-white dark:bg-gray-800' : ''}
-    ${comment.status === 'approved' && !styles?.cardBorder ? 'border-gray-200 dark:border-gray-700' : ''}
     border rounded-lg p-4
     ${level > 0 ? 'ml-8 mt-3' : 'mt-4'}
     ${className}
@@ -199,22 +199,22 @@ export default function CommentItem({
             {isPublicProfile ? (
               <Link 
                 to={`/perfil/${(comment.author.userId as any).username}`} 
-                className={`font-semibold hover:underline ${!styles?.authorColor ? 'text-gray-900 dark:text-white' : ''}`}
-                style={{ color: styles?.authorColor || undefined }}
+                className="font-semibold hover:underline"
+                style={{ color: styles?.authorColor || '#111827' }}
               >
                 {authorName}
               </Link>
             ) : (
               <p 
-                className={`font-semibold ${!styles?.authorColor ? 'text-gray-900 dark:text-white' : ''}`}
-                style={{ color: styles?.authorColor || undefined }}
+                className="font-semibold"
+                style={{ color: styles?.authorColor || '#111827' }}
               >
                 {authorName}
               </p>
             )}
             <div 
-              className={`flex items-center gap-2 text-xs ${!styles?.dateColor ? 'text-gray-500 dark:text-gray-400' : ''}`}
-              style={{ color: styles?.dateColor || undefined }}
+              className="flex items-center gap-2 text-xs"
+              style={{ color: styles?.dateColor || '#6b7280' }}
             >
               <span>{formattedDate}</span>
               {comment.editedAt && (
@@ -226,7 +226,7 @@ export default function CommentItem({
               {comment.status === 'pending' && (
                 <>
                   <span>•</span>
-                  <span className="text-yellow-600 font-medium">Pendiente de aprobación</span>
+                  <span className="font-medium" style={{ color: '#d97706' }}>Pendiente de aprobación</span>
                 </>
               )}
             </div>
@@ -238,7 +238,8 @@ export default function CommentItem({
           <div className="relative">
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+              className="p-1 rounded transition-opacity hover:opacity-70"
+              style={{ color: styles?.dateColor || '#9ca3af' }}
             >
               <MoreVertical className="w-5 h-5" />
             </button>
@@ -249,14 +250,21 @@ export default function CommentItem({
                   className="fixed inset-0 z-10" 
                   onClick={() => setShowMenu(false)}
                 />
-                <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-1 z-20 min-w-[150px]">
+                <div 
+                  className="absolute right-0 top-full mt-1 rounded-lg shadow-xl border py-1 z-20 min-w-[150px]"
+                  style={{
+                    background: styles?.cardBackground || '#ffffff',
+                    borderColor: styles?.cardBorder || '#e5e7eb'
+                  }}
+                >
                   {isAuthor && onEdit && (
                     <button
                       onClick={() => {
                         onEdit(comment._id);
                         setShowMenu(false);
                       }}
-                      className="flex items-center gap-2 w-full px-3 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="flex items-center gap-2 w-full px-3 py-2 text-left transition-opacity hover:opacity-70"
+                      style={{ color: styles?.textColor || '#374151' }}
                     >
                       <Edit2 className="w-4 h-4" />
                       <span>Editar</span>
@@ -269,7 +277,8 @@ export default function CommentItem({
                         onDelete(comment._id);
                         setShowMenu(false);
                       }}
-                      className="flex items-center gap-2 w-full px-3 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      className="flex items-center gap-2 w-full px-3 py-2 text-left transition-opacity hover:opacity-70"
+                      style={{ color: '#dc2626' }}
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Eliminar</span>
@@ -282,7 +291,8 @@ export default function CommentItem({
                         onReport(comment._id);
                         setShowMenu(false);
                       }}
-                      className="flex items-center gap-2 w-full px-3 py-2 text-left text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors"
+                      className="flex items-center gap-2 w-full px-3 py-2 text-left transition-opacity hover:opacity-70"
+                      style={{ color: '#ea580c' }}
                     >
                       <Flag className="w-4 h-4" />
                       <span>Reportar</span>
@@ -298,8 +308,8 @@ export default function CommentItem({
       {/* Contenido del comentario */}
       <div className="prose prose-sm max-w-none mb-3">
         <p 
-          className={`whitespace-pre-wrap ${!styles?.textColor ? 'text-gray-700 dark:text-gray-300' : ''}`}
-          style={{ color: styles?.textColor || undefined }}
+          className="whitespace-pre-wrap"
+          style={{ color: styles?.textColor || '#374151' }}
         >
           {comment.content}
         </p>
@@ -312,7 +322,8 @@ export default function CommentItem({
           <button
             onClick={() => handleVote('like')}
             disabled={isVoting}
-            className="inline-flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-2 py-1 text-sm rounded transition-opacity disabled:opacity-50 hover:opacity-70"
+            style={{ color: styles?.dateColor || '#6b7280' }}
           >
             <ThumbsUp className="w-4 h-4" />
             <span className="font-medium">{localVotes.likes}</span>
@@ -321,18 +332,22 @@ export default function CommentItem({
           <button
             onClick={() => handleVote('dislike')}
             disabled={isVoting}
-            className="inline-flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1 px-2 py-1 text-sm rounded transition-opacity disabled:opacity-50 hover:opacity-70"
+            style={{ color: styles?.dateColor || '#6b7280' }}
           >
             <ThumbsDown className="w-4 h-4" />
             <span className="font-medium">{localVotes.dislikes}</span>
           </button>
 
           {/* Score */}
-          <span className={`text-sm font-semibold ${
-            localVotes.score > 0 ? 'text-green-600 dark:text-green-400' :
-            localVotes.score < 0 ? 'text-red-600 dark:text-red-400' :
-            'text-gray-500 dark:text-gray-400'
-          }`}>
+          <span 
+            className="text-sm font-semibold"
+            style={{
+              color: localVotes.score > 0 ? '#16a34a' :
+                     localVotes.score < 0 ? '#dc2626' :
+                     styles?.dateColor || '#6b7280'
+            }}
+          >
             {localVotes.score > 0 && '+'}{localVotes.score}
           </span>
         </div>
@@ -341,7 +356,8 @@ export default function CommentItem({
         {canReply && onReply && (
           <button
             onClick={() => onReply(comment._id)}
-            className="inline-flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-1 text-sm rounded transition-opacity hover:opacity-70"
+            style={{ color: styles?.dateColor || '#6b7280' }}
           >
             <Reply className="w-4 h-4" />
             <span>Responder</span>
@@ -350,7 +366,10 @@ export default function CommentItem({
 
         {/* Reportes (admin) */}
         {isAdmin && comment.isReported && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded-full font-medium">
+          <span 
+            className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium"
+            style={{ background: '#fed7aa', color: '#9a3412' }}
+          >
             <Flag className="w-3 h-3" />
             {comment.reports?.length || 0} reportes
           </span>

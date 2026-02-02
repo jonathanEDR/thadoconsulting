@@ -316,18 +316,31 @@ export default function CommentsList({
 
       {loading && comments.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12">
-          <div className="w-12 h-12 border-4 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Cargando comentarios...</p>
+          <div 
+            className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin mb-4"
+            style={{ borderColor: currentStyles.iconColor || '#2563eb' }}
+          />
+          <p style={{ color: currentStyles.textColor || '#4b5563' }}>
+            Cargando comentarios...
+          </p>
         </div>
       )}
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 mb-6">
+        <div 
+          className="p-4 border rounded-lg mb-6"
+          style={{
+            background: '#fef2f2',
+            borderColor: '#fecaca',
+            color: '#b91c1c'
+          }}
+        >
           <p className="font-semibold">Error al cargar comentarios</p>
           <p className="text-sm mt-1">{error}</p>
           <button
             onClick={() => refetch()}
-            className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm"
+            className="mt-2 font-medium text-sm hover:opacity-80"
+            style={{ color: '#2563eb' }}
           >
             Reintentar
           </button>
@@ -336,11 +349,17 @@ export default function CommentsList({
 
       {!loading && topLevelComments.length === 0 && (
         <div className="text-center py-12">
-          <MessageCircle className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <MessageCircle 
+            className="w-16 h-16 mx-auto mb-4"
+            style={{ color: currentStyles.iconColor ? `${currentStyles.iconColor}40` : '#d1d5db' }}
+          />
+          <h3 
+            className="text-lg font-semibold mb-2"
+            style={{ color: currentStyles.titleColor || '#111827' }}
+          >
             Aún no hay comentarios
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p style={{ color: currentStyles.textColor || '#4b5563' }}>
             {isSignedIn 
               ? '¡Sé el primero en comentar!' 
               : 'Inicia sesión para ser el primero en comentar'}

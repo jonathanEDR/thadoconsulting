@@ -205,12 +205,12 @@ export default function AuthorCard({
         {/* Expertise Tags */}
         {expertise && expertise.length > 0 && (
           <div className="flex items-start gap-2 mb-4">
-            <Award size={16} className="text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+            <Award size={16} className="text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
             <div className="flex flex-wrap gap-2">
               {expertise.slice(0, 4).map((skill: string, index: number) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700"
+                  className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
                 >
                   {skill}
                 </span>
