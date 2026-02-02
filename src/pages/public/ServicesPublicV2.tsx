@@ -337,14 +337,42 @@ const ServicesPublicV2 = () => {
           {/* Contenido del Hero - Posicionado en la parte inferior (debajo del centro) */}
           <div className="relative z-10 container mx-auto h-full flex items-end pb-12 md:pb-16" style={{ minHeight: '500px' }}>
             <div className="text-center animate-fade-in-down max-w-4xl mx-auto w-full">
-              <h1 
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-1 leading-none"
-                dangerouslySetInnerHTML={{ 
-                  __html: pageData?.content?.hero?.title || 'Nuestros <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">Servicios</span>'
-                }}
-              />
+              {/* Título principal + Texto destacado */}
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 leading-none">
+                <span
+                  style={{
+                    color: currentTheme === 'dark'
+                      ? (pageData?.content?.hero?.styles?.dark?.titleColor || '#f9fafb')
+                      : (pageData?.content?.hero?.styles?.light?.titleColor || '#1f2937')
+                  }}
+                  dangerouslySetInnerHTML={{ 
+                    __html: pageData?.content?.hero?.title || 'Servicios'
+                  }}
+                />
+                {/* Texto destacado si existe */}
+                {pageData?.content?.hero?.titleHighlight && (
+                  <>
+                    {' '}
+                    <span
+                      style={{
+                        color: currentTheme === 'dark'
+                          ? (pageData?.content?.hero?.styles?.dark?.titleHighlightColor || '#A78BFA')
+                          : (pageData?.content?.hero?.styles?.light?.titleHighlightColor || '#8B5CF6')
+                      }}
+                      dangerouslySetInnerHTML={{ 
+                        __html: pageData.content.hero.titleHighlight
+                      }}
+                    />
+                  </>
+                )}
+              </h1>
               <p 
-                className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mt-1 mb-0 leading-tight"
+                className="text-base md:text-lg max-w-3xl mx-auto mt-1 mb-0 leading-tight"
+                style={{
+                  color: currentTheme === 'dark'
+                    ? (pageData?.content?.hero?.styles?.dark?.subtitleColor || '#d1d5db')
+                    : (pageData?.content?.hero?.styles?.light?.subtitleColor || '#4b5563')
+                }}
                 dangerouslySetInnerHTML={{ 
                   __html: pageData?.content?.hero?.subtitle || 'Soluciones digitales de vanguardia diseñadas para impulsar tu negocio hacia el éxito'
                 }}
@@ -352,7 +380,12 @@ const ServicesPublicV2 = () => {
               {/* Descripción adicional si existe */}
               {pageData?.content?.hero?.description && (
                 <p 
-                  className="text-sm text-gray-500 dark:text-gray-400 max-w-3xl mx-auto mt-1 leading-tight"
+                  className="text-sm max-w-3xl mx-auto mt-1 leading-tight"
+                  style={{
+                    color: currentTheme === 'dark'
+                      ? (pageData?.content?.hero?.styles?.dark?.subtitleColor || '#9ca3af')
+                      : (pageData?.content?.hero?.styles?.light?.subtitleColor || '#6b7280')
+                  }}
                   dangerouslySetInnerHTML={{ 
                     __html: pageData.content.hero.description
                   }}
