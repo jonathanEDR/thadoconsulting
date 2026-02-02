@@ -105,6 +105,7 @@ interface BlogPostDetailConfig {
     showCard?: boolean; showBio?: boolean; showSocialLinks?: boolean;
     showRole?: boolean; nameFormat?: 'full' | 'two-words' | 'first-initials';
     avatarShape?: 'circle' | 'square'; cardPosition?: 'bottom' | 'sidebar';
+    transparentCard?: boolean;
     styles?: {
       light?: { background?: string; border?: string; nameColor?: string; bioColor?: string };
       dark?: { background?: string; border?: string; nameColor?: string; bioColor?: string };
@@ -121,6 +122,7 @@ interface BlogPostDetailConfig {
     enabled?: boolean; maxPosts?: number; showTitle?: boolean; title?: string;
     layout?: 'grid' | 'carousel'; columns?: number;
     showCategoryLink?: boolean; showExploreButton?: boolean;
+    transparentSection?: boolean;
     styles?: {
       light?: { sectionBackground?: string; sectionBorder?: string; iconColor?: string;
         cardBackground?: string; cardBorder?: string; cardTitleColor?: string;
@@ -136,6 +138,7 @@ interface BlogPostDetailConfig {
   };
   navigation?: {
     enabled?: boolean; showPrevNext?: boolean; showThumbnails?: boolean; showEmptyCard?: boolean;
+    transparentSection?: boolean;
     styles?: {
       light?: { sectionBackground?: string; sectionBorder?: string; titleColor?: string;
         indicatorColor?: string; cardBackground?: string; cardBorder?: string;
@@ -153,6 +156,7 @@ interface BlogPostDetailConfig {
     enabled?: boolean; title?: string; fontFamily?: string; allowAnonymous?: boolean;
     moderationRequired?: boolean; maxDepth?: number; showCount?: boolean;
     avatarShape?: 'circle' | 'square';
+    transparentBackground?: boolean;
     styles?: {
       light?: { sectionBackground?: string; sectionBorder?: string; titleColor?: string;
         iconColor?: string; countColor?: string; selectorBackground?: string;
@@ -854,14 +858,14 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                           <ThemeTabs activeTheme={theme} onChange={setTheme} />
                           {theme === 'light' ? (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo" value={config.author?.styles?.light?.background || '#f3f4f6'} onChange={(v) => updateStyles('author', 'light', 'background', v)} />
+                              <CompactColorPicker label="Fondo" value={config.author?.styles?.light?.background || '#f3f4f6'} onChange={(v) => updateStyles('author', 'light', 'background', v)} showTransparent />
                               <CompactColorPicker label="Borde" value={config.author?.styles?.light?.border || '#e5e7eb'} onChange={(v) => updateStyles('author', 'light', 'border', v)} />
                               <CompactColorPicker label="Nombre" value={config.author?.styles?.light?.nameColor || '#1f2937'} onChange={(v) => updateStyles('author', 'light', 'nameColor', v)} />
                               <CompactColorPicker label="Biografía" value={config.author?.styles?.light?.bioColor || '#6b7280'} onChange={(v) => updateStyles('author', 'light', 'bioColor', v)} />
                             </div>
                           ) : (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo" value={config.author?.styles?.dark?.background || '#1f2937'} onChange={(v) => updateStyles('author', 'dark', 'background', v)} />
+                              <CompactColorPicker label="Fondo" value={config.author?.styles?.dark?.background || '#1f2937'} onChange={(v) => updateStyles('author', 'dark', 'background', v)} showTransparent />
                               <CompactColorPicker label="Borde" value={config.author?.styles?.dark?.border || '#374151'} onChange={(v) => updateStyles('author', 'dark', 'border', v)} />
                               <CompactColorPicker label="Nombre" value={config.author?.styles?.dark?.nameColor || '#f9fafb'} onChange={(v) => updateStyles('author', 'dark', 'nameColor', v)} />
                               <CompactColorPicker label="Biografía" value={config.author?.styles?.dark?.bioColor || '#9ca3af'} onChange={(v) => updateStyles('author', 'dark', 'bioColor', v)} />
@@ -953,7 +957,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                           <ThemeTabs activeTheme={theme} onChange={setTheme} />
                           {theme === 'light' ? (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.comments?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('comments', 'light', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.comments?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('comments', 'light', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.comments?.styles?.light?.sectionBorder || '#e5e7eb'} onChange={(v) => updateStyles('comments', 'light', 'sectionBorder', v)} />
                               <CompactColorPicker label="Título" value={config.comments?.styles?.light?.titleColor || '#111827'} onChange={(v) => updateStyles('comments', 'light', 'titleColor', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.comments?.styles?.light?.cardBackground || '#f9fafb'} onChange={(v) => updateStyles('comments', 'light', 'cardBackground', v)} />
@@ -964,7 +968,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                             </div>
                           ) : (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.comments?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('comments', 'dark', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.comments?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('comments', 'dark', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.comments?.styles?.dark?.sectionBorder || '#374151'} onChange={(v) => updateStyles('comments', 'dark', 'sectionBorder', v)} />
                               <CompactColorPicker label="Título" value={config.comments?.styles?.dark?.titleColor || '#f9fafb'} onChange={(v) => updateStyles('comments', 'dark', 'titleColor', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.comments?.styles?.dark?.cardBackground || '#111827'} onChange={(v) => updateStyles('comments', 'dark', 'cardBackground', v)} />
@@ -1069,7 +1073,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                           <ThemeTabs activeTheme={theme} onChange={setTheme} />
                           {theme === 'light' ? (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.relatedPosts?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('relatedPosts', 'light', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.relatedPosts?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('relatedPosts', 'light', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.relatedPosts?.styles?.light?.sectionBorder || '#e5e7eb'} onChange={(v) => updateStyles('relatedPosts', 'light', 'sectionBorder', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.relatedPosts?.styles?.light?.cardBackground || '#f9fafb'} onChange={(v) => updateStyles('relatedPosts', 'light', 'cardBackground', v)} />
                               <CompactColorPicker label="Título tarjeta" value={config.relatedPosts?.styles?.light?.cardTitleColor || '#ffffff'} onChange={(v) => updateStyles('relatedPosts', 'light', 'cardTitleColor', v)} />
@@ -1079,7 +1083,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                             </div>
                           ) : (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.relatedPosts?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('relatedPosts', 'dark', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.relatedPosts?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('relatedPosts', 'dark', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.relatedPosts?.styles?.dark?.sectionBorder || '#374151'} onChange={(v) => updateStyles('relatedPosts', 'dark', 'sectionBorder', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.relatedPosts?.styles?.dark?.cardBackground || '#111827'} onChange={(v) => updateStyles('relatedPosts', 'dark', 'cardBackground', v)} />
                               <CompactColorPicker label="Título tarjeta" value={config.relatedPosts?.styles?.dark?.cardTitleColor || '#ffffff'} onChange={(v) => updateStyles('relatedPosts', 'dark', 'cardTitleColor', v)} />
@@ -1106,7 +1110,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                           <ThemeTabs activeTheme={theme} onChange={setTheme} />
                           {theme === 'light' ? (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.navigation?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('navigation', 'light', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.navigation?.styles?.light?.sectionBackground || '#ffffff'} onChange={(v) => updateStyles('navigation', 'light', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.navigation?.styles?.light?.sectionBorder || '#e5e7eb'} onChange={(v) => updateStyles('navigation', 'light', 'sectionBorder', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.navigation?.styles?.light?.cardBackground || '#ffffff'} onChange={(v) => updateStyles('navigation', 'light', 'cardBackground', v)} />
                               <CompactColorPicker label="Borde tarjeta" value={config.navigation?.styles?.light?.cardBorder || '#e5e7eb'} onChange={(v) => updateStyles('navigation', 'light', 'cardBorder', v)} />
@@ -1116,7 +1120,7 @@ export const BlogPostDetailConfigSectionCompact: React.FC<Props> = ({ config, on
                             </div>
                           ) : (
                             <div className="space-y-2 mt-2">
-                              <CompactColorPicker label="Fondo sección" value={config.navigation?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('navigation', 'dark', 'sectionBackground', v)} />
+                              <CompactColorPicker label="Fondo sección" value={config.navigation?.styles?.dark?.sectionBackground || '#1f2937'} onChange={(v) => updateStyles('navigation', 'dark', 'sectionBackground', v)} showTransparent />
                               <CompactColorPicker label="Borde sección" value={config.navigation?.styles?.dark?.sectionBorder || '#374151'} onChange={(v) => updateStyles('navigation', 'dark', 'sectionBorder', v)} />
                               <CompactColorPicker label="Fondo tarjeta" value={config.navigation?.styles?.dark?.cardBackground || '#1f2937'} onChange={(v) => updateStyles('navigation', 'dark', 'cardBackground', v)} />
                               <CompactColorPicker label="Borde tarjeta" value={config.navigation?.styles?.dark?.cardBorder || '#4b5563'} onChange={(v) => updateStyles('navigation', 'dark', 'cardBorder', v)} />

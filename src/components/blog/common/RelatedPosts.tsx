@@ -39,6 +39,7 @@ interface RelatedPostsProps {
   showCategoryLink?: boolean;
   showExploreButton?: boolean;
   title?: string;
+  transparentSection?: boolean;
 }
 
 export default function RelatedPosts({
@@ -50,7 +51,8 @@ export default function RelatedPosts({
   theme = 'light',
   showCategoryLink = true,
   showExploreButton = true,
-  title = 'Artículos Relacionados'
+  title = 'Artículos Relacionados',
+  transparentSection = false
 }: RelatedPostsProps) {
   
   // Calcular estilos dinámicos desde CMS
@@ -174,8 +176,16 @@ export default function RelatedPosts({
 
   return (
     <section 
-      className={`related-posts rounded-xl shadow-sm p-6 sm:p-8 ${!currentStyles.sectionBackground ? 'bg-white dark:bg-gray-800' : ''} ${!currentStyles.sectionBorder ? 'border border-gray-200 dark:border-gray-700' : ''} ${className}`}
-      style={{
+      className={`related-posts rounded-xl p-6 sm:p-8 ${
+        transparentSection
+          ? ''
+          : `shadow-sm ${
+              !currentStyles.sectionBackground ? 'bg-white dark:bg-gray-800' : ''
+            } ${
+              !currentStyles.sectionBorder ? 'border border-gray-200 dark:border-gray-700' : ''
+            }`
+      } ${className}`}
+      style={transparentSection ? {} : {
         backgroundColor: currentStyles.sectionBackground || undefined,
         borderColor: currentStyles.sectionBorder || undefined,
         borderWidth: currentStyles.sectionBorder ? '1px' : undefined,

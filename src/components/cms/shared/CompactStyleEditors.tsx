@@ -15,6 +15,7 @@ interface ColorPickerProps {
   value: string;
   onChange: (value: string) => void;
   size?: 'sm' | 'md';
+  showTransparent?: boolean; // Nuevo: Mostrar botón de transparente
 }
 
 interface ThemeTabsProps {
@@ -68,10 +69,12 @@ export const CompactColorPicker: React.FC<ColorPickerProps> = ({
   label,
   value,
   onChange,
-  size = 'sm'
+  size = 'sm',
+  showTransparent = false
 }) => {
   const heightClass = size === 'sm' ? 'h-7' : 'h-9';
   const textClass = size === 'sm' ? 'text-xs' : 'text-sm';
+  const isTransparent = value === 'transparent' || value === 'none' || value === '';
   
   return (
     <div className="flex items-center gap-1.5">
@@ -82,9 +85,10 @@ export const CompactColorPicker: React.FC<ColorPickerProps> = ({
       )}
       <input
         type="color"
-        value={value}
+        value={isTransparent ? '#ffffff' : value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-7 ${heightClass} rounded cursor-pointer border border-gray-300 dark:border-gray-600`}
+        className={`w-7 ${heightClass} rounded cursor-pointer border border-gray-300 dark:border-gray-600 ${isTransparent ? 'opacity-50' : ''}`}
+        disabled={isTransparent}
       />
       <input
         type="text"
@@ -92,7 +96,22 @@ export const CompactColorPicker: React.FC<ColorPickerProps> = ({
         onChange={(e) => onChange(e.target.value)}
         className={`flex-1 px-2 py-1 ${textClass} border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono min-w-0`}
         style={{ maxWidth: '90px' }}
+        placeholder="#000000"
       />
+      {showTransparent && (
+        <button
+          type="button"
+          onClick={() => onChange(isTransparent ? '#ffffff' : 'transparent')}
+          className={`px-2 py-1 ${textClass} rounded border transition-all ${
+            isTransparent
+              ? 'bg-blue-500 text-white border-blue-600 hover:bg-blue-600'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title={isTransparent ? 'Click para usar color' : 'Click para transparente'}
+        >
+          {isTransparent ? '🔲' : '◻️'}
+        </button>
+      )}
     </div>
   );
 };
@@ -301,6 +320,7 @@ export const ConfigRow: React.FC<{
 
 /**
  * Grid de colores para múltiples propiedades
+ * Soporta botón de transparencia inline con showTransparent
  */
 export const ColorGrid: React.FC<{
   items: Array<{
@@ -311,33 +331,83 @@ export const ColorGrid: React.FC<{
     darkValue: string;
     onLightChange: (value: string) => void;
     onDarkChange: (value: string) => void;
+    showTransparent?: boolean;
   }>;
-}> = ({ items }) => (
-  <div className="space-y-1">
-    <div className="grid grid-cols-[1fr_60px_60px] gap-2 text-[10px] text-gray-400 px-1">
-      <span>Propiedad</span>
-      <span className="text-center">☀️ Claro</span>
-      <span className="text-center">🌙 Oscuro</span>
-    </div>
-    {items.map((item, idx) => (
-      <div key={idx} className="grid grid-cols-[1fr_60px_60px] gap-2 items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0">
-        <span className="text-xs text-gray-600 dark:text-gray-400 truncate">{item.label}</span>
-        <input
-          type="color"
-          value={item.lightValue}
-          onChange={(e) => item.onLightChange(e.target.value)}
-          className="w-full h-6 rounded cursor-pointer border border-gray-300 dark:border-gray-600"
-        />
-        <input
-          type="color"
-          value={item.darkValue}
-          onChange={(e) => item.onDarkChange(e.target.value)}
-          className="w-full h-6 rounded cursor-pointer border border-gray-300 dark:border-gray-600"
-        />
+}> = ({ items }) => {
+  // Helper para detectar si un valor es transparente
+  const isTransparentValue = (v: string) => 
+    v === 'transparent' || v === 'none' || v === '';
+
+  return (
+    <div className="space-y-1">
+      <div className="grid grid-cols-[1fr_80px_80px] gap-2 text-[10px] text-gray-400 px-1">
+        <span>Propiedad</span>
+        <span className="text-center">☀️ Claro</span>
+        <span className="text-center">🌙 Oscuro</span>
       </div>
-    ))}
-  </div>
-);
+      {items.map((item, idx) => {
+        const lightIsTransparent = isTransparentValue(item.lightValue);
+        const darkIsTransparent = isTransparentValue(item.darkValue);
+        
+        return (
+          <div key={idx} className="grid grid-cols-[1fr_80px_80px] gap-2 items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0">
+            <span className="text-xs text-gray-600 dark:text-gray-400 truncate">{item.label}</span>
+            
+            {/* Light theme color */}
+            <div className="flex items-center gap-1">
+              <input
+                type="color"
+                value={lightIsTransparent ? '#ffffff' : item.lightValue}
+                onChange={(e) => item.onLightChange(e.target.value)}
+                disabled={lightIsTransparent}
+                className={`w-6 h-6 rounded cursor-pointer border border-gray-300 dark:border-gray-600 ${lightIsTransparent ? 'opacity-40' : ''}`}
+              />
+              {item.showTransparent && (
+                <button
+                  type="button"
+                  onClick={() => item.onLightChange(lightIsTransparent ? '#ffffff' : 'transparent')}
+                  className={`w-6 h-6 flex items-center justify-center rounded text-xs transition-all ${
+                    lightIsTransparent 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200'
+                  }`}
+                  title={lightIsTransparent ? 'Restaurar color' : 'Hacer transparente'}
+                >
+                  {lightIsTransparent ? '🔲' : '◻️'}
+                </button>
+              )}
+            </div>
+            
+            {/* Dark theme color */}
+            <div className="flex items-center gap-1">
+              <input
+                type="color"
+                value={darkIsTransparent ? '#1f2937' : item.darkValue}
+                onChange={(e) => item.onDarkChange(e.target.value)}
+                disabled={darkIsTransparent}
+                className={`w-6 h-6 rounded cursor-pointer border border-gray-300 dark:border-gray-600 ${darkIsTransparent ? 'opacity-40' : ''}`}
+              />
+              {item.showTransparent && (
+                <button
+                  type="button"
+                  onClick={() => item.onDarkChange(darkIsTransparent ? '#1f2937' : 'transparent')}
+                  className={`w-6 h-6 flex items-center justify-center rounded text-xs transition-all ${
+                    darkIsTransparent 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200'
+                  }`}
+                  title={darkIsTransparent ? 'Restaurar color' : 'Hacer transparente'}
+                >
+                  {darkIsTransparent ? '🔲' : '◻️'}
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 /**
  * Toggle compacto con etiqueta y descripción opcional

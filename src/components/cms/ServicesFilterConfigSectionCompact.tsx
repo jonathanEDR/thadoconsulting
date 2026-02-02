@@ -13,8 +13,7 @@ import {
   StyleTypeSelect,
   CompactGradientPicker,
   CompactSection,
-  ColorGrid,
-  CompactToggle
+  ColorGrid
 } from './shared/CompactStyleEditors';
 
 interface ServicesFilterConfigSectionProps {
@@ -241,15 +240,6 @@ const ServicesFilterConfigSectionCompact: React.FC<ServicesFilterConfigSectionPr
                 {/* Estilos del Input de Búsqueda */}
                 <CompactSection title="Input de Búsqueda" icon="🔍" defaultOpen={true}>
                   <div className="space-y-3">
-                    <CompactToggle
-                      label="Fondo transparente"
-                      checked={activeTheme === 'light' 
-                        ? (filterConfig.styles?.searchInputBgTransparent === true || filterConfig.styles?.searchInputBgTransparent === 'true')
-                        : (filterConfig.styles?.searchInputBgTransparentDark === true || filterConfig.styles?.searchInputBgTransparentDark === 'true')
-                      }
-                      onChange={(checked) => setThemedValue('searchInputBgTransparent', 'searchInputBgTransparentDark', checked)}
-                    />
-                    
                     <ColorGrid
                       items={[
                         {
@@ -259,7 +249,8 @@ const ServicesFilterConfigSectionCompact: React.FC<ServicesFilterConfigSectionPr
                           lightValue: filterConfig.styles?.searchInputBg || '#ffffff',
                           darkValue: filterConfig.styles?.searchInputBgDark || '#1f2937',
                           onLightChange: (v) => handleUpdateStyle('searchInputBg', v),
-                          onDarkChange: (v) => handleUpdateStyle('searchInputBgDark', v)
+                          onDarkChange: (v) => handleUpdateStyle('searchInputBgDark', v),
+                          showTransparent: true
                         },
                         {
                           label: 'Borde',
@@ -416,30 +407,15 @@ const ServicesFilterConfigSectionCompact: React.FC<ServicesFilterConfigSectionPr
 
                 {/* Fondo del Panel */}
                 <CompactSection title="Fondo del Panel" icon="🎨">
-                  <div className="space-y-3">
-                    <CompactToggle
-                      label="Fondo transparente"
-                      checked={activeTheme === 'light'
-                        ? (filterConfig.styles?.bgTransparent === true || filterConfig.styles?.bgTransparent === 'true')
-                        : (filterConfig.styles?.bgTransparentDark === true || filterConfig.styles?.bgTransparentDark === 'true')
-                      }
-                      onChange={(checked) => setThemedValue('bgTransparent', 'bgTransparentDark', checked ? 'true' : 'false')}
-                    />
-                    
-                    {!(activeTheme === 'light' 
-                      ? (filterConfig.styles?.bgTransparent === true || filterConfig.styles?.bgTransparent === 'true')
-                      : (filterConfig.styles?.bgTransparentDark === true || filterConfig.styles?.bgTransparentDark === 'true')
-                    ) && (
-                      <CompactColorPicker
-                        label="Color"
-                        value={activeTheme === 'light'
-                          ? (filterConfig.styles?.backgroundColor || '#ffffff')
-                          : (filterConfig.styles?.backgroundColorDark || '#1e293b')
-                        }
-                        onChange={(v) => setThemedValue('backgroundColor', 'backgroundColorDark', v)}
-                      />
-                    )}
-                  </div>
+                  <CompactColorPicker
+                    label="Color de fondo"
+                    value={activeTheme === 'light'
+                      ? (filterConfig.styles?.backgroundColor || '#ffffff')
+                      : (filterConfig.styles?.backgroundColorDark || '#1e293b')
+                    }
+                    onChange={(v) => setThemedValue('backgroundColor', 'backgroundColorDark', v)}
+                    showTransparent
+                  />
                 </CompactSection>
 
                 {/* Dimensiones */}
@@ -532,9 +508,15 @@ const ServicesFilterConfigSectionCompact: React.FC<ServicesFilterConfigSectionPr
                     maxWidth: '100%',
                     padding: filterConfig.styles?.panelPadding || '1.5rem',
                     borderRadius: filterConfig.styles?.borderRadius || '1rem',
-                    backgroundColor: activeTheme === 'light'
-                      ? (filterConfig.styles?.bgTransparent === true || filterConfig.styles?.bgTransparent === 'true' ? 'transparent' : filterConfig.styles?.backgroundColor || '#ffffff')
-                      : (filterConfig.styles?.bgTransparentDark === true || filterConfig.styles?.bgTransparentDark === 'true' ? 'transparent' : filterConfig.styles?.backgroundColorDark || '#1e293b'),
+                    backgroundColor: (() => {
+                      const bgValue = activeTheme === 'light'
+                        ? (filterConfig.styles?.backgroundColor || '#ffffff')
+                        : (filterConfig.styles?.backgroundColorDark || '#1e293b');
+                      // Detectar transparencia desde el valor
+                      return (bgValue === 'transparent' || bgValue === 'none' || bgValue === '')
+                        ? 'transparent'
+                        : bgValue;
+                    })(),
                     border: (activeTheme === 'light' ? filterConfig.styles?.borderStyle : filterConfig.styles?.borderStyleDark) === 'none'
                       ? 'none'
                       : `${filterConfig.styles?.borderWidth || '2px'} solid ${

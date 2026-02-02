@@ -439,10 +439,11 @@ const ServicesPublicV2 = () => {
                   const styles = pageData?.content?.servicesFilter?.styles;
                   const isDark = currentTheme === 'dark';
                   
-                  // Verificar si el fondo es transparente
-                  const isTransparent = isDark 
-                    ? (styles?.bgTransparentDark === true || styles?.bgTransparentDark === 'true')
-                    : (styles?.bgTransparent === true || styles?.bgTransparent === 'true');
+                  // Detectar transparencia desde el valor del color (no desde flags)
+                  const bgValue = isDark 
+                    ? (styles?.backgroundColorDark || '#1e293b')
+                    : (styles?.backgroundColor || '#ffffff');
+                  const isTransparent = bgValue === 'transparent' || bgValue === 'none' || bgValue === '';
                   
                   // Obtener el estilo de borde según el tema
                   const borderStyle = isDark 
@@ -563,14 +564,13 @@ const ServicesPublicV2 = () => {
                           style={{
                             backgroundColor: (() => {
                               const s = pageData?.content?.servicesFilter?.styles;
-                              if (currentTheme === 'dark') {
-                                return (s?.searchInputBgTransparentDark === true || s?.searchInputBgTransparentDark === 'true')
-                                  ? 'transparent'
-                                  : (s?.searchInputBgDark || '#1f2937');
-                              }
-                              return (s?.searchInputBgTransparent === true || s?.searchInputBgTransparent === 'true')
-                                ? 'transparent'
+                              const bgValue = currentTheme === 'dark'
+                                ? (s?.searchInputBgDark || '#1f2937')
                                 : (s?.searchInputBg || '#ffffff');
+                              // Detectar transparencia desde el valor
+                              return (bgValue === 'transparent' || bgValue === 'none' || bgValue === '')
+                                ? 'transparent'
+                                : bgValue;
                             })(),
                             borderWidth: '1px',
                             borderStyle: 'solid',
@@ -781,14 +781,13 @@ const ServicesPublicV2 = () => {
                           style={{
                             backgroundColor: (() => {
                               const s = pageData?.content?.servicesFilter?.styles;
-                              if (currentTheme === 'dark') {
-                                return (s?.sortSelectBgTransparentDark === true || s?.sortSelectBgTransparentDark === 'true')
-                                  ? 'transparent'
-                                  : (s?.sortSelectBgDark || '#1f2937');
-                              }
-                              return (s?.sortSelectBgTransparent === true || s?.sortSelectBgTransparent === 'true')
-                                ? 'transparent'
+                              const bgValue = currentTheme === 'dark'
+                                ? (s?.sortSelectBgDark || '#1f2937')
                                 : (s?.sortSelectBg || '#ffffff');
+                              // Detectar transparencia desde el valor
+                              return (bgValue === 'transparent' || bgValue === 'none' || bgValue === '')
+                                ? 'transparent'
+                                : bgValue;
                             })(),
                             borderWidth: '1px',
                             borderStyle: 'solid',
@@ -957,14 +956,13 @@ const ServicesPublicV2 = () => {
                               className="w-full pl-10 pr-10 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                               style={{
                                 backgroundColor: (() => {
-                                  if (isDark) {
-                                    return (styles?.searchInputBgTransparentDark === true || styles?.searchInputBgTransparentDark === 'true')
-                                      ? 'transparent'
-                                      : (styles?.searchInputBgDark || '#1f2937');
-                                  }
-                                  return (styles?.searchInputBgTransparent === true || styles?.searchInputBgTransparent === 'true')
-                                    ? 'transparent'
+                                  const bgValue = isDark
+                                    ? (styles?.searchInputBgDark || '#1f2937')
                                     : (styles?.searchInputBg || '#ffffff');
+                                  // Detectar transparencia desde el valor
+                                  return (bgValue === 'transparent' || bgValue === 'none' || bgValue === '')
+                                    ? 'transparent'
+                                    : bgValue;
                                 })(),
                                 borderWidth: '1px',
                                 borderStyle: 'solid',
@@ -1163,14 +1161,13 @@ const ServicesPublicV2 = () => {
                               className="w-full appearance-none px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all cursor-pointer"
                               style={{
                                 backgroundColor: (() => {
-                                  if (isDark) {
-                                    return (styles?.sortSelectBgTransparentDark === true || styles?.sortSelectBgTransparentDark === 'true')
-                                      ? 'transparent'
-                                      : (styles?.sortSelectBgDark || '#1f2937');
-                                  }
-                                  return (styles?.sortSelectBgTransparent === true || styles?.sortSelectBgTransparent === 'true')
-                                    ? 'transparent'
+                                  const bgValue = isDark
+                                    ? (styles?.sortSelectBgDark || '#1f2937')
                                     : (styles?.sortSelectBg || '#ffffff');
+                                  // Detectar transparencia desde el valor
+                                  return (bgValue === 'transparent' || bgValue === 'none' || bgValue === '')
+                                    ? 'transparent'
+                                    : bgValue;
                                 })(),
                                 borderWidth: '1px',
                                 borderStyle: 'solid',

@@ -379,18 +379,19 @@ const BlogPostEnhanced: React.FC = () => {
                   </h3>
                   <AuthorCard 
                     author={post.author}
-                    styles={authorConfig.styles ? {
-                      background: { light: authorConfig.styles.light?.background, dark: authorConfig.styles.dark?.background },
-                      border: { light: authorConfig.styles.light?.border, dark: authorConfig.styles.dark?.border },
-                      nameColor: { light: authorConfig.styles.light?.nameColor, dark: authorConfig.styles.dark?.nameColor },
-                      bioColor: { light: authorConfig.styles.light?.bioColor, dark: authorConfig.styles.dark?.bioColor }
-                    } : undefined}
+                    styles={authorConfig.styles}
                     theme={theme as 'light' | 'dark'}
                     showBio={authorConfig.showBio !== false}
                     showSocialLinks={authorConfig.showSocialLinks !== false}
                     showRole={authorConfig.showRole !== false}
                     nameFormat={authorConfig.nameFormat || 'full'}
                     avatarShape={authorConfig.avatarShape || 'square'}
+                    transparentCard={
+                      (theme === 'dark' 
+                        ? (authorConfig.styles?.dark?.background === 'transparent' || authorConfig.styles?.dark?.background === 'none' || !authorConfig.styles?.dark?.background)
+                        : (authorConfig.styles?.light?.background === 'transparent' || authorConfig.styles?.light?.background === 'none' || !authorConfig.styles?.light?.background)
+                      ) || false
+                    }
                   />
                 </div>
               )}
@@ -399,25 +400,37 @@ const BlogPostEnhanced: React.FC = () => {
             {/* Comments Section */}
             {commentsConfig.enabled !== false && post.allowComments && (
               <div 
-                className={`rounded-xl shadow-sm p-6 sm:p-8 ${
-                  !commentsConfig.styles?.light?.sectionBackground && !commentsConfig.styles?.dark?.sectionBackground 
-                    ? 'bg-white dark:bg-gray-800' 
-                    : ''
-                } ${
-                  !commentsConfig.styles?.light?.sectionBorder && !commentsConfig.styles?.dark?.sectionBorder 
-                    ? 'border border-gray-200 dark:border-gray-700' 
-                    : ''
+                className={`rounded-xl p-6 sm:p-8 ${
+                  (theme === 'dark'
+                    ? (commentsConfig.styles?.dark?.sectionBackground === 'transparent' || commentsConfig.styles?.dark?.sectionBackground === 'none' || commentsConfig.styles?.dark?.sectionBackground === '')
+                    : (commentsConfig.styles?.light?.sectionBackground === 'transparent' || commentsConfig.styles?.light?.sectionBackground === 'none' || commentsConfig.styles?.light?.sectionBackground === '')
+                  )
+                    ? ''
+                    : `shadow-sm ${
+                        !commentsConfig.styles?.light?.sectionBackground && !commentsConfig.styles?.dark?.sectionBackground 
+                          ? 'bg-white dark:bg-gray-800' 
+                          : ''
+                      } ${
+                        !commentsConfig.styles?.light?.sectionBorder && !commentsConfig.styles?.dark?.sectionBorder 
+                          ? 'border border-gray-200 dark:border-gray-700' 
+                          : ''
+                      }`
                 }`}
-                style={{
-                  background: theme === 'dark' 
-                    ? commentsConfig.styles?.dark?.sectionBackground 
-                    : commentsConfig.styles?.light?.sectionBackground,
-                  borderColor: theme === 'dark' 
-                    ? commentsConfig.styles?.dark?.sectionBorder 
-                    : commentsConfig.styles?.light?.sectionBorder,
-                  borderWidth: (commentsConfig.styles?.light?.sectionBorder || commentsConfig.styles?.dark?.sectionBorder) ? '1px' : undefined,
-                  borderStyle: (commentsConfig.styles?.light?.sectionBorder || commentsConfig.styles?.dark?.sectionBorder) ? 'solid' : undefined,
-                }}
+                style={
+                  (theme === 'dark'
+                    ? (commentsConfig.styles?.dark?.sectionBackground === 'transparent' || commentsConfig.styles?.dark?.sectionBackground === 'none' || commentsConfig.styles?.dark?.sectionBackground === '')
+                    : (commentsConfig.styles?.light?.sectionBackground === 'transparent' || commentsConfig.styles?.light?.sectionBackground === 'none' || commentsConfig.styles?.light?.sectionBackground === '')
+                  ) ? {} : {
+                    background: theme === 'dark' 
+                      ? commentsConfig.styles?.dark?.sectionBackground 
+                      : commentsConfig.styles?.light?.sectionBackground,
+                    borderColor: theme === 'dark' 
+                      ? commentsConfig.styles?.dark?.sectionBorder 
+                      : commentsConfig.styles?.light?.sectionBorder,
+                    borderWidth: (commentsConfig.styles?.light?.sectionBorder || commentsConfig.styles?.dark?.sectionBorder) ? '1px' : undefined,
+                    borderStyle: (commentsConfig.styles?.light?.sectionBorder || commentsConfig.styles?.dark?.sectionBorder) ? 'solid' : undefined,
+                  }
+                }
               >
                 <CommentsList 
                   postSlug={slug!}
@@ -464,6 +477,12 @@ const BlogPostEnhanced: React.FC = () => {
                 theme={theme as 'light' | 'dark'}
                 showCategoryLink={relatedConfig.showCategoryLink !== false}
                 showExploreButton={relatedConfig.showExploreButton !== false}
+                transparentSection={
+                  (theme === 'dark'
+                    ? (relatedConfig.styles?.dark?.sectionBackground === 'transparent' || relatedConfig.styles?.dark?.sectionBackground === 'none' || relatedConfig.styles?.dark?.sectionBackground === '')
+                    : (relatedConfig.styles?.light?.sectionBackground === 'transparent' || relatedConfig.styles?.light?.sectionBackground === 'none' || relatedConfig.styles?.light?.sectionBackground === '')
+                  ) || false
+                }
                 styles={relatedConfig.styles ? {
                   sectionBackground: { light: relatedConfig.styles.light?.sectionBackground, dark: relatedConfig.styles.dark?.sectionBackground },
                   sectionBorder: { light: relatedConfig.styles.light?.sectionBorder, dark: relatedConfig.styles.dark?.sectionBorder },
@@ -489,6 +508,12 @@ const BlogPostEnhanced: React.FC = () => {
               <PostNavigation 
                 currentPost={post}
                 showEmptyCard={navConfig.showEmptyCard ?? false}
+                transparentSection={
+                  (theme === 'dark'
+                    ? (navConfig.styles?.dark?.sectionBackground === 'transparent' || navConfig.styles?.dark?.sectionBackground === 'none' || navConfig.styles?.dark?.sectionBackground === '')
+                    : (navConfig.styles?.light?.sectionBackground === 'transparent' || navConfig.styles?.light?.sectionBackground === 'none' || navConfig.styles?.light?.sectionBackground === '')
+                  ) || false
+                }
                 styles={navConfig.styles ? {
                   sectionBackground: theme === 'dark' ? navConfig.styles.dark?.sectionBackground : navConfig.styles.light?.sectionBackground,
                   sectionBorder: theme === 'dark' ? navConfig.styles.dark?.sectionBorder : navConfig.styles.light?.sectionBorder,

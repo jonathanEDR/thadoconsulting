@@ -16,7 +16,7 @@ export interface AuthorCardStyles {
   bioColor?: { light?: string; dark?: string };
 }
 
-interface AuthorCardProps {
+export interface AuthorCardProps {
   author: BlogAuthor;
   className?: string;
   variant?: 'default' | 'compact';
@@ -27,6 +27,7 @@ interface AuthorCardProps {
   showRole?: boolean;
   nameFormat?: 'full' | 'two-words' | 'first-initials';
   avatarShape?: 'circle' | 'square';
+  transparentCard?: boolean;
 }
 
 export default function AuthorCard({ 
@@ -39,7 +40,8 @@ export default function AuthorCard({
   showSocialLinks = true,
   showRole = true,
   nameFormat = 'full',
-  avatarShape = 'square'
+  avatarShape = 'square',
+  transparentCard = false
 }: AuthorCardProps) {
   // Clase de forma del avatar
   const avatarShapeClass = avatarShape === 'circle' ? 'rounded-full' : 'rounded-2xl';
@@ -305,8 +307,10 @@ export default function AuthorCard({
   );
 
   // Estilos base del contenedor
-  const containerBaseClass = "rounded-2xl p-8 shadow-lg transition-all duration-300";
-  const containerStyle = {
+  const containerBaseClass = transparentCard 
+    ? "rounded-2xl p-8 transition-all duration-300"
+    : "rounded-2xl p-8 shadow-lg transition-all duration-300";
+  const containerStyle = transparentCard ? {} : {
     background: currentStyles.background || undefined,
     borderColor: currentStyles.border || undefined,
     borderWidth: currentStyles.border ? '2px' : undefined,
@@ -323,7 +327,15 @@ export default function AuthorCard({
               window.location.href = profileUrl;
             }
           }}
-          className={`block ${containerBaseClass} ${!currentStyles.background ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''} ${!currentStyles.border ? 'border-2 border-gray-200 dark:border-gray-700' : ''} hover:shadow-2xl hover:border-blue-400 dark:hover:border-blue-600 cursor-pointer`}
+          className={`block ${containerBaseClass} ${
+            transparentCard
+              ? ''
+              : `${
+                  !currentStyles.background ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''
+                } ${
+                  !currentStyles.border ? 'border-2 border-gray-200 dark:border-gray-700' : ''
+                } hover:shadow-2xl hover:border-blue-400 dark:hover:border-blue-600`
+          } cursor-pointer`}
           style={containerStyle}
           role="button"
           tabIndex={0}
@@ -338,7 +350,15 @@ export default function AuthorCard({
         </div>
       ) : (
         <div 
-          className={`${containerBaseClass} ${!currentStyles.background ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''} ${!currentStyles.border ? 'border-2 border-gray-200 dark:border-gray-700' : ''}`}
+          className={`${containerBaseClass} ${
+            transparentCard
+              ? ''
+              : `${
+                  !currentStyles.background ? 'bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900' : ''
+                } ${
+                  !currentStyles.border ? 'border-2 border-gray-200 dark:border-gray-700' : ''
+                }`
+          }`}
           style={containerStyle}
         >
           {CardContent}

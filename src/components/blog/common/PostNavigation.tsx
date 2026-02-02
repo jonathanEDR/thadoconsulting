@@ -31,6 +31,7 @@ interface PostNavigationProps {
   className?: string;
   showEmptyCard?: boolean;
   styles?: NavigationStyles;
+  transparentSection?: boolean;
 }
 
 interface NavigationPost {
@@ -47,7 +48,8 @@ export default function PostNavigation({
   currentPost,
   className = '',
   showEmptyCard = false,
-  styles = {}
+  styles = {},
+  transparentSection = false
 }: PostNavigationProps) {
   
   const [previousPost, setPreviousPost] = useState<NavigationPost | null>(null);
@@ -126,8 +128,16 @@ export default function PostNavigation({
   return (
     <nav className={`post-navigation ${className}`}>
       <div 
-        className={`rounded-xl shadow-sm p-6 sm:p-8 ${!styles.sectionBackground ? 'bg-white dark:bg-gray-800' : ''} ${!styles.sectionBorder ? 'border border-gray-200 dark:border-gray-700' : ''}`}
-        style={{
+        className={`rounded-xl p-6 sm:p-8 ${
+          transparentSection
+            ? ''
+            : `shadow-sm ${
+                !styles.sectionBackground ? 'bg-white dark:bg-gray-800' : ''
+              } ${
+                !styles.sectionBorder ? 'border border-gray-200 dark:border-gray-700' : ''
+              }`
+        }`}
+        style={transparentSection ? {} : {
           backgroundColor: styles.sectionBackground || undefined,
           borderColor: styles.sectionBorder || undefined,
           borderWidth: styles.sectionBorder ? '1px' : undefined,
