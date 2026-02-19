@@ -1,4 +1,4 @@
-{
+﻿{
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/sitemap-blog.xml",
-      "destination": "https://thadoconsulting-back.onrender.com/api/blog/sitemap.xml"
+      "destination": "https://thadoconsulting-back-98ll.onrender.com/api/blog/sitemap.xml"
     },
     {
       "source": "/api/blog/(.*)",
-      "destination": "https://thadoconsulting-back.onrender.com/api/blog/$1"
+      "destination": "https://thadoconsulting-back-98ll.onrender.com/api/blog/$1"
     },
     {
       "source": "/blog/:slug",

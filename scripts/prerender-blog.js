@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🚀 Pre-rendering dinámico para Blog Posts
  *
  * Este script genera HTML estático para cada post del blog durante el build,
@@ -21,7 +21,7 @@ const distPath = path.join(__dirname, '../dist');
 
 // Configuración
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-const rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
+const rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
 // Remover /api del final si existe para evitar duplicación
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 

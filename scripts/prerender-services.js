@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🚀 Pre-rendering dinámico para Servicios
  *
  * Este script genera HTML estático para cada servicio durante el build,
@@ -32,7 +32,7 @@ console.log(`   VERCEL: ${process.env.VERCEL || '(not set)'}`);
 console.log(`   VERCEL_ENV: ${process.env.VERCEL_ENV || '(not set)'}`);
 
 // IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back.onrender.com';
+let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
 const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
 console.log(`   Base URL (normalized): ${baseApiUrl}`);
 console.log(`   Full API path will be: ${baseApiUrl}/api/...`);

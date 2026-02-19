@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🌐 Configuración Central de API
  * Maneja la detección automática de URLs del backend según el entorno
  */
@@ -51,13 +51,13 @@ function detectApiConfiguration(): ApiConfigType {
     } 
     else if (isProductionDomain || import.meta.env.PROD) {
       // Producción - usar Render backend
-      baseUrl = 'https://thadoconsulting-back.onrender.com';
+      baseUrl = 'https://thadoconsulting-back-98ll.onrender.com';
       environment = 'production';
     } 
     else {
       // Fallback basado en PROD flag de Vite
       baseUrl = import.meta.env.PROD 
-        ? 'https://thadoconsulting-back.onrender.com'
+        ? 'https://thadoconsulting-back-98ll.onrender.com'
         : 'http://localhost:5000';
       environment = import.meta.env.PROD ? 'production' : 'development';
     }
@@ -65,7 +65,7 @@ function detectApiConfiguration(): ApiConfigType {
   // 4. Fallback absoluto (SSR o caso extremo)
   else {
     baseUrl = import.meta.env.PROD 
-      ? 'https://thadoconsulting-back.onrender.com'
+      ? 'https://thadoconsulting-back-98ll.onrender.com'
       : 'http://localhost:5000';
   }
 

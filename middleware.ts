@@ -1,4 +1,4 @@
-import { next } from '@vercel/edge';
+﻿import { next } from '@vercel/edge';
 
 /**
  * 🚀 Vercel Edge Middleware para SEO de Blog Posts
@@ -12,7 +12,7 @@ import { next } from '@vercel/edge';
 
 // Configuración
 const CONFIG = {
-  apiUrl: 'https://thadoconsulting-back.onrender.com',
+  apiUrl: 'https://thadoconsulting-back-98ll.onrender.com',
   siteUrl: 'https://www.thadoconsulting.com',
   siteName: 'THADO Consulting Blog',
   defaultImage: 'https://www.thadoconsulting.com/FAVICON.svg',

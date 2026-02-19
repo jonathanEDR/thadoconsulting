@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hook para mantener el backend de Render activo
  * 
  * Render Free Tier duerme el servidor después de 15 min de inactividad.
@@ -11,7 +11,7 @@
 import { useEffect, useRef } from 'react';
 
 // Configuración
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://thadoconsulting-back.onrender.com/api';
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://thadoconsulting-back-98ll.onrender.com/api';
 const PING_INTERVAL_MS = 10 * 60 * 1000; // 10 minutos (Render duerme a los 15)
 const HEALTH_ENDPOINT = '/health';
 
