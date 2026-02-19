@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🗺️ Generador de Sitemap XML Dinámico para Blog
  *
  * Genera sitemap-blog.xml con todos los posts del blog y actualiza el índice principal.

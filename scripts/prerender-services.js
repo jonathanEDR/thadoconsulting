@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🚀 Pre-rendering dinámico para Servicios
  *
  * Este script genera HTML estático para cada servicio durante el build,

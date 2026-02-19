@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Hook para mantener el backend de Render activo
  * 
  * Render Free Tier duerme el servidor después de 15 min de inactividad.

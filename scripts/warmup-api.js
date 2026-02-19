@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🔥 API Warm-up Script
  * 
  * Este script "despierta" el backend en Render antes de ejecutar

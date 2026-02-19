@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🚀 Pre-rendering dinámico para Blog Posts
  *
  * Este script genera HTML estático para cada post del blog durante el build,

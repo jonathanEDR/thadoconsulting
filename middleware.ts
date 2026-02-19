@@ -1,4 +1,4 @@
-﻿import { next } from '@vercel/edge';
+import { next } from '@vercel/edge';
 
 /**
  * 🚀 Vercel Edge Middleware para SEO de Blog Posts

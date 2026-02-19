@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🌐 Configuración Central de API
  * Maneja la detección automática de URLs del backend según el entorno
  */
