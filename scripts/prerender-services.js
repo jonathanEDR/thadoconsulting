@@ -32,9 +32,14 @@ console.log(`   NODE_ENV: ${process.env.NODE_ENV || '(not set)'}`);
 console.log(`   VERCEL: ${process.env.VERCEL || '(not set)'}`);
 console.log(`   VERCEL_ENV: ${process.env.VERCEL_ENV || '(not set)'}`);
 
-// IMPORTANTE: Usar VITE_BACKEND_URL (sin /api) como prioridad para evitar /api/api
+// IMPORTANTE: Extraer solo el origin (protocolo + host) para evitar /api/api
 let rawApiUrl = process.env.VITE_BACKEND_URL || process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
-const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+let baseApiUrl;
+try {
+  baseApiUrl = new URL(rawApiUrl).origin;
+} catch {
+  baseApiUrl = rawApiUrl.replace(/\/api.*$/, '').replace(/\/+$/, '');
+}
 console.log(`   Base URL (normalized): ${baseApiUrl}`);
 console.log(`   Full API path will be: ${baseApiUrl}/api/...`);
 console.log('═'.repeat(60));

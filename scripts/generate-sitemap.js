@@ -19,10 +19,14 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, '../dist');
 
 // Configuración
-// IMPORTANTE: Usar VITE_BACKEND_URL (sin /api) como prioridad para evitar /api/api
+// IMPORTANTE: Extraer solo el origin (protocolo + host) para evitar /api/api
 const rawApiUrl = process.env.VITE_BACKEND_URL || process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
-// Remover /api del final si existe para evitar duplicación
-const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+let baseApiUrl;
+try {
+  baseApiUrl = new URL(rawApiUrl).origin; // Solo protocolo + host, sin path
+} catch {
+  baseApiUrl = rawApiUrl.replace(/\/api.*$/, '').replace(/\/+$/, '');
+}
 
 // ✅ Configuración centralizada - Usar variables de entorno con fallbacks
 const CONFIG = {
