@@ -19,10 +19,10 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, '../dist');
 
 // Configuración
-// IMPORTANTE: Normalizar la URL base - remover /api si ya está incluido para evitar /api/api
-let rawApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
+// IMPORTANTE: Usar VITE_BACKEND_URL (sin /api) como prioridad para evitar /api/api
+const rawApiUrl = process.env.VITE_BACKEND_URL || process.env.VITE_API_URL || process.env.API_URL || 'https://thadoconsulting-back-98ll.onrender.com';
 // Remover /api del final si existe para evitar duplicación
-const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '');
+const baseApiUrl = rawApiUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 
 // ✅ Configuración centralizada - Usar variables de entorno con fallbacks
 const CONFIG = {
@@ -37,6 +37,7 @@ console.log('🔧 CONFIGURACIÓN DE BUILD - SITEMAP');
 console.log('═'.repeat(60));
 console.log(`   VITE_SITE_URL: ${process.env.VITE_SITE_URL || '(not set - using default)'}`);
 console.log(`   Site URL (used in sitemaps): ${CONFIG.siteUrl}`);
+console.log(`   VITE_BACKEND_URL (raw): ${process.env.VITE_BACKEND_URL || '(not set)'}`);
 console.log(`   VITE_API_URL (raw): ${process.env.VITE_API_URL || '(not set)'}`);
 console.log(`   API_URL (raw): ${process.env.API_URL || '(not set)'}`);
 console.log(`   Base URL (normalized): ${CONFIG.apiUrl}`);
@@ -312,8 +313,7 @@ async function main() {
   console.log('═'.repeat(50));
   console.log(`   💼 Servicios: ${servicesCount}`);
   console.log(`   📝 Posts del blog: ${postsCount}`);
-  console.log(`   📁 Categorías: ${categoriesCount}`);
-  console.log(`   🔢 Total URLs: ${servicesCount + postsCount + categoriesCount}`);
+  console.log(`   🔢 Total URLs: ${servicesCount + postsCount}`);
   console.log('═'.repeat(50));
 
   if (postsCount > 0 || servicesCount > 0) {
