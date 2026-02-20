@@ -21,6 +21,30 @@
       "destination": "/servicios/:slug/index.html"
     },
     {
+      "source": "/nosotros",
+      "destination": "/nosotros/index.html"
+    },
+    {
+      "source": "/contacto",
+      "destination": "/contacto/index.html"
+    },
+    {
+      "source": "/servicios",
+      "destination": "/servicios/index.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/index.html"
+    },
+    {
+      "source": "/privacidad",
+      "destination": "/privacidad/index.html"
+    },
+    {
+      "source": "/terminos",
+      "destination": "/terminos/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

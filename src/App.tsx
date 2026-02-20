@@ -38,6 +38,7 @@ const Contact = lazy(() => import('./pages/public/Contact'));
 const PublicProfilePage = lazy(() => import('./pages/public/PublicProfilePage'));
 const PrivacyPolicy = lazy(() => import('./pages/public/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/public/TermsOfService'));
+const NotFound = lazy(() => import('./pages/public/NotFound'));
 
 // Páginas de autenticación - CON Clerk optimizado
 const Login = lazy(() => import('./pages/auth/Login'));
@@ -636,6 +637,9 @@ function AppContent() {
                 </DashboardRoute>
               } />
               */}
+
+              {/* 404 - Catch all unmatched routes */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
           {/* 🔔 Contenedor de notificaciones Toast */}

@@ -13,6 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import * as cheerio from 'cheerio';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -541,10 +542,10 @@ function generatePostHtml(indexHtml, post) {
 
   // Reemplazar el contenido del div#root con el contenido visible del post
   // Esto es crítico para que Google vea el contenido real
-  html = html.replace(
-    /<div id="root">.*?<\/div>/s,
-    `<div id="root">${visibleContent}</div>`
-  );
+  // Usar cheerio en vez de regex para evitar truncar HTML anidado
+  const $ = cheerio.load(html, { decodeEntities: false });
+  $('#root').html(visibleContent);
+  html = $.html();
 
   return html;
 }

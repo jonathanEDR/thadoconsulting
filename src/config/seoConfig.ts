@@ -212,6 +212,50 @@ export const DEFAULT_SEO_CONFIG: SeoConfigMap = {
     ogImageAlt: 'THADO Consulting - Contáctanos',
     twitterCard: 'summary_large_image',
     canonical: 'https://www.thadoconsulting.com/contacto'
+  },
+
+  // 🔒 PÁGINA PRIVACIDAD
+  privacidad: {
+    metaTitle: 'Política de Privacidad - THADO Consulting',
+    metaDescription: 'Conoce nuestra política de privacidad y cómo protegemos tus datos personales. THADO Consulting cumple con la Ley de Protección de Datos Personales del Perú.',
+    keywords: [
+      'política de privacidad',
+      'protección de datos',
+      'THADO Consulting',
+      'datos personales',
+      'Ley 29733',
+      'privacidad Perú'
+    ],
+    ogTitle: 'Política de Privacidad - THADO Consulting',
+    ogDescription: 'Conoce cómo protegemos tus datos personales',
+    ogImage: 'https://www.thadoconsulting.com/logohorizontalconfondo.jpg',
+    ogImageWidth: '1200',
+    ogImageHeight: '630',
+    ogImageAlt: 'THADO Consulting - Política de Privacidad',
+    twitterCard: 'summary_large_image',
+    canonical: 'https://www.thadoconsulting.com/privacidad'
+  },
+
+  // 📜 PÁGINA TÉRMINOS Y CONDICIONES
+  terminos: {
+    metaTitle: 'Términos y Condiciones - THADO Consulting',
+    metaDescription: 'Lee nuestros términos y condiciones de uso de los servicios de THADO Consulting. Regulaciones aplicables a la contratación de servicios contables y tributarios.',
+    keywords: [
+      'términos y condiciones',
+      'condiciones de servicio',
+      'THADO Consulting',
+      'servicios contables',
+      'contrato de servicios',
+      'términos de uso'
+    ],
+    ogTitle: 'Términos y Condiciones - THADO Consulting',
+    ogDescription: 'Términos y condiciones de uso de nuestros servicios contables',
+    ogImage: 'https://www.thadoconsulting.com/logohorizontalconfondo.jpg',
+    ogImageWidth: '1200',
+    ogImageHeight: '630',
+    ogImageAlt: 'THADO Consulting - Términos y Condiciones',
+    twitterCard: 'summary_large_image',
+    canonical: 'https://www.thadoconsulting.com/terminos'
   }
 };
 
