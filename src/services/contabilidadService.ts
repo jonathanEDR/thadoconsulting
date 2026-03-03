@@ -21,7 +21,11 @@ import type {
   EstadisticasContabilidad,
   MiCuentaContable,
   MiEstadoContable,
-  PaginationInfo
+  PaginationInfo,
+  PresentacionLibro,
+  RegistrarLibroData,
+  CatalogoLibros,
+  LibrosPorRegimen
 } from '../types/contabilidad';
 
 // Declaración de tipo para Clerk en window
@@ -379,6 +383,71 @@ export const portalClienteApi = {
   }
 };
 
+// ============================================
+// 📚 LIBROS ELECTRÓNICOS
+// ============================================
+
+export const librosElectronicosApi = {
+  /**
+   * Obtener catálogo de libros y configuración por régimen
+   */
+  async getCatalogo(): Promise<ApiResponse<{ catalogo: CatalogoLibros; librosPorRegimen: LibrosPorRegimen }>> {
+    const { data } = await api.get('/libros/catalogo');
+    return data;
+  },
+
+  /**
+   * Obtener libros configurados de un cliente + presentaciones
+   */
+  async getByCliente(clienteId: string, params?: { periodo?: string; anio?: number }): Promise<ApiResponse<{
+    cliente: { _id: string; ruc: string; razonSocial: string; regimenTributario: string; librosConfigurados: string[] };
+    presentaciones: PresentacionLibro[];
+    catalogo: CatalogoLibros;
+  }>> {
+    const queryParams = new URLSearchParams();
+    if (params?.periodo) queryParams.set('periodo', params.periodo);
+    if (params?.anio) queryParams.set('anio', String(params.anio));
+    const qs = queryParams.toString();
+    const { data } = await api.get(`/libros/cliente/${clienteId}${qs ? '?' + qs : ''}`);
+    return data;
+  },
+
+  /**
+   * Obtener libros de un periodo específico (auto-crea pendientes)
+   */
+  async getByPeriodo(clienteId: string, periodo: string): Promise<ApiResponse<{
+    presentaciones: PresentacionLibro[];
+    librosConfigurados: string[];
+  }>> {
+    const { data } = await api.get(`/libros/cliente/${clienteId}/periodo/${periodo}`);
+    return data;
+  },
+
+  /**
+   * Registrar presentación de un libro electrónico
+   */
+  async registrar(libroData: RegistrarLibroData): Promise<ApiResponse<PresentacionLibro>> {
+    const { data } = await api.post('/libros', libroData);
+    return data;
+  },
+
+  /**
+   * Actualizar presentación de un libro
+   */
+  async actualizar(id: string, updates: Partial<{ estado: string; codigoConstancia: string; observaciones: string }>): Promise<ApiResponse<PresentacionLibro>> {
+    const { data } = await api.put(`/libros/${id}`, updates);
+    return data;
+  },
+
+  /**
+   * Configurar qué libros debe llevar un cliente
+   */
+  async configurarLibros(clienteId: string, libros: string[]): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.put(`/libros/cliente/${clienteId}/configurar`, { libros });
+    return data;
+  }
+};
+
 // Export default agrupado
 const contabilidadService = {
   clientes: clientesContablesApi,
@@ -386,7 +455,8 @@ const contabilidadService = {
   declaraciones: declaracionesApi,
   proyecciones: proyeccionesApi,
   cronograma: cronogramaApi,
-  portal: portalClienteApi
+  portal: portalClienteApi,
+  libros: librosElectronicosApi
 };
 
 export default contabilidadService;

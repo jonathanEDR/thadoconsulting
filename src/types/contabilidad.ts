@@ -96,6 +96,7 @@ export interface ConfiguracionTributaria {
   categoriaRUS?: CategoriaRUS;
   coeficienteRenta?: number;
   obligaciones?: string[];
+  librosElectronicos?: string[];
 }
 
 export interface ContadorAsignado {
@@ -391,6 +392,59 @@ export interface EstadisticasContabilidad {
   declaracionesPendientes: number;
   montoTotalMes: number;
 }
+
+// ============================================
+// LIBROS ELECTRÓNICOS
+// ============================================
+
+export type EstadoLibro = 'PENDIENTE' | 'PRESENTADO';
+
+export type SistemaLibro = 'PLE' | 'SIRE';
+
+export interface CatalogoLibroInfo {
+  nombre: string;
+  sistema: SistemaLibro;
+  obligatorioDesde: string;
+}
+
+export type CatalogoLibros = Record<string, CatalogoLibroInfo>;
+
+export type LibrosPorRegimen = Record<RegimenTributario, string[]>;
+
+export interface PresentacionLibro {
+  _id: string;
+  clienteId: string;
+  periodo: string;
+  anio: number;
+  mes: number;
+  codigoLibro: string;
+  nombreLibro: string;
+  sistema: SistemaLibro;
+  estado: EstadoLibro;
+  codigoConstancia: string;
+  fechaPresentacion?: string;
+  observaciones: string;
+  registradoPor: {
+    userId: string;
+    nombre: string;
+  };
+  activo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RegistrarLibroData {
+  clienteId: string;
+  periodo: string;
+  codigoLibro: string;
+  codigoConstancia?: string;
+  observaciones?: string;
+}
+
+export const ESTADO_LIBRO_CONFIG: Record<EstadoLibro, { label: string; color: string; icon: string }> = {
+  PENDIENTE: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400', icon: '⏳' },
+  PRESENTADO: { label: 'Presentado', color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400', icon: '✅' }
+};
 
 // ============================================
 // FILTROS Y PAGINACIÓN

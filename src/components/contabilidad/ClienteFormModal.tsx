@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Button } from '../UI';
 import MapLocationPicker, { detectarZonaIGV } from '../common/MapLocationPicker';
 import type { LocationData } from '../common/MapLocationPicker';
-import type { CreateClienteData, RegimenTributario, CategoriaRUS, ZonaIGV } from '../../types/contabilidad';
+import type { CreateClienteData, RegimenTributario, CategoriaRUS, ZonaIGV, CatalogoLibros, LibrosPorRegimen } from '../../types/contabilidad';
 import { REGIMEN_LABELS, ZONA_IGV_LABELS } from '../../types/contabilidad';
+import { librosElectronicosApi } from '../../services/contabilidadService';
 
 interface ClienteFormModalProps {
   onClose: () => void;
@@ -69,6 +70,29 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
 
   // IGV zone auto-detection warning
   const [zonaIGVSugerida, setZonaIGVSugerida] = useState<string | null>(null);
+
+  // Catálogo de libros electrónicos
+  const [catalogoLibros, setCatalogoLibros] = useState<CatalogoLibros>({});
+  const [librosPorRegimen, setLibrosPorRegimen] = useState<LibrosPorRegimen>({ RUS: [], RER: [], MYPE: [], GENERAL: [] });
+  const [librosSeleccionados, setLibrosSeleccionados] = useState<string[]>(
+    initialData?.configuracionTributaria?.librosElectronicos || []
+  );
+
+  // Cargar catálogo de libros
+  useEffect(() => {
+    librosElectronicosApi.getCatalogo().then(res => {
+      if (res.success) {
+        setCatalogoLibros(res.data.catalogo);
+        setLibrosPorRegimen(res.data.librosPorRegimen);
+        // Si no hay libros seleccionados, precargar por régimen
+        if (librosSeleccionados.length === 0 && !isEditing) {
+          const sugeridos = res.data.librosPorRegimen[formData.regimenTributario] || [];
+          setLibrosSeleccionados(sugeridos);
+        }
+      }
+    }).catch(() => { /* silently ignore */ });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /** Handle ubicacion changes from MapLocationPicker + auto-detect IGV zone */
   const handleUbicacionChange = useCallback((location: LocationData) => {
@@ -152,7 +176,13 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
     }
 
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        configuracionTributaria: {
+          ...formData.configuracionTributaria,
+          librosElectronicos: librosSeleccionados
+        }
+      });
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { message?: string } } };
       setError(axiosErr.response?.data?.message || 'Error al guardar cliente');
@@ -424,6 +454,75 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
                 />
               </div>
             </div>
+          </fieldset>
+
+          {/* Libros Electrónicos */}
+          <fieldset className="space-y-4">
+            <legend className="text-lg font-semibold text-gray-900 dark:text-white mb-2">📚 Libros Electrónicos</legend>
+            
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {librosSeleccionados.length} libro(s) seleccionado(s)
+              </span>
+              {formData.regimenTributario && librosPorRegimen[formData.regimenTributario as keyof typeof librosPorRegimen] && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const sugeridos = librosPorRegimen[formData.regimenTributario as keyof typeof librosPorRegimen] || [];
+                    setLibrosSeleccionados(sugeridos);
+                  }}
+                  className="text-xs px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                >
+                  🔄 Cargar sugeridos ({formData.regimenTributario})
+                </button>
+              )}
+            </div>
+
+            {Object.keys(catalogoLibros).length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400 italic">Cargando catálogo de libros...</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {Object.entries(catalogoLibros).map(([codigo, info]) => {
+                  const isChecked = librosSeleccionados.includes(codigo);
+                  return (
+                    <label
+                      key={codigo}
+                      className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                        isChecked
+                          ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600'
+                          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setLibrosSeleccionados(prev => [...prev, codigo]);
+                          } else {
+                            setLibrosSeleccionados(prev => prev.filter(c => c !== codigo));
+                          }
+                        }}
+                        className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{info.nombre}</span>
+                          <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
+                            info.sistema === 'SIRE' 
+                              ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                              : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                          }`}>
+                            {info.sistema}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Código: {codigo}</span>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
           </fieldset>
 
           {/* Contador Asignado */}
