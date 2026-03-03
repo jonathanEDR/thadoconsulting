@@ -9,7 +9,6 @@ import { MessageFiltersComponent } from '../../components/crm/messages/MessageFi
 import { TemplateEditor } from '../../components/crm/templates/TemplateEditor';
 import { MessageComposer } from '../../components/crm/messages/MessageComposer';
 import { ConversationPanel } from '../../components/crm/messages/ConversationPanel';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { useDashboardHeaderGradient } from '../../hooks/cms/useDashboardHeaderGradient';
 import type { 
   LeadMessage, 
@@ -647,7 +646,6 @@ export const CrmMessages: React.FC = () => {
   // ========================================
 
   return (
-    <SmartDashboardLayout>
       <div className="w-full">
         {/* Header - 🎨 Usando gradiente dinámico del sidebar */}
         <div 
@@ -1327,7 +1325,6 @@ export const CrmMessages: React.FC = () => {
         </>
       )}
       </div>
-    </SmartDashboardLayout>
   );
 };
 

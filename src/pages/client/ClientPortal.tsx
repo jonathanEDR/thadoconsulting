@@ -21,7 +21,8 @@ interface ClientStats {
 
 export default function ClientPortal() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
+  const isClient = role === 'CLIENT';
 
   // ========================================
   // 📊 STATE
@@ -57,9 +58,12 @@ export default function ClientPortal() {
       const clientLeads = leadsResponse.data?.leads || [];
       setLeads(clientLeads);
 
-      // Cargar mensajes no leídos
-      const unreadResponse = await messageService.getUnreadMessages();
-      const unreadTotal = unreadResponse.data?.total || 0;
+      // Cargar mensajes no leídos (solo para CLIENT)
+      let unreadTotal = 0;
+      if (isClient) {
+        const unreadResponse = await messageService.getUnreadMessages();
+        unreadTotal = unreadResponse.data?.total || 0;
+      }
 
       // Calcular estadísticas
       const activeCount = clientLeads.filter(
@@ -78,8 +82,8 @@ export default function ClientPortal() {
         lastUpdate: new Date().toISOString(),
       });
 
-      // Cargar mensajes recientes (últimos 5)
-      if (clientLeads.length > 0) {
+      // Cargar mensajes recientes (últimos 5) - solo para CLIENT
+      if (isClient && clientLeads.length > 0) {
         const firstLeadId = clientLeads[0]._id;
         const messagesResponse = await messageService.getLeadMessages(firstLeadId, {
           limit: 5,
@@ -187,7 +191,8 @@ export default function ClientPortal() {
             </div>
           </div>
 
-          {/* Mensajes Sin Leer */}
+          {/* Mensajes Sin Leer - Solo para CLIENT */}
+          {isClient && (
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-purple-500">
             <div className="flex items-center justify-between mb-2">
               <div className="text-3xl">💬</div>
@@ -205,6 +210,7 @@ export default function ClientPortal() {
               Leer mensajes →
             </button>
           </div>
+          )}
         </div>
 
         {/* Grid de Contenido */}
@@ -277,7 +283,8 @@ export default function ClientPortal() {
             )}
           </div>
 
-          {/* Mensajes Recientes */}
+          {/* Mensajes Recientes - Solo para CLIENT */}
+          {isClient && (
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -346,6 +353,7 @@ export default function ClientPortal() {
               </div>
             )}
           </div>
+          )}
         </div>
 
         {/* Accesos Rápidos */}
@@ -361,6 +369,7 @@ export default function ClientPortal() {
               <div className="text-sm text-white/80">Ver todas las solicitudes</div>
             </button>
 
+            {isClient && (
             <button
               onClick={() => navigate('/dashboard/client/messages')}
               className="bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-lg p-4 transition-all text-left"
@@ -369,6 +378,7 @@ export default function ClientPortal() {
               <div className="font-semibold">Mensajes</div>
               <div className="text-sm text-white/80">Comunicación con el equipo</div>
             </button>
+            )}
 
             <button
               onClick={() => navigate('/dashboard/profile')}

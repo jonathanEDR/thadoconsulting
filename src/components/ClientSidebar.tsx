@@ -62,8 +62,9 @@ export default function ClientSidebar({ isOpen, setIsOpen }: ClientSidebarProps)
     fontWeightBold: globalConfig.fontWeightBold || '600',
   };
 
-  // Menú simplificado solo para USER y CLIENT
-  const menuItems: MenuItem[] = [
+  // Menú simplificado — filtrado por rol
+  // 🔒 Mensajes y Mi Contabilidad solo disponibles para CLIENT
+  const allMenuItems: MenuItem[] = [
     {
       name: 'Dashboard',
       icon: '🏠',
@@ -100,6 +101,12 @@ export default function ClientSidebar({ isOpen, setIsOpen }: ClientSidebarProps)
       description: 'Tu información'
     }
   ];
+
+  // Filtrar ítems exclusivos de CLIENT para usuarios con rol USER
+  const clientOnlyKeys = ['mensajes', 'contabilidad'];
+  const menuItems = role === 'CLIENT'
+    ? allMenuItems
+    : allMenuItems.filter(item => !clientOnlyKeys.includes(item.menuKey));
 
   const handleNavigation = (path: string) => {
     navigate(path);

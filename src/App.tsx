@@ -1,6 +1,6 @@
 ﻿import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { ClerkProvider, useAuth as useClerkAuth } from '@clerk/clerk-react';
+import { ClerkProvider, useAuth as useClerkAuth, useUser } from '@clerk/clerk-react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
@@ -216,21 +216,100 @@ const DashboardRoute = ({ children }: { children: React.ReactNode }) => (
 );
 
 /**
+ * 🛡️ Guard genérico de autenticación + roles para wrappers persistentes
+ * Muestra loading SOLO en el área de contenido, nunca full-screen.
+ */
+const DashboardAuthGuard = ({ allowedRoles }: { allowedRoles?: UserRole[] }) => {
+  const { isLoaded, isSignedIn } = useUser();
+  const { role, isLoading } = useAuth();
+
+  if (!isLoaded || isLoading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="text-center">
+          <div className="relative inline-block">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-t-4 border-purple-600 dark:border-purple-400"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">Cargando módulo...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-32">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mx-auto mb-3"></div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Cargando página...</p>
+        </div>
+      </div>
+    }>
+      <Outlet />
+    </Suspense>
+  );
+};
+
+/**
+ * 🏢 Layout Persistente para Admin (ADMIN + MODERATOR + SUPER_ADMIN)
+ */
+const AdminLayoutWrapper = () => (
+  <DashboardProviders>
+    <SmartDashboardLayout>
+      <DashboardAuthGuard allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]} />
+    </SmartDashboardLayout>
+  </DashboardProviders>
+);
+
+/**
+ * 🤖 Layout Persistente para Super Admin (ADMIN + SUPER_ADMIN)
+ */
+const SuperAdminLayoutWrapper = () => (
+  <DashboardProviders>
+    <SmartDashboardLayout>
+      <DashboardAuthGuard allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]} />
+    </SmartDashboardLayout>
+  </DashboardProviders>
+);
+
+/**
+ * 🔒 Layout Persistente para cualquier usuario autenticado
+ */
+const AuthenticatedLayoutWrapper = () => (
+  <DashboardProviders>
+    <SmartDashboardLayout>
+      <DashboardAuthGuard />
+    </SmartDashboardLayout>
+  </DashboardProviders>
+);
+
+/**
  * 🎯 Layout Persistente SOLO para Dashboard del Cliente
- * Este wrapper mantiene el SmartDashboardLayout montado mientras navegas
- * entre las páginas del cliente, evitando re-renderizados innecesarios
  */
 const ClientDashboardLayoutWrapper = () => (
   <DashboardProviders>
-    <ProtectedRoute>
-      <RoleBasedRoute allowedRoles={[UserRole.USER, UserRole.CLIENT]}>
-        <SmartDashboardLayout>
-          <Outlet />
-        </SmartDashboardLayout>
-      </RoleBasedRoute>
-    </ProtectedRoute>
+    <SmartDashboardLayout>
+      <DashboardAuthGuard allowedRoles={[UserRole.USER, UserRole.CLIENT]} />
+    </SmartDashboardLayout>
   </DashboardProviders>
 );
+
+/**
+ * 🏢 Layout Persistente para Módulo de Contabilidad (Admin)
+ * Reutiliza SuperAdminLayoutWrapper (= mismos roles ADMIN + SUPER_ADMIN)
+ */
+const ContabilidadLayoutWrapper = SuperAdminLayoutWrapper;
 
 // 📊 Componente para trackear Page Views en GTM
 function GTMTracker() {
@@ -304,376 +383,98 @@ function AppContent() {
               
               {/* 👤 RUTAS DEL CLIENTE con Layout Persistente */}
               <Route path="/dashboard/client" element={<ClientDashboardLayoutWrapper />}>
-                {/* Dashboard principal del cliente */}
                 <Route index element={<ClientDashboard />} />
-                
-                {/* Portal Cliente */}
                 <Route path="portal" element={<ClientPortal />} />
-                
-                {/* Mis Mensajes */}
-                <Route path="messages" element={<MyMessages />} />
-                
-                {/* Mis Solicitudes con Timeline */}
+                {/* 🔒 Mensajes y Contabilidad: solo rol CLIENT */}
+                <Route path="messages" element={
+                  <RoleBasedRoute allowedRoles={[UserRole.CLIENT]} redirectTo="/dashboard/client">
+                    <MyMessages />
+                  </RoleBasedRoute>
+                } />
                 <Route path="solicitudes" element={<MySolicitudes />} />
-                
-                {/* Redirección de ruta antigua "leads" a nueva "solicitudes" */}
                 <Route path="leads" element={<Navigate to="/dashboard/client/solicitudes" replace />} />
-                
-                {/* 🏢 Mi Contabilidad - Portal del cliente */}
-                <Route path="contabilidad" element={<MiContabilidad />} />
+                <Route path="contabilidad" element={
+                  <RoleBasedRoute allowedRoles={[UserRole.CLIENT]} redirectTo="/dashboard/client">
+                    <MiContabilidad />
+                  </RoleBasedRoute>
+                } />
+              </Route>
+
+              {/* 🔓 RUTAS PARA CUALQUIER USUARIO AUTENTICADO */}
+              <Route element={<AuthenticatedLayoutWrapper />}>
+                <Route path="/dashboard/profile" element={<Profile />} />
+                <Route path="/dashboard/mi-blog" element={<MyBlogHub />} />
               </Route>
               
-              {/* ⚡ Dashboard para ADMIN, MODERATOR y SUPER_ADMIN */}
-              <Route path="/dashboard/admin" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <AdminDashboard />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
+              {/* ⚡ RUTAS ADMIN + MODERATOR + SUPER_ADMIN */}
+              <Route element={<AdminLayoutWrapper />}>
+                {/* Dashboard Admin */}
+                <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                
+                {/* Notificaciones */}
+                <Route path="/dashboard/notifications" element={<NotificationsHistory />} />
+                
+                {/* CMS */}
+                <Route path="/dashboard/cms/*" element={<CmsManager />} />
+                
+                {/* Media Library */}
+                <Route path="/dashboard/media" element={<MediaLibrary />} />
+                
+                {/* CRM */}
+                <Route path="/dashboard/crm" element={<LeadsManagement />} />
+                <Route path="/dashboard/crm/messages" element={<CrmMessages />} />
+                
+                {/* Agenda */}
+                <Route path="/dashboard/agenda" element={<AgendaManagement />} />
+                
+                {/* Servicios */}
+                <Route path="/dashboard/servicios" element={<ServicioDashboard />} />
+                <Route path="/dashboard/servicios/management" element={<ServiciosManagement />} />
+                <Route path="/dashboard/servicios/new" element={<ServicioForm />} />
+                <Route path="/dashboard/servicios/:id/edit" element={<ServicioForm />} />
+                
+                {/* Blog Admin */}
+                <Route path="/dashboard/blog" element={<BlogDashboard />} />
+                <Route path="/dashboard/blog/posts/new" element={<PostEditor />} />
+                <Route path="/dashboard/blog/posts/:id/edit" element={<PostEditor />} />
+                <Route path="/dashboard/blog/categories" element={<CategoriesManager />} />
+                <Route path="/dashboard/blog/moderation" element={<CommentModeration />} />
+                
+                {/* Demos */}
+                <Route path="/demo/notifications" element={<NotificationDemo />} />
+                <Route path="/demo/performance" element={<PerformanceDemo />} />
+              </Route>
               
-              {/* Perfil - Accesible para todos los usuarios autenticados */}
-              <Route path="/dashboard/profile" element={
-                <DashboardRoute>
-                  <Profile />
-                </DashboardRoute>
-              } />
-              
-              
-              {/* � Historial de Notificaciones - Solo Admins */}
-              <Route path="/dashboard/notifications" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <NotificationsHistory />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* �📚 Mi Actividad en el Blog - Accesible para todos los usuarios autenticados */}
-              <Route path="/dashboard/mi-blog" element={
-                <ProtectedRoute>
-                  <MyBlogHub />
-                </ProtectedRoute>
-              } />
-              
-              {/* 📝 CMS - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              {/* Ruta consolidada para CMS - maneja todas las sub-rutas internamente */}
-              <Route path="/dashboard/cms/*" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <CmsManager />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* 🖼️ Media Library - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              <Route path="/dashboard/media" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <MediaLibrary />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* 📋 CRM - Gestión de Leads - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              <Route path="/dashboard/crm" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <LeadsManagement />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
+              {/* 🏢 MÓDULO DE CONTABILIDAD - ADMIN + SUPER_ADMIN */}
+              <Route path="/dashboard/contabilidad" element={<ContabilidadLayoutWrapper />}>
+                <Route index element={<ContabilidadManagement />} />
+                <Route path="clientes/:id" element={<FichaCliente />} />
+                <Route path="clientes/:clienteId/declaraciones" element={<DeclaracionesCliente />} />
+                <Route path="clientes/:clienteId/proyecciones" element={<ProyeccionesCliente />} />
+              </Route>
 
-              {/* 💬 Mensajería CRM - Página administrativa de mensajes */}
-              <Route path="/dashboard/crm/messages" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <CrmMessages />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
+              {/* 🤖 RUTAS SUPER ADMIN - ADMIN + SUPER_ADMIN */}
+              <Route element={<SuperAdminLayoutWrapper />}>
+                {/* Agentes IA */}
+                <Route path="/dashboard/ai-agents" element={<AIAgentsDashboard />} />
+                <Route path="/dashboard/agents/blog/config" element={<BlogAgentConfig />} />
+                <Route path="/dashboard/agents/blog/training" element={<BlogAgentTraining />} />
+                <Route path="/dashboard/agents/seo/config" element={<SEOAgentConfig />} />
+                <Route path="/dashboard/agents/seo/training" element={<SEOAgentTraining />} />
+                <Route path="/dashboard/agents/services/config" element={<ServicesAgentConfig />} />
+                <Route path="/dashboard/agents/services/training" element={<ServicesAgentTraining />} />
+                
+                {/* Scuti AI */}
+                <Route path="/dashboard/scuti-ai" element={<ScutiAIChatPage />} />
+                <Route path="/dashboard/ai-analytics" element={<AIAnalytics />} />
+                
+                {/* Gestión de Usuarios */}
+                <Route path="/dashboard/admin/users" element={<UsersManagement />} />
+                <Route path="/dashboard/admin/user-roles" element={<UserRoleManagement />} />
+              </Route>
 
-              {/* 📅 MÓDULO DE AGENDA - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              
-              {/* Dashboard de Agenda - Calendario de reuniones y eventos */}
-              <Route path="/dashboard/agenda" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <AgendaManagement />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* 🚀 MÓDULO DE SERVICIOS - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              
-              {/* Dashboard Principal de Servicios - Estadísticas y métricas */}
-              <Route path="/dashboard/servicios" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <ServicioDashboard />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Gestión de Servicios - Lista, filtros, CRUD */}
-              <Route path="/dashboard/servicios/management" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <ServiciosManagement />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Crear Nuevo Servicio */}
-              <Route path="/dashboard/servicios/new" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <ServicioForm />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Editar Servicio Existente */}
-              <Route path="/dashboard/servicios/:id/edit" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <ServicioForm />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* � MÓDULO DE BLOG - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              
-              {/* Dashboard Principal de Blog - Estadísticas y resumen */}
-              <Route path="/dashboard/blog" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <BlogDashboard />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Crear Nuevo Post */}
-              <Route path="/dashboard/blog/posts/new" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <PostEditor />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Editar Post Existente */}
-              <Route path="/dashboard/blog/posts/:id/edit" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <PostEditor />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Gestión de Categorías */}
-              <Route path="/dashboard/blog/categories" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <CategoriesManager />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Moderación de Comentarios */}
-              <Route path="/dashboard/blog/moderation" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <CommentModeration />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* 🏢 MÓDULO DE CONTABILIDAD - Solo ADMIN y SUPER_ADMIN */}
-              
-              {/* Dashboard Principal de Contabilidad - Lista de clientes y semáforo */}
-              <Route path="/dashboard/contabilidad" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <ContabilidadManagement />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Ficha del Cliente Contable */}
-              <Route path="/dashboard/contabilidad/clientes/:id" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <FichaCliente />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Declaraciones Mensuales del Cliente */}
-              <Route path="/dashboard/contabilidad/clientes/:clienteId/declaraciones" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <DeclaracionesCliente />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Proyecciones de Pago del Cliente */}
-              <Route path="/dashboard/contabilidad/clientes/:clienteId/proyecciones" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <ProyeccionesCliente />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* 🤖 MÓDULO DE AGENTES IA - Solo ADMIN y SUPER_ADMIN */}
-              
-              {/* Redirección de ruta antigua a nueva */}
+              {/* Redirección de ruta antigua */}
               <Route path="/dashboard/agents" element={<Navigate to="/dashboard/ai-agents" replace />} />
-              
-              {/* Dashboard Central de Agentes IA - Configuración y monitoreo */}
-              <Route path="/dashboard/ai-agents" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <AIAgentsDashboard />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Configuración detallada del BlogAgent */}
-              <Route path="/dashboard/agents/blog/config" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <BlogAgentConfig />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Entrenamiento avanzado del BlogAgent */}
-              <Route path="/dashboard/agents/blog/training" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <BlogAgentTraining />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Configuración detallada del SEOAgent */}
-              <Route path="/dashboard/agents/seo/config" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <SEOAgentConfig />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Entrenamiento avanzado del SEOAgent */}
-              <Route path="/dashboard/agents/seo/training" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <SEOAgentTraining />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Configuración detallada del ServicesAgent */}
-              <Route path="/dashboard/agents/services/config" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <ServicesAgentConfig />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Entrenamiento avanzado del ServicesAgent */}
-              <Route path="/dashboard/agents/services/training" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <SmartDashboardLayout>
-                      <ServicesAgentTraining />
-                    </SmartDashboardLayout>
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* 🚀 SCUTI AI - Chat Principal con GerenteGeneral */}
-              <Route path="/dashboard/scuti-ai" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <ScutiAIChatPage />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* Analytics de AI - Estadísticas de uso */}
-              <Route path="/dashboard/ai-analytics" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <AIAnalytics />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* 👥 Gestión de Usuarios - Solo ADMIN y SUPER_ADMIN */}
-              <Route path="/dashboard/admin/users" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <UsersManagement />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* 🎯 Gestión de Roles y Promociones - Solo ADMIN y SUPER_ADMIN */}
-              <Route path="/dashboard/admin/user-roles" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
-                    <UserRoleManagement />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-
-              {/* 🎨 PÁGINAS DEMO - Solo ADMIN, MODERATOR y SUPER_ADMIN */}
-              
-              {/* Demo de Notificaciones */}
-              <Route path="/demo/notifications" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <NotificationDemo />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
-              
-              {/* Demo de Optimizaciones de Rendimiento */}
-              <Route path="/demo/performance" element={
-                <DashboardRoute>
-                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.MODERATOR, UserRole.SUPER_ADMIN]}>
-                    <PerformanceDemo />
-                  </RoleBasedRoute>
-                </DashboardRoute>
-              } />
 
               {/* 🤖 Sistema de IA - Testing (Temporal) */}
               {/* Route temporalmente comentada - componente no implementado

@@ -6,6 +6,7 @@
 import React, { useState, useCallback } from 'react';
 import { ChevronDown, ChevronUp, Settings, Loader } from 'lucide-react';
 import { useAuth } from '@clerk/clerk-react';
+import { useAuth as useAppAuth } from '../../contexts/AuthContext';
 import ProfileView from './ProfileView';
 import ProfileEditor from './ProfileEditorComplete';
 import { useProfileCache } from '../../hooks/useDashboardCache';
@@ -13,6 +14,8 @@ import { getMyProfile } from '../../services/profileService';
 
 const ProfilePage: React.FC = () => {
   const { getToken } = useAuth();
+  const { role } = useAppAuth();
+  const isAdminProfile = role === 'ADMIN' || role === 'SUPER_ADMIN' || role === 'MODERATOR';
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   // Cargar datos del perfil
@@ -79,7 +82,10 @@ const ProfilePage: React.FC = () => {
           Mi Perfil
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Gestiona tu información personal y configuraciones de privacidad
+          {isAdminProfile
+            ? 'Gestiona tu información profesional, especialización y configuraciones'
+            : 'Gestiona tu información personal'
+          }
         </p>
       </div>
 
@@ -108,10 +114,13 @@ const ProfilePage: React.FC = () => {
             <Settings className="w-5 h-5 mr-3 text-indigo-600 dark:text-indigo-400" />
             <div className="text-left">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Configuración Avanzada
+                {isAdminProfile ? 'Configuración Avanzada' : 'Editar Perfil'}
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Edita tu perfil, redes sociales y preferencias de privacidad
+                {isAdminProfile
+                  ? 'Edita tu perfil, redes sociales y preferencias de privacidad'
+                  : 'Actualiza tu nombre, foto y datos básicos'
+                }
               </p>
             </div>
           </div>

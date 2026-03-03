@@ -17,6 +17,20 @@ export type MedioPago = 'EFECTIVO' | 'TRANSFERENCIA' | 'DEPOSITO' | 'TARJETA' | 
 
 export type CategoriaRUS = 1 | 2;
 
+export type ZonaIGV = 'GRAVADA' | 'EXONERADA' | 'INAFECTA';
+
+export const ZONA_IGV_LABELS: Record<ZonaIGV, string> = {
+  GRAVADA: 'Zona Gravada con IGV',
+  EXONERADA: 'Zona Exonerada de IGV (Amazonía)',
+  INAFECTA: 'Zona Inafecta de IGV'
+};
+
+export const ZONA_IGV_COLORS: Record<ZonaIGV, string> = {
+  GRAVADA: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+  EXONERADA: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+  INAFECTA: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+};
+
 export const REGIMEN_LABELS: Record<RegimenTributario, string> = {
   RUS: 'Nuevo RUS',
   RER: 'Régimen Especial (RER)',
@@ -65,6 +79,19 @@ export interface Contacto {
   departamento?: string;
 }
 
+export interface Coordenadas {
+  lat: number | null;
+  lng: number | null;
+}
+
+export interface Ubicacion {
+  direccion: string;
+  distrito: string;
+  provincia: string;
+  departamento: string;
+  coordenadas: Coordenadas;
+}
+
 export interface ConfiguracionTributaria {
   categoriaRUS?: CategoriaRUS;
   coeficienteRenta?: number;
@@ -97,11 +124,14 @@ export interface ClienteContable {
   razonSocial: string;
   nombreComercial?: string;
   regimenTributario: RegimenTributario;
+  zonaIGV: ZonaIGV;
   representante: Representante;
   contacto: Contacto;
+  ubicacion?: Ubicacion;
   honorarioMensual?: number;
   linkDrive?: string;
   usuarioVinculado?: {
+    userId?: string;
     clerkId: string;
     email: string;
     nombre: string;
@@ -127,8 +157,10 @@ export interface CreateClienteData {
   razonSocial: string;
   nombreComercial?: string;
   regimenTributario: RegimenTributario;
+  zonaIGV?: ZonaIGV;
   representante: Representante;
   contacto?: Contacto;
+  ubicacion?: Ubicacion;
   honorarioMensual?: number;
   linkDrive?: string;
   configuracionTributaria?: ConfiguracionTributaria;
@@ -234,12 +266,14 @@ export interface CalcularImpuestosRequest {
 
 export interface CalculoImpuestosResult {
   regimen: string;
-  detalleIGV: DetalleIGV | null;
+  zonaIGV?: ZonaIGV;
+  detalleIGV: (DetalleIGV & { zonaIGV?: string; nota?: string }) | null;
   detalleRenta: DetalleRenta;
   resumen: {
     igvAPagar: number;
     rentaAPagar: number;
     totalAPagar: number;
+    esExoneradoIGV?: boolean;
   };
   fechaVencimiento?: string;
 }
@@ -402,8 +436,11 @@ export interface MiCuentaContable {
 }
 
 export interface MiEstadoContable {
-  cuenta: MiCuentaContable;
-  ultimasDeclaraciones: DeclaracionMensual[];
-  pendientes: number;
+  estadoGeneral: string;
+  ultimaDeclaracion?: DeclaracionMensual | null;
+  ultimasDeclaraciones?: DeclaracionMensual[];
+  declaracionesPendientes?: number;
+  pendientes?: number;
   proximoVencimiento?: string;
+  periodoActual?: string;
 }

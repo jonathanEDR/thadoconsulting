@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useCRM } from '../../hooks/useCRM';
 import { useAuth } from '../../contexts/AuthContext';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { StatusBadge, PriorityBadge, OrigenBadge } from '../../components/crm/Badges';
 import { Button, Card } from '../../components/UI';
 import PageLoader from '../../components/common/PageLoader';
@@ -147,7 +146,7 @@ const LeadsManagement: React.FC = () => {
   // 🎨 RENDERIZADO
   // ========================================
   return (
-    <SmartDashboardLayout>
+    <>
       <div className="space-y-6">
         {/* 🎨 Header con gradiente dinámico del sidebar */}
         <div
@@ -659,7 +658,7 @@ const LeadsManagement: React.FC = () => {
         onChangeStatus={handleChangeStatus}
         onAddActivity={handleAddActivity}
       />
-    </SmartDashboardLayout>
+    </>
   );
 };
 

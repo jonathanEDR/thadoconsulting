@@ -41,7 +41,17 @@ const MiContabilidad: React.FC = () => {
 
       if (cuentaRes.success) setCuenta(cuentaRes.data);
       if (estadoRes.success) setEstado(estadoRes.data);
-      if (declRes.success) setDeclaraciones(declRes.data);
+      if (declRes.success) {
+        // Backend devuelve { cliente, declaraciones, pagination } o un array directo
+        const declData = declRes.data;
+        if (Array.isArray(declData)) {
+          setDeclaraciones(declData);
+        } else if (declData && Array.isArray(declData.declaraciones)) {
+          setDeclaraciones(declData.declaraciones);
+        } else {
+          setDeclaraciones([]);
+        }
+      }
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { code?: string; message?: string }; status?: number } };
       if (axiosErr.response?.data?.code === 'NO_ACCOUNTING_ACCOUNT') {
@@ -108,7 +118,7 @@ const MiContabilidad: React.FC = () => {
       {estado && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="p-4 text-center">
-            <div className="text-3xl font-bold text-yellow-600">{estado.pendientes}</div>
+            <div className="text-3xl font-bold text-yellow-600">{estado.declaracionesPendientes ?? estado.pendientes ?? 0}</div>
             <div className="text-sm text-gray-500 dark:text-gray-400">Declaraciones Pendientes</div>
           </Card>
           <Card className="p-4 text-center">
@@ -152,16 +162,16 @@ const MiContabilidad: React.FC = () => {
       </div>
 
       {/* Tab: Resumen */}
-      {tabActiva === 'resumen' && estado?.ultimasDeclaraciones && (
+      {tabActiva === 'resumen' && (
         <Card className="overflow-hidden">
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <h3 className="font-semibold text-gray-900 dark:text-white">📄 Últimas Declaraciones</h3>
           </div>
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {estado.ultimasDeclaraciones.length === 0 ? (
+            {declaraciones.length === 0 ? (
               <div className="p-8 text-center text-gray-500">Sin declaraciones recientes</div>
             ) : (
-              estado.ultimasDeclaraciones.map((dec) => (
+              declaraciones.slice(0, 5).map((dec) => (
                 <div key={dec._id} className="px-4 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="font-medium text-gray-900 dark:text-white">

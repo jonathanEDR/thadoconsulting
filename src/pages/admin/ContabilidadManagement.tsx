@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContabilidad } from '../../hooks/useContabilidad';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { Button, Card } from '../../components/UI';
 import PageLoader from '../../components/common/PageLoader';
 import { useDashboardHeaderGradient } from '../../hooks/cms/useDashboardHeaderGradient';
 import ClienteFormModal from '../../components/contabilidad/ClienteFormModal';
+import ClientesMapView from '../../components/contabilidad/ClientesMapView';
 import type { 
   ClienteContable, 
   CreateClienteData,
@@ -15,7 +15,8 @@ import type {
 import { 
   REGIMEN_LABELS, 
   REGIMEN_COLORS, 
-  ESTADO_CLIENTE_CONFIG 
+  ESTADO_CLIENTE_CONFIG,
+  ZONA_IGV_COLORS
 } from '../../types/contabilidad';
 
 /**
@@ -46,6 +47,7 @@ const ContabilidadManagement: React.FC = () => {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [vistaActiva, setVistaActiva] = useState<'lista' | 'semaforo'>('lista');
+  const [showFilters, setShowFilters] = useState(false);
 
   // Cargar semáforo y estadísticas al montar
   useEffect(() => {
@@ -106,103 +108,153 @@ const ContabilidadManagement: React.FC = () => {
   }
 
   return (
-    <SmartDashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div 
-          className="rounded-2xl p-6 text-white"
+          className="rounded-2xl p-4 md:p-5 text-white"
           style={{ background: headerGradient || 'linear-gradient(135deg, #1e40af 0%, #7c3aed 100%)' }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">🏢 Gestión de Clientes Contables</h1>
-              <p className="text-white/80 mt-1">
+          <div className="flex flex-col md:flex-row md:items-center gap-3 md:justify-between">
+            <div className="min-w-0">
+              <h1 className="text-lg md:text-xl font-bold truncate">🏢 Gestión de Clientes Contables</h1>
+              <p className="text-white/80 text-xs md:text-sm mt-0.5">
                 {estadisticas 
-                  ? `${estadisticas.clientesActivos} clientes activos · ${estadisticas.declaracionesPendientes} declaraciones pendientes`
-                  : 'Cargando estadísticas...'
+                  ? `${estadisticas.clientesActivos} activos · ${estadisticas.declaracionesPendientes} pendientes`
+                  : 'Cargando...'
                 }
               </p>
             </div>
-            <div className="flex gap-3">
-              <Button
-                variant="secondary"
-                onClick={() => setVistaActiva(vistaActiva === 'lista' ? 'semaforo' : 'lista')}
-              >
-                {vistaActiva === 'lista' ? '🚦 Ver Semáforo' : '📋 Ver Lista'}
-              </Button>
-              <Button onClick={() => setShowCreateModal(true)}>
-                ➕ Nuevo Cliente
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex bg-white/20 rounded-lg p-0.5">
+                <button
+                  onClick={() => setVistaActiva('lista')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                    vistaActiva === 'lista'
+                      ? 'bg-white text-blue-700 shadow-sm'
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  📋 Lista
+                </button>
+                <button
+                  onClick={() => setVistaActiva('semaforo')}
+                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                    vistaActiva === 'semaforo'
+                      ? 'bg-white text-blue-700 shadow-sm'
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  🚦 Semáforo
+                </button>
+              </div>
+              <Button onClick={() => setShowCreateModal(true)} className="text-xs md:text-sm !px-3 !py-1.5">
+                ➕ <span className="hidden sm:inline">Nuevo Cliente</span><span className="sm:hidden">Nuevo</span>
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Estadísticas rápidas */}
+        {/* Estadísticas rápidas - compactas */}
         {estadisticas && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="p-4 text-center">
-              <div className="text-3xl font-bold text-blue-600">{estadisticas.totalClientes}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Total Clientes</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Card className="p-3 text-center">
+              <div className="text-2xl font-bold text-blue-600">{estadisticas.totalClientes}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">Total Clientes</div>
             </Card>
-            <Card className="p-4 text-center">
-              <div className="text-3xl font-bold text-green-600">{estadisticas.clientesActivos}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Activos</div>
+            <Card className="p-3 text-center">
+              <div className="text-2xl font-bold text-green-600">{estadisticas.clientesActivos}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">Activos</div>
             </Card>
-            <Card className="p-4 text-center">
-              <div className="text-3xl font-bold text-yellow-600">{estadisticas.declaracionesPendientes}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Pendientes</div>
+            <Card className="p-3 text-center">
+              <div className="text-2xl font-bold text-yellow-600">{estadisticas.declaracionesPendientes}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">Pendientes</div>
             </Card>
-            <Card className="p-4 text-center">
-              <div className="text-3xl font-bold text-purple-600">
+            <Card className="p-3 text-center">
+              <div className="text-2xl font-bold text-purple-600">
                 S/ {(estadisticas.montoTotalMes || 0).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Tributos Mes</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">Tributos Mes</div>
             </Card>
           </div>
         )}
 
-        {/* Vista: Semáforo o Lista */}
+        {/* Mapa de clientes - siempre visible, colapsable */}
+        <ClientesMapView onViewCliente={handleViewCliente} />
+
+        {/* Vista: Semáforo o Lista (debajo del mapa) */}
         {vistaActiva === 'semaforo' ? (
           <SemaforoView semaforo={semaforo} onViewCliente={handleViewCliente} />
         ) : (
           <>
-            {/* Filtros */}
-            <Card className="p-4">
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="flex-1 min-w-[200px]">
+            {/* Búsqueda y Filtros */}
+            <Card className="p-3">
+              <div className="flex gap-2 items-center">
+                <div className="flex-1 min-w-0">
                   <input
                     type="text"
                     placeholder="🔍 Buscar por RUC, razón social..."
                     value={filters.search || ''}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-                <select
-                  value={filters.regimenTributario || ''}
-                  onChange={(e) => handleFilterRegimen(e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-lg border transition-colors ${
+                    showFilters || filters.regimenTributario || filters.estado
+                      ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
+                      : 'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }`}
+                  title="Filtros"
                 >
-                  <option value="">Todos los regímenes</option>
-                  <option value="RUS">Nuevo RUS</option>
-                  <option value="RER">RER</option>
-                  <option value="MYPE">MYPE</option>
-                  <option value="GENERAL">General</option>
-                </select>
-                <select
-                  value={filters.estado || ''}
-                  onChange={(e) => handleFilterEstado(e.target.value)}
-                  className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  <span>⚙️</span>
+                  <span className="hidden sm:inline">Filtros</span>
+                  {(filters.regimenTributario || filters.estado) && (
+                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                  )}
+                </button>
+                <button
+                  onClick={() => refresh()}
+                  className="p-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  title="Refrescar"
                 >
-                  <option value="">Todos los estados</option>
-                  <option value="ACTIVO">Activo</option>
-                  <option value="SUSPENDIDO">Suspendido</option>
-                  <option value="BAJA">Baja</option>
-                </select>
-                <Button variant="ghost" onClick={() => refresh()}>
-                  🔄 Refrescar
-                </Button>
+                  🔄
+                </button>
               </div>
+              {/* Filtros desplegables */}
+              {showFilters && (
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <select
+                    value={filters.regimenTributario || ''}
+                    onChange={(e) => handleFilterRegimen(e.target.value)}
+                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="">Todos los regímenes</option>
+                    <option value="RUS">Nuevo RUS</option>
+                    <option value="RER">RER</option>
+                    <option value="MYPE">MYPE</option>
+                    <option value="GENERAL">General</option>
+                  </select>
+                  <select
+                    value={filters.estado || ''}
+                    onChange={(e) => handleFilterEstado(e.target.value)}
+                    className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  >
+                    <option value="">Todos los estados</option>
+                    <option value="ACTIVO">Activo</option>
+                    <option value="SUSPENDIDO">Suspendido</option>
+                    <option value="BAJA">Baja</option>
+                  </select>
+                  {(filters.regimenTributario || filters.estado) && (
+                    <button
+                      onClick={() => { handleFilterRegimen(''); handleFilterEstado(''); }}
+                      className="px-3 py-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                    >
+                      ✕ Limpiar filtros
+                    </button>
+                  )}
+                </div>
+              )}
             </Card>
 
             {/* Error */}
@@ -212,8 +264,94 @@ const ContabilidadManagement: React.FC = () => {
               </div>
             )}
 
-            {/* Tabla de clientes */}
-            <Card className="overflow-hidden">
+            {/* Clientes - Vista Cards (móvil) */}
+            <div className="md:hidden space-y-3">
+              {clientes.length === 0 ? (
+                <Card className="p-8 text-center text-gray-500 dark:text-gray-400">
+                  {loading ? '⏳ Cargando...' : '📭 No se encontraron clientes'}
+                </Card>
+              ) : (
+                clientes.map((cliente) => (
+                  <div 
+                    key={cliente._id}
+                    role="button"
+                    tabIndex={0}
+                    className="p-4 cursor-pointer hover:ring-2 hover:ring-blue-400/50 transition-all active:scale-[0.99] bg-white/5 dark:bg-gray-800/60 rounded-xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm"
+                    onClick={() => handleViewCliente(cliente)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleViewCliente(cliente)}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="font-semibold text-gray-900 dark:text-white truncate">
+                          {cliente.razonSocial}
+                        </div>
+                        <div className="font-mono text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                          RUC: {cliente.ruc}
+                        </div>
+                        {cliente.representante?.nombre && (
+                          <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                            👤 {cliente.representante.nombre}
+                          </div>
+                        )}
+                      </div>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium flex-shrink-0 ${ESTADO_CLIENTE_CONFIG[cliente.estado]?.color}`}>
+                        {ESTADO_CLIENTE_CONFIG[cliente.estado]?.icon} {ESTADO_CLIENTE_CONFIG[cliente.estado]?.label}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mt-2.5">
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium ${REGIMEN_COLORS[cliente.regimenTributario]}`}>
+                        {REGIMEN_LABELS[cliente.regimenTributario]}
+                      </span>
+                      {cliente.zonaIGV && cliente.zonaIGV !== 'GRAVADA' && (
+                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium ${ZONA_IGV_COLORS[cliente.zonaIGV]}`}>
+                          {cliente.zonaIGV === 'EXONERADA' ? '🌿 Exonerada' : '📋 Inafecta'}
+                        </span>
+                      )}
+                      {cliente.honorarioMensual ? (
+                        <span className="text-xs text-gray-600 dark:text-gray-300 ml-auto">
+                          S/ {cliente.honorarioMensual.toLocaleString('es-PE')}
+                        </span>
+                      ) : null}
+                      {cliente.usuarioVinculado ? (
+                        <span className="text-[10px] text-green-600 dark:text-green-400">🔗 Vinculado</span>
+                      ) : null}
+                    </div>
+                    <div className="flex items-center justify-end gap-1 mt-2 pt-2 border-t border-gray-100 dark:border-gray-700/50" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => handleViewCliente(cliente)}
+                        className="p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600 text-xs"
+                      >
+                        👁️ Ver
+                      </button>
+                      <button
+                        onClick={() => navigate(`/dashboard/contabilidad/clientes/${cliente._id}/declaraciones`)}
+                        className="p-1.5 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 text-purple-600 text-xs"
+                      >
+                        📄 Declar.
+                      </button>
+                      {cliente.estado === 'ACTIVO' ? (
+                        <button
+                          onClick={() => handleDarDeBaja(cliente)}
+                          className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 text-xs"
+                        >
+                          ⛔ Baja
+                        </button>
+                      ) : cliente.estado === 'BAJA' ? (
+                        <button
+                          onClick={() => handleReactivar(cliente)}
+                          className="p-1.5 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 text-xs"
+                        >
+                          ♻️ Reactivar
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Clientes - Vista Tabla (desktop) */}
+            <Card className="overflow-hidden hidden md:block">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50 dark:bg-gray-800/50">
@@ -259,9 +397,16 @@ const ContabilidadManagement: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${REGIMEN_COLORS[cliente.regimenTributario]}`}>
-                              {REGIMEN_LABELS[cliente.regimenTributario]}
-                            </span>
+                            <div className="flex flex-col gap-1">
+                              <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${REGIMEN_COLORS[cliente.regimenTributario]}`}>
+                                {REGIMEN_LABELS[cliente.regimenTributario]}
+                              </span>
+                              {cliente.zonaIGV && cliente.zonaIGV !== 'GRAVADA' && (
+                                <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium ${ZONA_IGV_COLORS[cliente.zonaIGV]}`}>
+                                  {cliente.zonaIGV === 'EXONERADA' ? '🌿 Exonerada IGV' : '📋 Inafecta IGV'}
+                                </span>
+                              )}
+                            </div>
                           </td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${ESTADO_CLIENTE_CONFIG[cliente.estado]?.color}`}>
@@ -363,7 +508,6 @@ const ContabilidadManagement: React.FC = () => {
           />
         )}
       </div>
-    </SmartDashboardLayout>
   );
 };
 

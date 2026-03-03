@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { Button, Card } from '../../components/UI';
 import PageLoader from '../../components/common/PageLoader';
 import { clientesContablesApi, declaracionesApi } from '../../services/contabilidadService';
@@ -118,7 +117,6 @@ const DeclaracionesCliente: React.FC = () => {
   if (loading && !cliente) return <PageLoader />;
 
   return (
-    <SmartDashboardLayout>
       <div className="space-y-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -291,7 +289,6 @@ const DeclaracionesCliente: React.FC = () => {
           />
         )}
       </div>
-    </SmartDashboardLayout>
   );
 };
 

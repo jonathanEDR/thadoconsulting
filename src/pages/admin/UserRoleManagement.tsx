@@ -5,7 +5,6 @@
 
 import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { getEligibleUsers, promoteUserToClient, getRoleStatistics, type UserEligible } from '../../services/roleManagementService';
 import { CheckCircle, XCircle, Clock, TrendingUp, Users, Award, UserCheck } from 'lucide-react';
 
@@ -133,7 +132,6 @@ export default function UserRoleManagement() {
   // 🎨 RENDER
   // ========================================
   return (
-    <SmartDashboardLayout>
       <div className="max-w-7xl mx-auto p-6 space-y-6">
         
         {/* Header */}
@@ -387,6 +385,5 @@ export default function UserRoleManagement() {
           </div>
         )}
       </div>
-    </SmartDashboardLayout>
   );
 }

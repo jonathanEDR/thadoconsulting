@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useServerNotifications } from '../../contexts/ServerNotificationContext';
 import { notificationService, type Notification } from '../../services/notificationService';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 
 // Tipos de filtro
 type FilterType = 'all' | 'unread' | 'read';
@@ -141,7 +140,6 @@ export default function NotificationsHistory() {
   // Redireccionar si no es admin
   if (!canAccessAdmin) {
     return (
-      <SmartDashboardLayout>
         <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
             <span className="text-6xl mb-4 block">🔒</span>
@@ -153,7 +151,6 @@ export default function NotificationsHistory() {
             </p>
           </div>
         </div>
-      </SmartDashboardLayout>
     );
   }
 
@@ -161,7 +158,6 @@ export default function NotificationsHistory() {
   const unreadCount = notifications.filter(n => !n.leido).length;
 
   return (
-    <SmartDashboardLayout>
     <div className="w-full">
       {/* Header */}
       <div className="mb-6">
@@ -417,6 +413,5 @@ export default function NotificationsHistory() {
         </p>
       )}
     </div>
-    </SmartDashboardLayout>
   );
 }

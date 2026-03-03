@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Button } from '../UI';
-import type { CreateClienteData, RegimenTributario, CategoriaRUS } from '../../types/contabilidad';
-import { REGIMEN_LABELS } from '../../types/contabilidad';
+import MapLocationPicker, { detectarZonaIGV } from '../common/MapLocationPicker';
+import type { LocationData } from '../common/MapLocationPicker';
+import type { CreateClienteData, RegimenTributario, CategoriaRUS, ZonaIGV } from '../../types/contabilidad';
+import { REGIMEN_LABELS, ZONA_IGV_LABELS } from '../../types/contabilidad';
 
 interface ClienteFormModalProps {
   onClose: () => void;
@@ -27,6 +29,7 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
     razonSocial: initialData?.razonSocial || '',
     nombreComercial: initialData?.nombreComercial || '',
     regimenTributario: initialData?.regimenTributario || 'RUS',
+    zonaIGV: initialData?.zonaIGV || 'GRAVADA',
     representante: {
       nombre: initialData?.representante?.nombre || '',
       cargo: initialData?.representante?.cargo || '',
@@ -41,6 +44,16 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
       provincia: initialData?.contacto?.provincia || '',
       departamento: initialData?.contacto?.departamento || ''
     },
+    ubicacion: {
+      direccion: initialData?.ubicacion?.direccion || initialData?.contacto?.direccion || '',
+      distrito: initialData?.ubicacion?.distrito || initialData?.contacto?.distrito || '',
+      provincia: initialData?.ubicacion?.provincia || initialData?.contacto?.provincia || '',
+      departamento: initialData?.ubicacion?.departamento || initialData?.contacto?.departamento || '',
+      coordenadas: {
+        lat: initialData?.ubicacion?.coordenadas?.lat || null,
+        lng: initialData?.ubicacion?.coordenadas?.lng || null
+      }
+    },
     honorarioMensual: initialData?.honorarioMensual || undefined,
     linkDrive: initialData?.linkDrive || '',
     configuracionTributaria: {
@@ -53,6 +66,50 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
       email: initialData?.contadorAsignado?.email || ''
     }
   });
+
+  // IGV zone auto-detection warning
+  const [zonaIGVSugerida, setZonaIGVSugerida] = useState<string | null>(null);
+
+  /** Handle ubicacion changes from MapLocationPicker + auto-detect IGV zone */
+  const handleUbicacionChange = useCallback((location: LocationData) => {
+    setFormData(prev => ({
+      ...prev,
+      ubicacion: location,
+      // Also sync to contacto for backward compatibility
+      contacto: {
+        ...prev.contacto,
+        direccion: location.direccion,
+        distrito: location.distrito,
+        provincia: location.provincia,
+        departamento: location.departamento
+      }
+    }));
+
+    // Auto-detect IGV zone based on department
+    if (location.departamento) {
+      const zonaDetectada = detectarZonaIGV(location.departamento);
+      if (zonaDetectada === 'EXONERADA') {
+        setZonaIGVSugerida(`📍 ${location.departamento} es zona exonerada de IGV (Ley 27037 - Amazonía)`);
+        setFormData(prev => ({ ...prev, zonaIGV: 'EXONERADA' }));
+      } else if (zonaDetectada === 'PARCIAL') {
+        setZonaIGVSugerida(`⚠️ ${location.departamento} tiene provincias parcialmente exoneradas. Verifique manualmente.`);
+      } else {
+        setZonaIGVSugerida(null);
+        setFormData(prev => ({ ...prev, zonaIGV: 'GRAVADA' }));
+      }
+    }
+  }, []);
+
+  /** Get the zonaIGV badge color */
+  const zonaIGVBadge = useMemo(() => {
+    const z = formData.zonaIGV || 'GRAVADA';
+    const colors: Record<string, string> = {
+      GRAVADA: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      EXONERADA: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      INAFECTA: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+    };
+    return colors[z] || colors.GRAVADA;
+  }, [formData.zonaIGV]);
 
   const handleChange = (field: string, value: unknown) => {
     setFormData(prev => {
@@ -280,49 +337,54 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
                 />
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dirección</label>
-              <input
-                type="text"
-                value={formData.contacto?.direccion || ''}
-                onChange={(e) => handleChange('contacto.direccion', e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Distrito</label>
-                <input
-                  type="text"
-                  value={formData.contacto?.distrito || ''}
-                  onChange={(e) => handleChange('contacto.distrito', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
+          </fieldset>
+
+          {/* Ubicación con Mapa */}
+          <fieldset className="space-y-4">
+            <legend className="text-lg font-semibold text-gray-900 dark:text-white mb-2">🗺️ Ubicación</legend>
+            <MapLocationPicker
+              value={formData.ubicacion || { direccion: '', distrito: '', provincia: '', departamento: '', coordenadas: { lat: null, lng: null } }}
+              onChange={handleUbicacionChange}
+              height="280px"
+              placeholder="Buscar dirección del cliente..."
+            />
+            {zonaIGVSugerida && (
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 p-3 rounded-xl text-sm">
+                {zonaIGVSugerida}
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Provincia</label>
-                <input
-                  type="text"
-                  value={formData.contacto?.provincia || ''}
-                  onChange={(e) => handleChange('contacto.provincia', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Departamento</label>
-                <input
-                  type="text"
-                  value={formData.contacto?.departamento || ''}
-                  onChange={(e) => handleChange('contacto.departamento', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
+            )}
           </fieldset>
 
           {/* Configuración Tributaria */}
           <fieldset className="space-y-4">
             <legend className="text-lg font-semibold text-gray-900 dark:text-white mb-2">⚙️ Configuración Tributaria</legend>
+            
+            {/* Zona IGV */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Zona IGV <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold ${zonaIGVBadge}`}>{ZONA_IGV_LABELS[formData.zonaIGV || 'GRAVADA']}</span>
+              </label>
+              <select
+                value={formData.zonaIGV || 'GRAVADA'}
+                onChange={(e) => handleChange('zonaIGV', e.target.value as ZonaIGV)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                {(Object.keys(ZONA_IGV_LABELS) as ZonaIGV[]).map(key => (
+                  <option key={key} value={key}>{ZONA_IGV_LABELS[key]}</option>
+                ))}
+              </select>
+              {formData.zonaIGV === 'EXONERADA' && (
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                  🌿 Este cliente no pagará IGV en sus declaraciones (Ley 27037 - Promoción de la Amazonía)
+                </p>
+              )}
+              {formData.zonaIGV === 'INAFECTA' && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                  📋 Operaciones inafectas al IGV. No se calculará IGV en las declaraciones.
+                </p>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {formData.regimenTributario === 'RUS' && (
                 <div>

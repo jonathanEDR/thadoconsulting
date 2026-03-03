@@ -4,7 +4,6 @@ import { useImageLibrary } from '../hooks/cms/useImageLibrary';
 import { uploadImage, getImageStatistics, getOrphanImages, cleanupOrphanImages, updateImageMetadata } from '../services/imageService';
 import { media } from '../utils/contentManagementCache';
 import imageCompression from 'browser-image-compression';
-import SmartDashboardLayout from '../components/SmartDashboardLayout';
 import ImageMetadataEditor from '../components/ImageMetadataEditor';
 
 const MediaLibrary = () => {
@@ -162,7 +161,6 @@ const MediaLibrary = () => {
   };
 
   return (
-    <SmartDashboardLayout>
       <div className="h-full">
         {/* Header */}
         <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b sticky top-0 z-10`}>
@@ -587,7 +585,6 @@ const MediaLibrary = () => {
       )}
       
       </div>
-    </SmartDashboardLayout>
   );
 };
 

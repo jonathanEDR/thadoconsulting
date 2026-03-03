@@ -3,7 +3,7 @@
  * Sincroniza Clerk con el backend MongoDB y provee información del usuario con su rol
  */
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import { useUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
 import type { 
   UserWithRole, 
@@ -137,33 +137,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
   /**
    * Método para refrescar manualmente el usuario
    */
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     await syncUserData();
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clerkUser, isClerkLoaded]);
 
   /**
    * Limpiar error
    */
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError(null);
-  };
+  }, []);
 
   /**
    * Cerrar notificación de bienvenida
    */
-  const dismissWelcomeNotification = () => {
+  const dismissWelcomeNotification = useCallback(() => {
     setShowWelcomeNotification(false);
     setOnboardingData(null);
-  };
+  }, []);
 
   // ============================================
-  // VERIFICACIONES DE PERMISOS
+  // VERIFICACIONES DE PERMISOS (memoizadas)
   // ============================================
 
   /**
    * Verifica si el usuario tiene un permiso específico
    */
-  const hasPermissionCheck = (permission: Permission): boolean => {
+  const hasPermissionCheck = useCallback((permission: Permission): boolean => {
     if (!user || !user.role) return false;
     
     // Verificar permisos personalizados del usuario
@@ -173,46 +174,46 @@ export function AuthProvider({ children }: AuthProviderProps) {
     
     // Verificar permisos del rol
     return checkPermission(user.role, permission);
-  };
+  }, [user]);
 
   /**
    * Verifica si el usuario tiene al menos uno de los permisos
    */
-  const hasAnyPermissionCheck = (permissions: Permission[]): boolean => {
+  const hasAnyPermissionCheck = useCallback((permissions: Permission[]): boolean => {
     if (!user || !user.role) return false;
     return permissions.some(permission => hasPermissionCheck(permission));
-  };
+  }, [user, hasPermissionCheck]);
 
   /**
    * Verifica si el usuario tiene todos los permisos
    */
-  const hasAllPermissionsCheck = (permissions: Permission[]): boolean => {
+  const hasAllPermissionsCheck = useCallback((permissions: Permission[]): boolean => {
     if (!user || !user.role) return false;
     return permissions.every(permission => hasPermissionCheck(permission));
-  };
+  }, [user, hasPermissionCheck]);
 
   /**
    * Verifica si el usuario tiene uno de los roles especificados
    */
-  const hasRoleCheck = (roles: UserRole | UserRole[]): boolean => {
+  const hasRoleCheck = useCallback((roles: UserRole | UserRole[]): boolean => {
     if (!user || !user.role) return false;
     
     const roleArray = Array.isArray(roles) ? roles : [roles];
     return roleArray.includes(user.role);
-  };
+  }, [user]);
 
   // ============================================
   // VERIFICACIONES DE ACCESO
   // ============================================
 
-  const canAccessAdmin = user?.role ? canAccessAdminDashboard(user.role) : false;
-  const shouldUseClient = user?.role ? shouldUseClientDashboard(user.role) : false;
+  const canAccessAdmin = useMemo(() => user?.role ? canAccessAdminDashboard(user.role) : false, [user?.role]);
+  const shouldUseClient = useMemo(() => user?.role ? shouldUseClientDashboard(user.role) : false, [user?.role]);
 
   // ============================================
-  // CONTEXT VALUE
+  // CONTEXT VALUE (memoizado para evitar re-renders)
   // ============================================
 
-  const value: AuthContextType = {
+  const value: AuthContextType = useMemo(() => ({
     // Estado
     user,
     role: user?.role || null,
@@ -237,7 +238,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Métodos
     refreshUser,
     clearError
-  };
+  }), [
+    user, isLoading, error,
+    hasPermissionCheck, hasAnyPermissionCheck, hasAllPermissionsCheck, hasRoleCheck,
+    canAccessAdmin, shouldUseClient,
+    showWelcomeNotification, onboardingData, dismissWelcomeNotification,
+    refreshUser, clearError
+  ]);
 
   return (
     <AuthContext.Provider value={value}>

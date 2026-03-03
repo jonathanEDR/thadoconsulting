@@ -161,8 +161,8 @@ export const clientesContablesApi = {
   /**
    * Vincular un usuario del sistema al cliente contable
    */
-  async vincularUsuario(id: string, clerkId: string): Promise<ApiResponse<ClienteContable>> {
-    const { data } = await api.post(`/clientes/${id}/vincular-usuario`, { clerkId });
+  async vincularUsuario(id: string, userId: string): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.post(`/clientes/${id}/vincular-usuario`, { userId });
     return data;
   },
 
@@ -171,6 +171,41 @@ export const clientesContablesApi = {
    */
   async desvincularUsuario(id: string): Promise<ApiResponse<ClienteContable>> {
     const { data } = await api.delete(`/clientes/${id}/vincular-usuario`);
+    return data;
+  },
+
+  /**
+   * Obtener usuarios disponibles para vincular (no vinculados a otro cliente)
+   */
+  async getUsuariosDisponibles(search?: string, page?: number): Promise<ApiResponse<{
+    usuarios: Array<{
+      _id: string;
+      clerkId: string;
+      email: string;
+      nombre: string;
+      firstName?: string;
+      lastName?: string;
+      profileImage?: string;
+      role: string;
+    }>;
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      total: number;
+      hasNext: boolean;
+    };
+  }>> {
+    const { data } = await api.get('/clientes/usuarios-disponibles', {
+      params: { search, page, limit: 20 }
+    });
+    return data;
+  },
+
+  /**
+   * Obtener clientes con ubicación para visualización en mapa
+   */
+  async getClientesMapa(): Promise<ApiResponse<ClienteContable[]> & { total?: number }> {
+    const { data } = await api.get('/clientes/mapa');
     return data;
   }
 };
@@ -329,7 +364,7 @@ export const portalClienteApi = {
   /**
    * Obtener mis declaraciones (para rol CLIENT)
    */
-  async getMisDeclaraciones(anio?: number): Promise<ApiResponse<DeclaracionMensual[]>> {
+  async getMisDeclaraciones(anio?: number): Promise<ApiResponse<DeclaracionMensual[] | { declaraciones: DeclaracionMensual[]; cliente?: unknown; pagination?: unknown }>> {
     const params = anio ? `?anio=${anio}` : '';
     const { data } = await api.get(`/mis-declaraciones${params}`);
     return data;

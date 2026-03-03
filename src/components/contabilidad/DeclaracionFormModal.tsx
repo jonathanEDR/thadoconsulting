@@ -244,6 +244,13 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
                 {calculating && <span className="text-xs animate-pulse">recalculando...</span>}
               </h4>
               
+              {/* IGV exoneration notice */}
+              {calculo.resumen?.esExoneradoIGV && (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 text-sm text-green-700 dark:text-green-400">
+                  🌿 {calculo.detalleIGV?.nota || 'Cliente en zona exonerada/inafecta de IGV — IGV = S/ 0.00'}
+                </div>
+              )}
+
               {/* IGV - solo si no es RUS */}
               {calculo.detalleIGV && (
                 <div className="grid grid-cols-2 gap-2 text-sm">

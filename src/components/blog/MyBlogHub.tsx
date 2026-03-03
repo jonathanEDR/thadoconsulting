@@ -12,7 +12,7 @@ import {
   Clock,
   BarChart3 
 } from 'lucide-react';
-import SmartDashboardLayout from '../SmartDashboardLayout';
+
 import ActivityStats from './ActivityStats';
 import MyComments from './MyComments';
 import MyBookmarks from './MyBookmarks';
@@ -82,7 +82,6 @@ export default function MyBlogHub() {
   };
 
   return (
-    <SmartDashboardLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -140,6 +139,5 @@ export default function MyBlogHub() {
           {renderTabContent()}
         </div>
       </div>
-    </SmartDashboardLayout>
   );
 }

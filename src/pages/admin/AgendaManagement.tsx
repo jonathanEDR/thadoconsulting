@@ -5,7 +5,6 @@
 
 import React, { useState } from 'react';
 import { useEvents } from '../../hooks/useEvents';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { StatusBadge, PriorityBadge, TypeBadge } from '../../components/agenda/EventBadges';
 import EventFormModal from '../../components/agenda/EventFormModal';
 import EventDetailModal from '../../components/agenda/EventDetailModal';
@@ -160,7 +159,7 @@ const AgendaManagement: React.FC = () => {
   // ========================================
 
   return (
-    <SmartDashboardLayout>
+    <>
       <div className="space-y-4 md:space-y-6">
         {/* Header con diseño moderno y responsive */}
         <div 
@@ -604,7 +603,7 @@ const AgendaManagement: React.FC = () => {
         onStatusChange={handleStatusChange}
         isLoading={isSubmitting}
       />
-    </SmartDashboardLayout>
+    </>
   );
 };
 

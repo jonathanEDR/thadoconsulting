@@ -145,22 +145,26 @@ export const PROFILE_FIELDS = {
   SOCIAL: ['twitter', 'linkedin', 'github', 'orcid']
 } as const;
 
+/**
+ * Especializaciones para administradores/contadores
+ * Enfocadas en el rubro contable y tributario peruano
+ */
 export const EXPERTISE_CATEGORIES = [
-  'Desarrollo Web',
-  'Desarrollo Móvil',
-  'Data Science',
-  'Machine Learning',
-  'DevOps',
-  'UI/UX Design',
-  'Marketing Digital',
-  'SEO',
-  'E-commerce',
-  'Blockchain',
-  'Ciberseguridad',
-  'Cloud Computing',
-  'Inteligencia Artificial',
-  'Internet de las Cosas (IoT)',
-  'Realidad Virtual/Aumentada'
+  'Tributación',
+  'Auditoría Financiera',
+  'NIIF / NIC',
+  'Contabilidad de Costos',
+  'Gestión Financiera',
+  'Legislación Laboral',
+  'Planillas y Nóminas',
+  'Tributación Integral',
+  'Contabilidad Gubernamental',
+  'Peritaje Contable',
+  'Finanzas Corporativas',
+  'Control Interno',
+  'Consultoría Empresarial',
+  'Comercio Exterior y Aduanas',
+  'Precios de Transferencia'
 ] as const;
 
 export type ExpertiseCategory = typeof EXPERTISE_CATEGORIES[number];

@@ -35,7 +35,11 @@ import {
 } from '../../services/profileService';
 import { useProfileCache } from '../../hooks/useDashboardCache';
 import type { BlogProfile } from '../../types/profile';
+import { EXPERTISE_CATEGORIES } from '../../types/profile';
+import { useAuth as useAppAuth } from '../../contexts/AuthContext';
 import AvatarUpload from './AvatarUpload';
+import MapLocationPicker from '../common/MapLocationPicker';
+import type { LocationData } from '../common/MapLocationPicker';
 
 // ============================================
 // TIPOS Y INTERFACES
@@ -87,6 +91,10 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
   const { getToken } = useAuth();
   const { user } = useUser();
   const navigate = useNavigate();
+  const { role } = useAppAuth();
+
+  // Determinar si es admin/moderador (perfil completo) o usuario/cliente (perfil básico)
+  const isAdminProfile = role === 'ADMIN' || role === 'SUPER_ADMIN' || role === 'MODERATOR';
 
   // ⚡ CACHE OPTIMIZADO: Hook personalizado para cache de perfil
   const {
@@ -119,6 +127,15 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
       isPublicProfile: true,
       allowComments: true
     }
+  });
+
+  // Estado para el mapa de ubicación
+  const [locationData, setLocationData] = useState<LocationData>({
+    direccion: '',
+    distrito: '',
+    provincia: '',
+    departamento: '',
+    coordenadas: { lat: null, lng: null }
   });
 
   // Estados de UI
@@ -374,6 +391,19 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
     setHasChanges(true);
   };
 
+  // Handler para cambio de ubicación desde el mapa
+  const handleLocationChange = (location: LocationData) => {
+    setLocationData(location);
+    // Generar string legible para el campo location del perfil
+    const parts = [location.distrito, location.provincia, location.departamento].filter(Boolean);
+    const locationString = parts.length > 0 ? parts.join(', ') : location.direccion || '';
+    setFormData(prev => ({
+      ...prev,
+      location: locationString
+    }));
+    setHasChanges(true);
+  };
+
   const handleExpertiseAdd = (expertise: string) => {
     if (expertise && !(formData.expertise || []).includes(expertise)) {
       setFormData(prev => ({
@@ -583,8 +613,10 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
           <nav className="flex space-x-8 px-6">
             {[
               { id: 'basic', label: 'Información Básica', icon: User },
-              { id: 'social', label: 'Redes Sociales', icon: Users },
-              { id: 'privacy', label: 'Privacidad', icon: Shield }
+              ...(isAdminProfile ? [
+                { id: 'social', label: 'Redes Sociales', icon: Users },
+                { id: 'privacy', label: 'Privacidad', icon: Shield }
+              ] : [])
             ].map(tab => {
               const Icon = tab.icon;
               return (
@@ -686,27 +718,30 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
                 </div>
               </div>
 
-              {/* Location */}
+              {/* Location con Mapa */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   <MapPin className="inline w-4 h-4 mr-2" />
                   Ubicación
                 </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => handleBasicChange('location', e.target.value)}
-                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-                    getFieldError('location') ? 'border-red-300 dark:border-red-700' : 'border-gray-300 dark:border-gray-600'
-                  }`}
-                  placeholder="Ciudad, País"
+                {formData.location && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    📍 {formData.location}
+                  </p>
+                )}
+                <MapLocationPicker
+                  value={locationData}
+                  onChange={handleLocationChange}
+                  height="250px"
+                  placeholder="Buscar tu ubicación..."
                 />
                 {getFieldError('location') && (
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{getFieldError('location')}</p>
                 )}
               </div>
 
-              {/* Website */}
+              {/* Website - Solo para administradores */}
+              {isAdminProfile && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   <Globe className="inline w-4 h-4 mr-2" />
@@ -725,8 +760,10 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{getFieldError('website')}</p>
                 )}
               </div>
+              )}
 
-              {/* Expertise */}
+              {/* Expertise - Solo para administradores */}
+              {isAdminProfile && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   <Zap className="inline w-4 h-4 mr-2" />
@@ -759,27 +796,19 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
                   <option value="">Selecciona una especialización</option>
-                  {[
-                    'Desarrollo Web',
-                    'Desarrollo Móvil',
-                    'Data Science',
-                    'Machine Learning',
-                    'DevOps',
-                    'UI/UX Design',
-                    'Marketing Digital',
-                    'SEO',
-                    'E-commerce',
-                    'Blockchain'
-                  ].map(skill => (
+                  {EXPERTISE_CATEGORIES.map(skill => (
                     <option key={skill} value={skill}>{skill}</option>
                   ))}
                 </select>
               </div>
+              )}
+
+              {/* Website - Solo para administradores (ya se mostró arriba para admins, ocultar para clientes) */}
             </div>
           )}
 
-          {/* Tab: Redes Sociales */}
-          {activeTab === 'social' && (
+          {/* Tab: Redes Sociales - Solo administradores */}
+          {activeTab === 'social' && isAdminProfile && (
             <div className="space-y-6">
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <div className="flex items-start">
@@ -875,8 +904,8 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
             </div>
           )}
 
-          {/* Tab: Privacidad */}
-          {activeTab === 'privacy' && (
+          {/* Tab: Privacidad - Solo administradores */}
+          {activeTab === 'privacy' && isAdminProfile && (
             <div className="space-y-6">
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
                 <div className="flex items-start">
@@ -990,7 +1019,7 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ compactMode = false }) =>
               )}
             </button>
 
-            {formData.privacy.isPublicProfile && user?.username && (
+            {isAdminProfile && formData.privacy.isPublicProfile && user?.username && (
               <button
                 type="button"
                 onClick={viewPublicProfile}

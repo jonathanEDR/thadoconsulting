@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { Button, Card } from '../../components/UI';
 import PageLoader from '../../components/common/PageLoader';
 import { clientesContablesApi } from '../../services/contabilidadService';
 import { declaracionesApi } from '../../services/contabilidadService';
 import ClienteFormModal from '../../components/contabilidad/ClienteFormModal';
+import VincularUsuarioModal from '../../components/contabilidad/VincularUsuarioModal';
 import type { 
   ClienteContable, 
   CreateClienteData, 
@@ -15,7 +15,9 @@ import {
   REGIMEN_LABELS, 
   REGIMEN_COLORS, 
   ESTADO_CLIENTE_CONFIG, 
-  ESTADO_DECLARACION_CONFIG 
+  ESTADO_DECLARACION_CONFIG,
+  ZONA_IGV_LABELS,
+  ZONA_IGV_COLORS
 } from '../../types/contabilidad';
 
 /**
@@ -31,6 +33,7 @@ const FichaCliente: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showVincularModal, setShowVincularModal] = useState(false);
   const [tabActiva, setTabActiva] = useState<'info' | 'declaraciones' | 'notas' | 'documentos'>('info');
 
   const loadCliente = useCallback(async () => {
@@ -79,16 +82,17 @@ const FichaCliente: React.FC = () => {
     }
   };
 
-  const handleVincularUsuario = async () => {
-    const clerkId = window.prompt('Ingresa el Clerk ID del usuario a vincular:');
-    if (!clerkId || !id) return;
+  const handleVincularUsuario = async (userId: string) => {
+    if (!id) return;
     try {
-      const response = await clientesContablesApi.vincularUsuario(id, clerkId);
+      const response = await clientesContablesApi.vincularUsuario(id, userId);
       if (response.success) {
         setCliente(response.data);
+        setShowVincularModal(false);
       }
     } catch (err) {
       console.error('Error vinculando usuario:', err);
+      throw err;
     }
   };
 
@@ -107,19 +111,16 @@ const FichaCliente: React.FC = () => {
   if (loading) return <PageLoader />;
   if (error || !cliente) {
     return (
-      <SmartDashboardLayout>
         <div className="p-8 text-center">
           <div className="text-red-500 text-xl mb-4">⚠️ {error || 'Cliente no encontrado'}</div>
           <Button onClick={() => navigate('/dashboard/contabilidad')}>← Volver</Button>
         </div>
-      </SmartDashboardLayout>
     );
   }
 
   const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
   return (
-    <SmartDashboardLayout>
       <div className="space-y-6">
         {/* Header con breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -152,6 +153,11 @@ const FichaCliente: React.FC = () => {
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${REGIMEN_COLORS[cliente.regimenTributario]}`}>
                   {REGIMEN_LABELS[cliente.regimenTributario]}
                 </span>
+                {cliente.zonaIGV && cliente.zonaIGV !== 'GRAVADA' && (
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${ZONA_IGV_COLORS[cliente.zonaIGV]}`}>
+                    {ZONA_IGV_LABELS[cliente.zonaIGV]}
+                  </span>
+                )}
                 {cliente.honorarioMensual && (
                   <span>💰 S/ {cliente.honorarioMensual.toLocaleString('es-PE')}/mes</span>
                 )}
@@ -220,6 +226,7 @@ const FichaCliente: React.FC = () => {
               <h3 className="font-semibold text-gray-900 dark:text-white mb-4">⚙️ Configuración Tributaria</h3>
               <div className="space-y-2 text-sm">
                 <InfoRow label="Régimen" value={REGIMEN_LABELS[cliente.regimenTributario]} />
+                <InfoRow label="Zona IGV" value={ZONA_IGV_LABELS[cliente.zonaIGV || 'GRAVADA']} />
                 {cliente.regimenTributario === 'RUS' && (
                   <InfoRow label="Categoría RUS" value={`Categoría ${cliente.configuracionTributaria?.categoriaRUS || 1}`} />
                 )}
@@ -243,16 +250,21 @@ const FichaCliente: React.FC = () => {
             {/* Portal Cliente */}
             <Card className="p-5">
               <h3 className="font-semibold text-gray-900 dark:text-white mb-4">🔗 Portal Cliente</h3>
-              {cliente.usuarioVinculado ? (
+              {cliente.usuarioVinculado?.clerkId ? (
                 <div className="space-y-3">
                   <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
                     <div className="text-sm font-medium text-green-800 dark:text-green-400">✅ Usuario vinculado</div>
                     <div className="text-sm text-green-600 dark:text-green-300 mt-1">
-                      {cliente.usuarioVinculado.nombre} ({cliente.usuarioVinculado.email})
+                      {cliente.usuarioVinculado.nombre || cliente.usuarioVinculado.email}
                     </div>
-                    <div className="text-xs text-green-500 mt-1">
-                      Vinculado: {new Date(cliente.usuarioVinculado.vinculadoEn).toLocaleDateString('es-PE')}
+                    <div className="text-xs text-green-500/80 mt-0.5">
+                      {cliente.usuarioVinculado.email}
                     </div>
+                    {cliente.usuarioVinculado.vinculadoEn && (
+                      <div className="text-xs text-green-500 mt-1">
+                        Vinculado: {new Date(cliente.usuarioVinculado.vinculadoEn).toLocaleDateString('es-PE')}
+                      </div>
+                    )}
                   </div>
                   <Button variant="danger" size="sm" onClick={handleDesvincularUsuario}>
                     🔓 Desvincular
@@ -263,7 +275,7 @@ const FichaCliente: React.FC = () => {
                   <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm text-gray-500 dark:text-gray-400">
                     Sin usuario vinculado. El cliente no puede acceder al portal.
                   </div>
-                  <Button variant="secondary" size="sm" onClick={handleVincularUsuario}>
+                  <Button variant="secondary" size="sm" onClick={() => setShowVincularModal(true)}>
                     🔗 Vincular Usuario
                   </Button>
                 </div>
@@ -408,8 +420,15 @@ const FichaCliente: React.FC = () => {
             isEditing
           />
         )}
+
+        {/* Modal de vincular usuario */}
+        {showVincularModal && (
+          <VincularUsuarioModal
+            onClose={() => setShowVincularModal(false)}
+            onVincular={handleVincularUsuario}
+          />
+        )}
       </div>
-    </SmartDashboardLayout>
   );
 };
 

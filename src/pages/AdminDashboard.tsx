@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '../contexts/AuthContext';
 import { adminService } from '../services/adminService';
-import SmartDashboardLayout from '../components/SmartDashboardLayout';
 import RoleBadge from '../components/RoleBadge';
 import { Permission, type UserStats, formatUserName } from '../types/roles';
 import PageLoader from '../components/common/PageLoader';
@@ -87,7 +86,6 @@ export default function AdminDashboard() {
   }
 
   return (
-    <SmartDashboardLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header de Bienvenida Administrativo - 🎨 Usando gradiente dinámico del sidebar */}
         <div 
@@ -380,6 +378,5 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-    </SmartDashboardLayout>
   );
 }

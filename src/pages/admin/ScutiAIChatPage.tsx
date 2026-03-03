@@ -16,7 +16,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import { useScutiAI } from '../../hooks/useScutiAI';
 import ChatHeader from '../../components/scuti-ai/ChatHeader';
 import MessageBubble from '../../components/scuti-ai/MessageBubble';
@@ -321,7 +320,6 @@ const ScutiAIChatPage: React.FC = () => {
   };
 
   return (
-    <SmartDashboardLayout>
       <div className="flex h-[calc(100vh-4rem)] bg-gray-50 dark:bg-gray-950">
         {/* Sidebar con historial de conversaciones */}
         <div className={`${isSidebarCollapsed ? 'w-14' : 'w-72'} flex-shrink-0 transition-all duration-300`}>
@@ -561,7 +559,6 @@ const ScutiAIChatPage: React.FC = () => {
           />
         )}
       </div>
-    </SmartDashboardLayout>
   );
 };
 

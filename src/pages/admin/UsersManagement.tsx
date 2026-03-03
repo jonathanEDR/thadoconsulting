@@ -17,7 +17,6 @@ import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { adminService } from '../../services/adminService';
 import { useUsersCache } from '../../hooks/useDashboardCache';
-import SmartDashboardLayout from '../../components/SmartDashboardLayout';
 import RoleBadge from '../../components/RoleBadge';
 import { useDashboardHeaderGradient } from '../../hooks/cms/useDashboardHeaderGradient';
 import {
@@ -231,7 +230,6 @@ export default function UsersManagement() {
   // Si no tiene permisos
   if (!canManageUsers) {
     return (
-      <SmartDashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="text-6xl mb-4">🔒</div>
@@ -243,12 +241,11 @@ export default function UsersManagement() {
             </p>
           </div>
         </div>
-      </SmartDashboardLayout>
     );
   }
 
   return (
-    <SmartDashboardLayout>
+    <>
       <div className="w-full space-y-6">
         {/* Header - 🎨 Usando gradiente dinámico del sidebar */}
         <div 
@@ -768,6 +765,6 @@ export default function UsersManagement() {
           </div>
         </div>
       )}
-    </SmartDashboardLayout>
+    </>
   );
 }
