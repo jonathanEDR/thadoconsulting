@@ -240,7 +240,7 @@ function generateServiceSchema(servicio) {
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "PE",
-        "addressLocality": "Lima"
+        "addressLocality": "Huánuco"
       }
     },
     "areaServed": {

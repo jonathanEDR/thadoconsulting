@@ -110,6 +110,13 @@ const AIAnalytics = lazy(() => import('./pages/admin/AIAnalytics'));
 // 🔔 Historial de Notificaciones
 const NotificationsHistory = lazy(() => import('./pages/admin/NotificationsHistory'));
 
+// 🏢 Módulo de Contabilidad
+const ContabilidadManagement = lazy(() => import('./pages/admin/ContabilidadManagement'));
+const FichaCliente = lazy(() => import('./pages/admin/FichaCliente'));
+const DeclaracionesCliente = lazy(() => import('./pages/admin/DeclaracionesCliente'));
+const ProyeccionesCliente = lazy(() => import('./pages/admin/ProyeccionesCliente'));
+const MiContabilidad = lazy(() => import('./pages/client/MiContabilidad'));
+
 // ⚡ Componente de loading con logo - Usa variables CSS del tema CMS
 // Detecta el tema del CMS a través de la variable --color-background
 const LoadingSpinner = () => {
@@ -311,6 +318,9 @@ function AppContent() {
                 
                 {/* Redirección de ruta antigua "leads" a nueva "solicitudes" */}
                 <Route path="leads" element={<Navigate to="/dashboard/client/solicitudes" replace />} />
+                
+                {/* 🏢 Mi Contabilidad - Portal del cliente */}
+                <Route path="contabilidad" element={<MiContabilidad />} />
               </Route>
               
               {/* ⚡ Dashboard para ADMIN, MODERATOR y SUPER_ADMIN */}
@@ -489,6 +499,44 @@ function AppContent() {
                 </DashboardRoute>
               } />
               
+              {/* 🏢 MÓDULO DE CONTABILIDAD - Solo ADMIN y SUPER_ADMIN */}
+              
+              {/* Dashboard Principal de Contabilidad - Lista de clientes y semáforo */}
+              <Route path="/dashboard/contabilidad" element={
+                <DashboardRoute>
+                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+                    <ContabilidadManagement />
+                  </RoleBasedRoute>
+                </DashboardRoute>
+              } />
+              
+              {/* Ficha del Cliente Contable */}
+              <Route path="/dashboard/contabilidad/clientes/:id" element={
+                <DashboardRoute>
+                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+                    <FichaCliente />
+                  </RoleBasedRoute>
+                </DashboardRoute>
+              } />
+              
+              {/* Declaraciones Mensuales del Cliente */}
+              <Route path="/dashboard/contabilidad/clientes/:clienteId/declaraciones" element={
+                <DashboardRoute>
+                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+                    <DeclaracionesCliente />
+                  </RoleBasedRoute>
+                </DashboardRoute>
+              } />
+              
+              {/* Proyecciones de Pago del Cliente */}
+              <Route path="/dashboard/contabilidad/clientes/:clienteId/proyecciones" element={
+                <DashboardRoute>
+                  <RoleBasedRoute allowedRoles={[UserRole.ADMIN, UserRole.SUPER_ADMIN]}>
+                    <ProyeccionesCliente />
+                  </RoleBasedRoute>
+                </DashboardRoute>
+              } />
+
               {/* 🤖 MÓDULO DE AGENTES IA - Solo ADMIN y SUPER_ADMIN */}
               
               {/* Redirección de ruta antigua a nueva */}

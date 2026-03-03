@@ -141,10 +141,10 @@ export const SITE_CONFIG: SiteConfig = {
   // CONTACTO
   // ─────────────────────────────────────────
   contact: {
-    email: 'contacto@thadoconsulting.pe',
+    email: 'thadoconsulting@gmail.com',
     phone: '+51 973 397 306',
     phoneClean: '+51973397306',
-    address: 'Lima, Perú',
+    address: 'Huánuco, Perú',
     openingHours: 'Mo-Fr 09:00-18:00',
   },
 

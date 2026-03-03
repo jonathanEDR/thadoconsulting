@@ -34,7 +34,7 @@ const CONFIG = {
   apiUrl: baseApiUrl,
   siteUrl: 'https://www.thadoconsulting.com',
   siteName: 'THADO Consulting Blog',
-  defaultImage: 'https://www.thadoconsulting.com/Logo.png',
+  defaultImage: 'https://www.thadoconsulting.com/FAVICON.png',
   twitterHandle: '@thadoconsulting'
 };
 

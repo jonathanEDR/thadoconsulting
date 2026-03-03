@@ -4,9 +4,9 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 // Diferentes duraciones según el tipo de contenido
 // ✅ Optimizado para páginas públicas que cambian raramente
 const CACHE_DURATIONS = {
-  // 🌐 Páginas públicas - Contenido estático (raramente cambia)
-  PUBLIC_PAGES: 7 * 24 * 60 * 60 * 1000, // 7 días (contenido CMS muy estable)
-  PUBLIC_FOOTER: 7 * 24 * 60 * 60 * 1000,// 7 días
+  // 🌐 Páginas públicas - SEO puede cambiar desde CMS, cache moderado
+  PUBLIC_PAGES: 1 * 60 * 60 * 1000,      // 1 hora (permite ver cambios SEO del CMS rápidamente)
+  PUBLIC_FOOTER: 1 * 60 * 60 * 1000,     // 1 hora
   
   // 📝 Contenido semi-estático
   BLOG_POSTS: 24 * 60 * 60 * 1000,       // 24 horas

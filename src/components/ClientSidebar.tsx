@@ -86,6 +86,13 @@ export default function ClientSidebar({ isOpen, setIsOpen }: ClientSidebarProps)
       description: 'Actividad en el blog'
     },
     {
+      name: 'Mi Contabilidad',
+      icon: '🏢',
+      menuKey: 'contabilidad',
+      path: '/dashboard/client/contabilidad',
+      description: 'Estado de tus declaraciones'
+    },
+    {
       name: 'Perfil',
       icon: '👤',
       menuKey: 'profile',

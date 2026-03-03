@@ -109,7 +109,14 @@ export const Permission = {
   
   // Gestión de roles
   ASSIGN_ROLES: 'ASSIGN_ROLES',
-  VIEW_ROLES: 'VIEW_ROLES'
+  VIEW_ROLES: 'VIEW_ROLES',
+  
+  // 🏢 Contabilidad
+  VIEW_ACCOUNTING_CLIENTS: 'VIEW_ACCOUNTING_CLIENTS',
+  MANAGE_ACCOUNTING_CLIENTS: 'MANAGE_ACCOUNTING_CLIENTS',
+  VIEW_ACCOUNTING_DECLARATIONS: 'VIEW_ACCOUNTING_DECLARATIONS',
+  MANAGE_ACCOUNTING_DECLARATIONS: 'MANAGE_ACCOUNTING_DECLARATIONS',
+  VIEW_OWN_ACCOUNTING: 'VIEW_OWN_ACCOUNTING'
 } as const;
 
 export type Permission = typeof Permission[keyof typeof Permission];
@@ -139,7 +146,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.MANAGE_SYSTEM,
     Permission.VIEW_LOGS,
     Permission.ASSIGN_ROLES,
-    Permission.VIEW_ROLES
+    Permission.VIEW_ROLES,
+    Permission.VIEW_ACCOUNTING_CLIENTS,
+    Permission.MANAGE_ACCOUNTING_CLIENTS,
+    Permission.VIEW_ACCOUNTING_DECLARATIONS,
+    Permission.MANAGE_ACCOUNTING_DECLARATIONS
   ],
   
   [UserRole.ADMIN]: [
@@ -157,7 +168,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.EXPORT_DATA,
     Permission.VIEW_LOGS,
     Permission.ASSIGN_ROLES,
-    Permission.VIEW_ROLES
+    Permission.VIEW_ROLES,
+    Permission.VIEW_ACCOUNTING_CLIENTS,
+    Permission.MANAGE_ACCOUNTING_CLIENTS,
+    Permission.VIEW_ACCOUNTING_DECLARATIONS,
+    Permission.MANAGE_ACCOUNTING_DECLARATIONS
   ],
   
   [UserRole.MODERATOR]: [
@@ -176,7 +191,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Acceso a servicios y uploads
     Permission.VIEW_CONTENT,
     Permission.VIEW_SERVICES,
-    Permission.UPLOAD_FILES
+    Permission.UPLOAD_FILES,
+    Permission.VIEW_OWN_ACCOUNTING
   ],
   
   [UserRole.USER]: [

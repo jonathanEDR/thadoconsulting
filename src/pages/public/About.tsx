@@ -7,6 +7,7 @@ import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidge
 import PageLoader from '../../components/common/PageLoader';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getPageBySlug } from '../../services/cmsApi';
+import { useSeo } from '../../hooks/useSeo';
 
 /**
  * 🏢 Página Nosotros/About
@@ -326,36 +327,20 @@ const About = () => {
 
   const heroStyles = getHeroStyles();
 
+  // 🎯 SEO dinámico desde CMS con fallback a hardcoded
+  const { SeoHelmet } = useSeo({
+    pageName: 'about',
+    fallbackTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    fallbackDescription: 'Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Tu socio de confianza.'
+  });
+
   return (
     <>
-      {/* ✅ SEO Hardcoded directo (para indexación inmediata de Google) */}
+      {/* ✅ SEO dinámico desde CMS (prioridad: CMS > seoConfig.ts > fallback) */}
+      <SeoHelmet />
+
+      {/* Schema.org - AboutPage */}
       <Helmet>
-        <title>Sobre Nosotros - THADO Consulting | Estudio Contable en Perú</title>
-        <meta name="description" content="Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Tu socio de confianza." />
-        <meta name="keywords" content="sobre nosotros, equipo THADO, estudio contable Perú, servicios contables, misión, visión, consultoría empresarial MYPES" />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
-        <meta property="og:description" content="Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú." />
-        <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="THADO Consulting - Estudio Contable en Perú" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.thadoconsulting.com/nosotros" />
-        <meta property="og:site_name" content="THADO Consulting" />
-        <meta property="og:locale" content="es_PE" />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sobre Nosotros - THADO Consulting | Estudio Contable en Perú" />
-        <meta name="twitter:description" content="Estudio contable especializado en servicios para MYPES en Perú" />
-        <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
-
-        {/* Canonical */}
-        <link rel="canonical" href="https://www.thadoconsulting.com/nosotros" />
-
-        {/* Schema.org - AboutPage */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -370,7 +355,7 @@ const About = () => {
               "foundingDate": "2024",
               "foundingLocation": {
                 "@type": "Place",
-                "name": "Lima, Perú"
+                "name": "Huánuco, Perú"
               },
               "slogan": "Tu socio contable y tributario de confianza para MYPES en Perú",
               "knowsAbout": [

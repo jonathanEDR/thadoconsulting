@@ -122,6 +122,8 @@ function escapeHtml(text) {
 
 // ═══════════════════════════════════════════════════════════
 // DEFINICIÓN DE RUTAS CON SEO HARDCODED Y GENERADORES DE CONTENIDO
+// ⚠️ NOTA: Estos valores son fallbacks. La fuente de verdad es el CMS.
+// Los valores hardcoded deben mantenerse sincronizados con src/config/seoConfig.ts
 // ═══════════════════════════════════════════════════════════
 
 const routes = [
@@ -134,7 +136,7 @@ const routes = [
       keywords: 'servicios contables Perú, asesoría tributaria SUNAT, contador para MYPE, planillas PLAME, constitución de empresas, facturación electrónica, outsourcing contable Lima',
       ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
       ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/servicios`
     },
     generateContent: (seo) => `
@@ -169,7 +171,7 @@ const routes = [
       keywords: 'blog contabilidad, guías tributarias SUNAT, contabilidad MYPES, declaraciones SUNAT, régimen tributario Perú, planillas PLAME, facturación electrónica',
       ogTitle: 'Blog THADO Consulting - Contabilidad y Tributación',
       ogDescription: 'Guías y artículos sobre contabilidad y tributación para MYPES en Perú',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/blog`
     },
     generateContent: (seo) => `
@@ -201,7 +203,7 @@ const routes = [
       keywords: 'THADO Consulting, estudio contable Perú, contador Lima, contadores colegiados, experiencia tributaria, asesoría contable MYPES',
       ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
       ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/nosotros`
     },
     generateContent: (seo) => `
@@ -236,7 +238,7 @@ const routes = [
       keywords: 'contacto THADO, consultoría contable Perú, asesoría tributaria gratuita, contador Lima contacto, solicitar servicio contable, presupuesto contabilidad',
       ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
       ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/contacto`
     },
     generateContent: (seo) => `
@@ -250,7 +252,7 @@ const routes = [
         <section>
           <h2 style="font-size:1.5rem;color:#1f2937;margin-bottom:1rem;">Canales de contacto</h2>
           <ul style="list-style:none;padding:0;">
-            <li style="padding:0.5rem 0;color:#374151;">📧 Email: contacto@thadoconsulting.pe</li>
+            <li style="padding:0.5rem 0;color:#374151;">📧 Email: thadoconsulting@gmail.com</li>
             <li style="padding:0.5rem 0;color:#374151;">⏰ Horario: Lunes a Viernes, 9:00 - 19:00</li>
             <li style="padding:0.5rem 0;color:#374151;">📍 Lima, Perú - Atención a nivel nacional</li>
             <li style="padding:0.5rem 0;color:#374151;">🔄 Primera consultoría gratuita</li>
@@ -267,7 +269,7 @@ const routes = [
       keywords: 'política de privacidad, protección de datos, THADO Consulting, datos personales, Ley 29733',
       ogTitle: 'Política de Privacidad - THADO Consulting',
       ogDescription: 'Conoce cómo protegemos tus datos personales',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/privacidad`
     },
     generateContent: (seo) => `
@@ -296,7 +298,7 @@ const routes = [
       keywords: 'términos y condiciones, condiciones de servicio, THADO Consulting, servicios contables, contrato de servicios',
       ogTitle: 'Términos y Condiciones - THADO Consulting',
       ogDescription: 'Términos y condiciones de uso de nuestros servicios contables',
-      ogImage: `${CONFIG.siteUrl}/logohorizontalconfondo.jpg`,
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/terminos`
     },
     generateContent: (seo) => `

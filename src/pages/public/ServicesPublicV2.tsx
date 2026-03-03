@@ -19,6 +19,7 @@ import { useCategoriasList } from '../../hooks/useCategoriasCache';
 import { invalidateServiciosCache } from '../../utils/serviciosCache';
 import { getPageBySlug } from '../../services/cmsApi';
 import { useSiteConfig } from '../../hooks/useSiteConfig';
+import { useSeo } from '../../hooks/useSeo';
 import type { Servicio, ServicioFilters } from '../../types/servicios';
 
 // ============================================
@@ -31,7 +32,14 @@ const ServicesPublicV2 = () => {
   // ============================================
 
   // 🆕 Configuración centralizada del sitio
-  const { config, getFullUrl, getImageUrl } = useSiteConfig();
+  useSiteConfig();
+
+  // 🎯 SEO dinámico desde CMS con fallback a hardcoded
+  const { SeoHelmet } = useSeo({
+    pageName: 'services',
+    fallbackTitle: 'Servicios Contables y Tributarios - THADO Consulting',
+    fallbackDescription: 'Servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú.'
+  });
 
   // Obtener query params de la URL
   const [searchParams] = useSearchParams();
@@ -235,35 +243,11 @@ const ServicesPublicV2 = () => {
 
   return (
     <>
-      {/* ✅ SEO usando configuración centralizada */}
+      {/* ✅ SEO dinámico desde CMS (prioridad: CMS > seoConfig.ts > fallback) */}
+      <SeoHelmet />
+
+      {/* Schema.org - Service Catalog (datos dinámicos de servicios) */}
       <Helmet>
-        <title>Nuestros Servicios{config.seo.titleSuffix}</title>
-        <meta name="description" content="Servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú. Soluciones profesionales para el crecimiento de tu negocio." />
-        <meta name="keywords" content="servicios contables, asesoría tributaria, gestión laboral, costos y presupuestos, SUNAT, declaraciones, contabilidad MYPE, estudio contable Perú" />
-
-        {/* Open Graph - ✅ Usando configuración centralizada */}
-        <meta property="og:title" content={`Servicios Contables y Tributarios${config.seo.titleSuffix}`} />
-        <meta property="og:description" content={`Servicios contables, asesoría tributaria, gestión laboral y financiera para MYPES en ${config.country}. Soluciones profesionales a tu medida.`} />
-        <meta property="og:image" content={getImageUrl(config.images.ogServices)} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={`${config.siteName} - Servicios Contables y Tributarios para MYPES`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={getFullUrl('/servicios')} />
-        <meta property="og:site_name" content={config.siteName} />
-        <meta property="og:locale" content={config.locale} />
-
-        {/* Twitter Card - ✅ Usando configuración centralizada */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`Servicios Contables y Tributarios${config.seo.titleSuffix}`} />
-        <meta name="twitter:description" content="Servicios contables, asesoría tributaria y gestión financiera para MYPES en Perú." />
-        <meta name="twitter:image" content={getImageUrl(config.images.ogServices)} />
-        <meta name="twitter:image:alt" content={`${config.siteName} - Servicios Contables y Tributarios para MYPES`} />
-
-        {/* Canonical */}
-        <link rel="canonical" href={getFullUrl('/servicios')} />
-
-        {/* Schema.org - Service Catalog */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -271,7 +255,7 @@ const ServicesPublicV2 = () => {
             "name": "Servicios Contables y Tributarios - THADO Consulting",
             "description": "Catálogo de servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú",
             "url": "https://www.thadoconsulting.com/servicios",
-            "numberOfItems": servicios?.length || 24,
+            "numberOfItems": servicios?.length || 0,
             "itemListElement": servicios?.slice(0, 10).map((servicio: Servicio, index: number) => ({
               "@type": "ListItem",
               "position": index + 1,

@@ -33,12 +33,12 @@ export const OrganizationSchema = () => {
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "PE",
-      "addressLocality": "Lima",
-      "addressRegion": "Lima"
+      "addressLocality": "Huánuco",
+      "addressRegion": "Huánuco"
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "email": "contacto@thadoconsulting.pe",
+      "email": "thadoconsulting@gmail.com",
       "contactType": "customer service",
       "availableLanguage": ["Spanish"]
     },
@@ -102,7 +102,7 @@ export const LocalBusinessSchema = () => {
     "alternateName": ["THADO", "THADO Contadores", "THADO Consultoría"],
     "image": "https://www.thadoconsulting.com/FAVICON.png",
     "url": "https://www.thadoconsulting.com",
-    "email": "contacto@thadoconsulting.pe",
+    "email": "thadoconsulting@gmail.com",
     "description": "Estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Expertos en declaraciones SUNAT, PDT, libros electrónicos y planificación fiscal.",
     "slogan": "Tu socio contable y tributario de confianza para MYPES en Perú",
     "knowsAbout": [
@@ -148,13 +148,13 @@ export const LocalBusinessSchema = () => {
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "PE",
-      "addressLocality": "Lima",
-      "addressRegion": "Lima"
+      "addressLocality": "Huánuco",
+      "addressRegion": "Huánuco"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": -12.0464,
-      "longitude": -77.0428
+      "latitude": -9.9306,
+      "longitude": -76.2422
     },
     "areaServed": [
       {
@@ -177,13 +177,7 @@ export const LocalBusinessSchema = () => {
         "closes": "19:00"
       }
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "47",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    // ⚠️ AggregateRating removido - se implementará cuando haya reseñas reales verificables
   };
 
   return (

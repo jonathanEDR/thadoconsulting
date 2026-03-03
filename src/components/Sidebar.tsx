@@ -170,6 +170,16 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       // Solo roles administrativos - Módulo de blog
     },
     {
+      name: 'Contabilidad',
+      icon: '🏢',
+      menuKey: 'contabilidad',
+      path: '/dashboard/contabilidad',
+      description: 'Gestión de clientes contables',
+      permission: Permission.MANAGE_ACCOUNTING_CLIENTS,
+      roles: [UserRole.ADMIN, UserRole.SUPER_ADMIN],
+      // Solo ADMIN y SUPER_ADMIN - Módulo de contabilidad
+    },
+    {
       name: 'Agentes IA',
       icon: '🤖',
       menuKey: 'agentesIA',

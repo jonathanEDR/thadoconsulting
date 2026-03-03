@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Newspaper } from 'lucide-react';
 import { useBlogPosts, useFeaturedPosts, useCategories, useTags } from '../../../hooks/blog';
 import { useBlogCmsConfig } from '../../../hooks/blog/useBlogCmsConfig';
@@ -9,6 +8,7 @@ import { AllNewsSection } from '../../../components/blog/sections/AllNewsSection
 import { BlogCtaSection } from '../../../components/blog/sections/BlogCtaSection';
 import PublicHeader from '../../../components/public/PublicHeader';
 import PublicFooter from '../../../components/public/PublicFooter';
+import { useSeo } from '../../../hooks/useSeo';
 
 // ✅ Skeleton para Featured Posts mientras carga la configuración
 const FeaturedPostsSkeleton: React.FC = () => (
@@ -52,7 +52,14 @@ const BlogHome: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState(''); // 🔍 Estado para búsqueda
   const postsPerPage = 9;
 
-  // 🆕 Cargar configuración del CMS y tema actual
+  // � SEO dinámico desde CMS con fallback a hardcoded
+  const { SeoHelmet } = useSeo({
+    pageName: 'blog',
+    fallbackTitle: 'Blog THADO Consulting - Contabilidad y Tributación para MYPES',
+    fallbackDescription: 'Artículos sobre contabilidad, tributación SUNAT, gestión financiera y consejos prácticos para MYPES en Perú.'
+  });
+
+  // �🆕 Cargar configuración del CMS y tema actual
   // ✅ loading: true si no hay cache disponible (evita flash de layout)
   const { config: cmsConfig, loading: cmsLoading } = useBlogCmsConfig();
   const featuredPostsConfig = cmsConfig.featuredPosts;
@@ -140,34 +147,8 @@ const BlogHome: React.FC = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
-      {/* ✅ SEO Hardcoded directo (para indexación inmediata de Google) */}
-      <Helmet>
-        <title>Blog THADO Consulting - Contabilidad y Tributación para MYPES</title>
-        <meta name="description" content="Artículos sobre contabilidad, tributación SUNAT, gestión financiera y consejos prácticos para MYPES en Perú. Blog de expertos contables." />
-        <meta name="keywords" content="blog contabilidad, tributación SUNAT, MYPES Perú, gestión financiera, libros electrónicos, PDT, planificación fiscal" />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
-        <meta property="og:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú." />
-        <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.thadoconsulting.com/blog" />
-        <meta property="og:site_name" content="THADO Consulting" />
-        <meta property="og:locale" content="es_PE" />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Blog THADO Consulting - Contabilidad y Tributación" />
-        <meta name="twitter:description" content="Artículos sobre contabilidad, tributación SUNAT y gestión financiera para MYPES en Perú" />
-        <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
-        <meta name="twitter:image:alt" content="THADO Consulting - Blog de Contabilidad y Tributación" />
-
-        {/* Canonical */}
-        <link rel="canonical" href="https://www.thadoconsulting.com/blog" />
-      </Helmet>
+      {/* ✅ SEO dinámico desde CMS (prioridad: CMS > seoConfig.ts > fallback) */}
+      <SeoHelmet />
 
       {/* JSON-LD para el sitio del blog - Memoizado */}
       <script type="application/ld+json">

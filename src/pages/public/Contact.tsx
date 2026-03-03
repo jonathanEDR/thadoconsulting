@@ -206,16 +206,16 @@ const Contact = () => {
               "@type": "Organization",
               "name": "THADO Consulting",
               "url": "https://www.thadoconsulting.com",
-              "logo": "https://www.thadoconsulting.com/FAVICON.svg",
-              "email": "contacto@thadoconsulting.pe",
+              "logo": "https://www.thadoconsulting.com/FAVICON.png",
+              "email": "thadoconsulting@gmail.com",
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Lima",
+                "addressLocality": "Huánuco",
                 "addressCountry": "PE"
               },
               "contactPoint": {
                 "@type": "ContactPoint",
-                "email": "contacto@thadoconsulting.pe",
+                "email": "thadoconsulting@gmail.com",
                 "contactType": "customer service",
                 "availableLanguage": ["Spanish"]
               }
