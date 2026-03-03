@@ -41,7 +41,7 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   const [ventasGravadas, setVentasGravadas] = useState(declaracion?.detalleIGV?.ventasGravadas || 0);
   const [comprasGravadas, setComprasGravadas] = useState(declaracion?.detalleIGV?.comprasGravadas || 0);
   const [saldoFavor, setSaldoFavor] = useState(declaracion?.detalleIGV?.saldoFavorAnterior || 0);
-  const [formulario, setFormulario] = useState(declaracion?.formulario || '');
+  const [formulario, setFormulario] = useState(declaracion?.formulario || (cliente.regimenTributario === 'RUS' ? 'NRUS' : 'PDT621'));
   const [numeroOrden, setNumeroOrden] = useState(declaracion?.numeroOrden || '');
   const [estado, setEstado] = useState<EstadoDeclaracion>(declaracion?.estado || 'PENDIENTE');
   const [esRectificatoria, setEsRectificatoria] = useState(declaracion?.esRectificatoria || false);
@@ -87,9 +87,16 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
     setError(null);
 
     try {
+      const creditoFiscalValue = calculo?.detalleIGV?.creditoFiscal
+        ?? Math.round(comprasGravadas * 0.18 * 100) / 100;
+
       const data: RegistrarDeclaracionData = {
         clienteId: cliente._id,
         periodo,
+        // Flat fields — required by backend to recalculate
+        ventasGravadas,
+        creditoFiscal: creditoFiscalValue,
+        saldoFavorAnterior: saldoFavor,
         detalleIGV: calculo?.detalleIGV || {
           ventasGravadas,
           comprasGravadas,
@@ -286,15 +293,18 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                N° Formulario
+                Tipo Formulario
               </label>
-              <input
-                type="text"
+              <select
                 value={formulario}
                 onChange={(e) => setFormulario(e.target.value)}
-                placeholder="621"
                 className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
+              >
+                <option value="PDT621">PDT 621</option>
+                <option value="PDT621_SIMPLIFICADO">PDT 621 Simplificado</option>
+                <option value="FORMULARIO_VIRTUAL">Formulario Virtual</option>
+                <option value="NRUS">NRUS (Nuevo RUS)</option>
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

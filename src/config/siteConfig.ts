@@ -99,7 +99,7 @@ export const SITE_CONFIG: SiteConfig = {
   language: 'es',
   country: 'Peru',
   countryCode: 'PE',
-  region: 'Lima',
+  region: 'Huánuco',
   timezone: 'America/Lima',
   
   // ─────────────────────────────────────────

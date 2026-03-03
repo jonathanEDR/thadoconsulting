@@ -19,13 +19,14 @@ import type { ClientLogosContent } from '../../types/cms';
 import type { DefaultFeaturedBlogConfig } from '../../utils/defaultConfig';
 
 // SEO fallback mínimo (el contenido real viene del CMS)
+// ⚠️ SYNC: ogImage debe existir en /public/ — usar FAVICON.png (verificado)
 const SEO_FALLBACK = {
   metaTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
   metaDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú. Evita multas SUNAT, ordena tu contabilidad y crece con confianza.',
   keywords: ['contador Perú', 'estudio contable Lima', 'servicios contables Perú', 'asesoría tributaria SUNAT'],
   ogTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
   ogDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú.',
-  ogImage: 'https://www.thadoconsulting.com/logohorizontalconfondo.jpg',
+  ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
 };
 
 

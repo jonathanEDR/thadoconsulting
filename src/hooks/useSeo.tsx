@@ -3,6 +3,34 @@ import { Helmet } from 'react-helmet-async';
 import { getPageBySlug, forceReload } from '../services/cmsApi';
 import { getHardcodedSeo } from '../config/seoConfig';
 
+// 🌐 URL base del sitio para construir URLs absolutas
+const SITE_URL = 'https://www.thadoconsulting.com';
+
+// 📌 Mapa de pageName → ruta pública (para canonical y og:url automáticos)
+const PAGE_ROUTES: Record<string, string> = {
+  home: '/',
+  about: '/nosotros',
+  services: '/servicios',
+  contact: '/contacto',
+  blog: '/blog',
+  privacidad: '/privacidad',
+  terminos: '/terminos',
+};
+
+/**
+ * Normaliza og:image: convierte URLs relativas a absolutas
+ * y valida que no sea una URL de red social (Facebook, Instagram, etc.)
+ */
+function normalizeOgImage(url: string | undefined): string {
+  if (!url) return '';
+  // Rechazar URLs de redes sociales
+  const invalidPatterns = ['facebook.com/photo', 'facebook.com/profile', 'instagram.com/p/', 'twitter.com/', 'x.com/'];
+  if (invalidPatterns.some(p => url.includes(p))) return '';
+  // Convertir rutas relativas a absolutas
+  if (url.startsWith('/')) return `${SITE_URL}${url}`;
+  return url;
+}
+
 /**
  * 🎯 Hook de SEO Global con Sistema de Prioridad
  * 
@@ -153,7 +181,10 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
                   : (hardcodedSeo?.keywords || DEFAULT_SEO.keywords),
                 ogTitle: data.seo.ogTitle || data.seo.metaTitle || hardcodedSeo?.ogTitle || fallbackTitle || DEFAULT_SEO.ogTitle,
                 ogDescription: data.seo.ogDescription || data.seo.metaDescription || hardcodedSeo?.ogDescription || fallbackDescription || DEFAULT_SEO.ogDescription,
-                ogImage: data.seo.ogImage || hardcodedSeo?.ogImage || '',
+                // ✅ Normalizar og:image (relativa → absoluta) y usar fallback de hardcoded
+                ogImage: normalizeOgImage(data.seo.ogImage) || normalizeOgImage(hardcodedSeo?.ogImage) || '',
+                // ✅ Mantener canonical del hardcoded (el CMS no lo provee)
+                canonical: hardcodedSeo?.canonical || (PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined),
                 _source: 'cms'
               };
               
@@ -268,6 +299,9 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
   const SeoHelmet = () => {
     if (!seoData.metaTitle) return null;
 
+    // ✅ Construir canonical y og:url (prioridad: seoData.canonical > auto-generado)
+    const canonicalUrl = seoData.canonical || (PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined);
+
     return (
       <Helmet key={`seo-${pageName}-${seoData.metaTitle}`} defer={false}>
         <title>{seoData.metaTitle}</title>
@@ -275,7 +309,7 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
         <meta name="keywords" content={seoData.keywords.join(', ')} />
         
         {/* Canonical URL */}
-        {seoData.canonical && <link rel="canonical" href={seoData.canonical} />}
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         
         {/* Open Graph */}
         <meta property="og:title" content={seoData.ogTitle} />
@@ -285,7 +319,9 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
         {seoData.ogImageHeight && <meta property="og:image:height" content={seoData.ogImageHeight} />}
         {seoData.ogImageAlt && <meta property="og:image:alt" content={seoData.ogImageAlt} />}
         <meta property="og:type" content="website" />
+        {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
         <meta property="og:site_name" content="THADO Consulting" />
+        <meta property="og:locale" content="es_PE" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />

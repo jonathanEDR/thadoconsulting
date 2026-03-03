@@ -203,6 +203,13 @@ export interface DeclaracionMensual {
 export interface RegistrarDeclaracionData {
   clienteId: string;
   periodo: string;
+  // Flat fields used by backend for recalculation
+  ventasGravadas?: number;
+  creditoFiscal?: number;
+  saldoFavorAnterior?: number;
+  coeficiente?: number;
+  categoriaRUS?: number;
+  // Nested detail objects
   detalleIGV: Partial<DetalleIGV>;
   detalleRenta?: Partial<DetalleRenta>;
   formulario?: string;
