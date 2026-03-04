@@ -63,14 +63,17 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     let mounted = true;
     const loadUnread = async () => {
       try {
+        // Esperar a que Clerk tenga sesión activa antes de consultar
+        const token = await window.Clerk?.session?.getToken();
+        if (!token || !mounted) return;
+        
         const response = await messageService.getUnreadMessages();
         if (!mounted) return;
         if (response && response.success && response.data) {
           setUnreadCount(response.data.total || (response.data.mensajes || []).length || 0);
         }
-      } catch (error) {
+      } catch {
         // No bloquear la UI por errores de badge
-        // console.warn('[Sidebar] error cargando mensajes no leídos', error);
       }
     };
 

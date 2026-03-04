@@ -10,11 +10,12 @@ import type {
   DeclaracionMensual, 
   RegistrarDeclaracionData,
   EstadoDeclaracion,
+  TipoDeclaracion,
   PresentacionLibro,
   RegistrarLibroData,
   CatalogoLibros
 } from '../../types/contabilidad';
-import { ESTADO_DECLARACION_CONFIG, REGIMEN_LABELS, ESTADO_LIBRO_CONFIG } from '../../types/contabilidad';
+import { ESTADO_DECLARACION_CONFIG, REGIMEN_LABELS, ESTADO_LIBRO_CONFIG, TIPO_DECLARACION_CONFIG } from '../../types/contabilidad';
 
 const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
@@ -32,6 +33,7 @@ const DeclaracionesCliente: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingDeclaracion, setEditingDeclaracion] = useState<DeclaracionMensual | null>(null);
   const [anioFiltro, setAnioFiltro] = useState<number>(new Date().getFullYear());
+  const [tipoModalNueva, setTipoModalNueva] = useState<TipoDeclaracion>('IGV_RENTA');
 
   // Libros Electrónicos
   const [libros, setLibros] = useState<PresentacionLibro[]>([]);
@@ -124,6 +126,22 @@ const DeclaracionesCliente: React.FC = () => {
     }
   };
 
+  // Eliminar declaración
+  const handleEliminar = async (declaracion: DeclaracionMensual) => {
+    const label = TIPO_DECLARACION_CONFIG[declaracion.tipo]?.label || declaracion.tipo;
+    const confirmado = window.confirm(
+      `¿Eliminar declaración ${label} del periodo ${declaracion.periodoFormateado || declaracion.periodo}?\n\nEsta acción es irreversible.`
+    );
+    if (!confirmado) return;
+    try {
+      await declaracionesApi.eliminar(declaracion._id, 'Eliminada manualmente');
+      await loadData();
+    } catch (err) {
+      console.error('Error eliminando declaración:', err);
+      window.alert('No se pudo eliminar la declaración.');
+    }
+  };
+
   // Registrar libro electrónico
   const handleRegistrarLibro = async (data: RegistrarLibroData) => {
     try {
@@ -158,17 +176,34 @@ const DeclaracionesCliente: React.FC = () => {
     (_, i) => new Date().getFullYear() - i
   );
 
+  // Helpers para obtener declaraciones por mes y tipo
+  const getDeclaracionesMes = (mesIdx: number) => declaraciones.filter(d => d.mes === mesIdx + 1);
+  const getDeclaracionTipo = (mesIdx: number, tipo: TipoDeclaracion) => declaraciones.find(d => d.mes === mesIdx + 1 && d.tipo === tipo);
+  
+  // Verificar qué obligaciones tiene el cliente
+  const obligaciones = cliente?.configuracionTributaria?.obligaciones;
+  const tienePlanilla = typeof obligaciones === 'object' && obligaciones !== null && !Array.isArray(obligaciones) && !!obligaciones.planilla;
+  const tieneAFP = typeof obligaciones === 'object' && obligaciones !== null && !Array.isArray(obligaciones) && !!obligaciones.afp;
+
+  // Abrir modal para tipo específico
+  const openCreateModal = (tipo: TipoDeclaracion = 'IGV_RENTA') => {
+    setTipoModalNueva(tipo);
+    setShowCreateModal(true);
+  };
+
   // Resumen del año
   const resumen = declaraciones.reduce(
     (acc, d) => ({
-      totalIGV: acc.totalIGV + (d.detalleIGV?.igvAPagar || 0),
-      totalRenta: acc.totalRenta + (d.detalleRenta?.rentaAPagar || 0),
+      totalIGV: acc.totalIGV + (d.tipo === 'IGV_RENTA' ? (d.detalleIGV?.igvAPagar || 0) : 0),
+      totalRenta: acc.totalRenta + (d.tipo === 'IGV_RENTA' ? (d.detalleRenta?.rentaAPagar || 0) : 0),
+      totalPlanilla: acc.totalPlanilla + (d.tipo === 'PLANILLA' ? (d.totalAPagar || 0) : 0),
+      totalAFP: acc.totalAFP + (d.tipo === 'AFP' ? (d.totalAPagar || 0) : 0),
       totalGeneral: acc.totalGeneral + (d.totalAPagar || 0),
       pagadas: acc.pagadas + (d.estado === 'PAGADO' ? 1 : 0),
       pendientes: acc.pendientes + (d.estado === 'PENDIENTE' ? 1 : 0),
       vencidas: acc.vencidas + (d.estado === 'VENCIDO' ? 1 : 0)
     }),
-    { totalIGV: 0, totalRenta: 0, totalGeneral: 0, pagadas: 0, pendientes: 0, vencidas: 0 }
+    { totalIGV: 0, totalRenta: 0, totalPlanilla: 0, totalAFP: 0, totalGeneral: 0, pagadas: 0, pendientes: 0, vencidas: 0 }
   );
 
   if (loading && !cliente) return <PageLoader />;
@@ -211,7 +246,7 @@ const DeclaracionesCliente: React.FC = () => {
                   <option key={a} value={a}>{a}</option>
                 ))}
               </select>
-              <Button onClick={() => setShowCreateModal(true)}>
+              <Button onClick={() => openCreateModal('IGV_RENTA')}>
                 ➕ Nueva Declaración
               </Button>
             </div>
@@ -219,7 +254,7 @@ const DeclaracionesCliente: React.FC = () => {
         </Card>
 
         {/* Resumen anual */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
           <Card className="p-3 text-center">
             <div className="text-lg font-bold text-blue-600">S/ {resumen.totalIGV.toFixed(2)}</div>
             <div className="text-xs text-gray-500">IGV Total</div>
@@ -228,6 +263,18 @@ const DeclaracionesCliente: React.FC = () => {
             <div className="text-lg font-bold text-purple-600">S/ {resumen.totalRenta.toFixed(2)}</div>
             <div className="text-xs text-gray-500">Renta Total</div>
           </Card>
+          {tienePlanilla && (
+            <Card className="p-3 text-center">
+              <div className="text-lg font-bold text-teal-600">S/ {resumen.totalPlanilla.toFixed(2)}</div>
+              <div className="text-xs text-gray-500">Planilla Total</div>
+            </Card>
+          )}
+          {tieneAFP && (
+            <Card className="p-3 text-center">
+              <div className="text-lg font-bold text-amber-600">S/ {resumen.totalAFP.toFixed(2)}</div>
+              <div className="text-xs text-gray-500">AFP Total</div>
+            </Card>
+          )}
           <Card className="p-3 text-center">
             <div className="text-lg font-bold text-gray-900 dark:text-white">S/ {resumen.totalGeneral.toFixed(2)}</div>
             <div className="text-xs text-gray-500">Total Tributos</div>
@@ -255,11 +302,17 @@ const DeclaracionesCliente: React.FC = () => {
         {/* Grid visual de meses */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {MESES.map((mes, idx) => {
-            const declaracion = declaraciones.find(d => d.mes === idx + 1);
+            const declIGV = getDeclaracionTipo(idx, 'IGV_RENTA');
+            const declPlanilla = tienePlanilla ? getDeclaracionTipo(idx, 'PLANILLA') : null;
+            const declAFP = tieneAFP ? getDeclaracionTipo(idx, 'AFP') : null;
+            const declsMes = getDeclaracionesMes(idx);
             const librosMes = getLibrosMes(idx);
             const tieneLibros = librosConfigurados.length > 0;
             const librosPresentados = librosMes.filter(l => l.estado === 'PRESENTADO').length;
             const librosPendientes = tieneLibros ? librosConfigurados.length - librosPresentados : 0;
+            
+            // Determine overall border color based on most urgent status
+            const mainDecl = declIGV || declsMes[0];
             
             return (
               <div 
@@ -268,74 +321,169 @@ const DeclaracionesCliente: React.FC = () => {
               >
               <Card 
                 className={`p-4 ${
-                  declaracion 
-                    ? 'border-l-4 ' + getBorderColor(declaracion.estado)
+                  mainDecl 
+                    ? 'border-l-4 ' + getBorderColor(mainDecl.estado)
                     : 'border-l-4 border-gray-200 dark:border-gray-700 opacity-60'
                 }`}
               >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-900 dark:text-white">{mes}</span>
+                  {declsMes.length > 0 && (
+                    <span className="text-[10px] text-gray-400">{declsMes.length} decl.</span>
+                  )}
+                </div>
+
+                {/* ── IGV / Renta Row ── */}
                 <div 
-                  className="cursor-pointer"
-                  onClick={() => declaracion ? setEditingDeclaracion(declaracion) : undefined}
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-lg p-1.5 -mx-1.5 transition-colors"
+                  onClick={() => declIGV ? setEditingDeclaracion(declIGV) : openCreateModal('IGV_RENTA')}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-gray-900 dark:text-white">{mes}</span>
-                    {declaracion && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${ESTADO_DECLARACION_CONFIG[declaracion.estado]?.color}`}>
-                        {ESTADO_DECLARACION_CONFIG[declaracion.estado]?.icon} {ESTADO_DECLARACION_CONFIG[declaracion.estado]?.label}
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">📊 IGV/Renta</span>
+                    {declIGV && (
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${ESTADO_DECLARACION_CONFIG[declIGV.estado]?.color}`}>
+                        {ESTADO_DECLARACION_CONFIG[declIGV.estado]?.icon}
                       </span>
                     )}
                   </div>
-                
-                  {declaracion ? (
-                    <div className="space-y-1 text-sm">
+                  {declIGV ? (
+                    <div className="space-y-0.5 text-xs">
                       <div className="flex justify-between text-gray-600 dark:text-gray-300">
                         <span>IGV</span>
-                        <span className="font-mono">S/ {(declaracion.detalleIGV?.igvAPagar || 0).toFixed(2)}</span>
+                        <span className="font-mono">S/ {(declIGV.detalleIGV?.igvAPagar || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-gray-600 dark:text-gray-300">
                         <span>Renta</span>
-                        <span className="font-mono">S/ {(declaracion.detalleRenta?.rentaAPagar || 0).toFixed(2)}</span>
+                        <span className="font-mono">S/ {(declIGV.detalleRenta?.rentaAPagar || 0).toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between font-bold text-gray-900 dark:text-white pt-1 border-t border-gray-200 dark:border-gray-600">
+                      <div className="flex justify-between font-bold text-gray-900 dark:text-white pt-0.5 border-t border-gray-200 dark:border-gray-600">
                         <span>Total</span>
-                        <span className="font-mono">S/ {(declaracion.totalAPagar || 0).toFixed(2)}</span>
+                        <span className="font-mono">S/ {(declIGV.totalAPagar || 0).toFixed(2)}</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="text-sm text-gray-400 dark:text-gray-500">
-                      Sin declaración
-                    </div>
+                    <div className="text-xs text-gray-400 dark:text-gray-500 italic">Sin declaración</div>
                   )}
                 </div>
-                    
-                {/* Acciones rápidas de declaración */}
-                {declaracion && (
-                  <div className="flex gap-1 pt-2" onClick={(e) => e.stopPropagation()}>
-                    {declaracion.estado === 'PENDIENTE' && (
+
+                {/* Quick state actions for IGV */}
+                {declIGV && (
+                  <div className="flex gap-1 pt-1 mb-1" onClick={(e) => e.stopPropagation()}>
+                    {declIGV.estado === 'PENDIENTE' && (
                       <>
-                        <button
-                          onClick={() => handleCambiarEstado(declaracion, 'PRESENTADO')}
-                          className="flex-1 text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded hover:bg-blue-200 transition-colors"
-                        >
+                        <button onClick={() => handleCambiarEstado(declIGV, 'PRESENTADO')}
+                          className="flex-1 text-[10px] px-1 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded hover:bg-blue-200 transition-colors">
                           📄 Presentar
                         </button>
-                        <button
-                          onClick={() => handleCambiarEstado(declaracion, 'PAGADO')}
-                          className="flex-1 text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors"
-                        >
+                        <button onClick={() => handleCambiarEstado(declIGV, 'PAGADO')}
+                          className="flex-1 text-[10px] px-1 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors">
                           ✅ Pagar
                         </button>
                       </>
                     )}
-                    {declaracion.estado === 'PRESENTADO' && (
-                      <button
-                        onClick={() => handleCambiarEstado(declaracion, 'PAGADO')}
-                        className="flex-1 text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors"
-                      >
-                        ✅ Registrar Pago
+                    {declIGV.estado === 'PRESENTADO' && (
+                      <button onClick={() => handleCambiarEstado(declIGV, 'PAGADO')}
+                        className="flex-1 text-[10px] px-1 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors">
+                        ✅ Pagar
+                      </button>
+                    )}
+                    {declIGV.estado !== 'PAGADO' && (
+                      <button onClick={() => handleEliminar(declIGV)}
+                        className="text-[10px] px-1.5 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 transition-colors" title="Eliminar declaración">
+                        🗑️
                       </button>
                     )}
                   </div>
+                )}
+
+                {/* ── Planilla Row ── */}
+                {tienePlanilla && (
+                  <>
+                  <div 
+                    className="cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-lg p-1.5 -mx-1.5 mt-1 border-t border-gray-100 dark:border-gray-700 transition-colors"
+                    onClick={() => declPlanilla ? setEditingDeclaracion(declPlanilla) : openCreateModal('PLANILLA')}
+                  >
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[10px] font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">👥 Planilla</span>
+                      {declPlanilla && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${ESTADO_DECLARACION_CONFIG[declPlanilla.estado]?.color}`}>
+                          {ESTADO_DECLARACION_CONFIG[declPlanilla.estado]?.icon}
+                        </span>
+                      )}
+                    </div>
+                    {declPlanilla ? (
+                      <div className="flex justify-between text-xs font-medium text-teal-800 dark:text-teal-300">
+                        <span>{declPlanilla.detallePlanilla?.cantidadTrabajadores || 0} trab.</span>
+                        <span className="font-mono">S/ {(declPlanilla.totalAPagar || 0).toFixed(2)}</span>
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-400 dark:text-gray-500 italic">Sin declaración</div>
+                    )}
+                  </div>
+                  {declPlanilla && declPlanilla.estado !== 'PAGADO' && (
+                    <div className="flex gap-1 mt-0.5" onClick={(e) => e.stopPropagation()}>
+                      {declPlanilla.estado === 'PENDIENTE' && (
+                        <button onClick={() => handleCambiarEstado(declPlanilla, 'PRESENTADO')}
+                          className="flex-1 text-[10px] px-1 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded hover:bg-blue-200 transition-colors">
+                          📄 Presentar
+                        </button>
+                      )}
+                      <button onClick={() => handleCambiarEstado(declPlanilla, 'PAGADO')}
+                        className="flex-1 text-[10px] px-1 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors">
+                        ✅ Pagar
+                      </button>
+                      <button onClick={() => handleEliminar(declPlanilla)}
+                        className="text-[10px] px-1.5 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 transition-colors" title="Eliminar declaración">
+                        🗑️
+                      </button>
+                    </div>
+                  )}
+                  </>
+                )}
+
+                {/* ── AFP Row ── */}
+                {tieneAFP && (
+                  <>
+                  <div 
+                    className="cursor-pointer hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg p-1.5 -mx-1.5 mt-1 border-t border-gray-100 dark:border-gray-700 transition-colors"
+                    onClick={() => declAFP ? setEditingDeclaracion(declAFP) : openCreateModal('AFP')}
+                  >
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">🏦 AFP</span>
+                      {declAFP && (
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${ESTADO_DECLARACION_CONFIG[declAFP.estado]?.color}`}>
+                          {ESTADO_DECLARACION_CONFIG[declAFP.estado]?.icon}
+                        </span>
+                      )}
+                    </div>
+                    {declAFP ? (
+                      <div className="flex justify-between text-xs font-medium text-amber-800 dark:text-amber-300">
+                        <span>{declAFP.detalleAFP?.afpNombre || 'AFP'}</span>
+                        <span className="font-mono">S/ {(declAFP.totalAPagar || 0).toFixed(2)}</span>
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-400 dark:text-gray-500 italic">Sin declaración</div>
+                    )}
+                  </div>
+                  {declAFP && declAFP.estado !== 'PAGADO' && (
+                    <div className="flex gap-1 mt-0.5" onClick={(e) => e.stopPropagation()}>
+                      {declAFP.estado === 'PENDIENTE' && (
+                        <button onClick={() => handleCambiarEstado(declAFP, 'PRESENTADO')}
+                          className="flex-1 text-[10px] px-1 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded hover:bg-blue-200 transition-colors">
+                          📄 Presentar
+                        </button>
+                      )}
+                      <button onClick={() => handleCambiarEstado(declAFP, 'PAGADO')}
+                        className="flex-1 text-[10px] px-1 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-200 transition-colors">
+                        ✅ Pagar
+                      </button>
+                      <button onClick={() => handleEliminar(declAFP)}
+                        className="text-[10px] px-1.5 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 transition-colors" title="Eliminar declaración">
+                        🗑️
+                      </button>
+                    </div>
+                  )}
+                  </>
                 )}
 
                 {/* Sección de Libros Electrónicos */}
@@ -413,6 +561,7 @@ const DeclaracionesCliente: React.FC = () => {
           <DeclaracionFormModal
             cliente={cliente}
             declaracion={editingDeclaracion || undefined}
+            tipoInicial={tipoModalNueva}
             onClose={() => {
               setShowCreateModal(false);
               setEditingDeclaracion(null);

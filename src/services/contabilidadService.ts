@@ -25,7 +25,9 @@ import type {
   PresentacionLibro,
   RegistrarLibroData,
   CatalogoLibros,
-  LibrosPorRegimen
+  LibrosPorRegimen,
+  DetallePlanilla,
+  DetalleAFP
 } from '../types/contabilidad';
 
 // Declaración de tipo para Clerk en window
@@ -211,6 +213,45 @@ export const clientesContablesApi = {
   async getClientesMapa(): Promise<ApiResponse<ClienteContable[]> & { total?: number }> {
     const { data } = await api.get('/clientes/mapa');
     return data;
+  },
+
+  /**
+   * Agregar nota a un cliente contable
+   */
+  async agregarNota(clienteId: string, nota: { tipo: string; descripcion: string }): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.post(`/clientes/${clienteId}/notas`, nota);
+    return data;
+  },
+
+  /**
+   * Eliminar nota de un cliente contable
+   */
+  async eliminarNota(clienteId: string, notaId: string): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.delete(`/clientes/${clienteId}/notas/${notaId}`);
+    return data;
+  },
+
+  // ========================================
+  // 📎 DOCUMENTOS
+  // ========================================
+
+  /**
+   * Agregar documento (link) a un cliente contable
+   */
+  async agregarDocumento(
+    clienteId: string,
+    documento: { nombre: string; tipo: string; url: string; periodo?: string; notas?: string }
+  ): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.post(`/clientes/${clienteId}/documentos`, documento);
+    return data;
+  },
+
+  /**
+   * Eliminar documento de un cliente contable
+   */
+  async eliminarDocumento(clienteId: string, docId: string): Promise<ApiResponse<ClienteContable>> {
+    const { data } = await api.delete(`/clientes/${clienteId}/documentos/${docId}`);
+    return data;
   }
 };
 
@@ -288,6 +329,53 @@ export const declaracionesApi = {
    */
   async cambiarEstado(id: string, estado: string, pago?: Record<string, unknown>): Promise<ApiResponse<DeclaracionMensual>> {
     const { data } = await api.patch(`/declaraciones/${id}/estado`, { estado, pago });
+    return data;
+  },
+
+  /**
+   * Eliminar una declaración (soft delete)
+   */
+  async eliminar(id: string, motivo?: string): Promise<ApiResponse<void>> {
+    const { data } = await api.delete(`/declaraciones/${id}`, { data: { motivo } });
+    return data;
+  },
+
+  /**
+   * Calcular planilla (preview sin guardar)
+   */
+  async calcularPlanillaPreview(params: {
+    cantidadTrabajadores?: number;
+    totalRemuneraciones?: number;
+    cantidadTrabajadoresONP?: number;
+    totalRemuneracionesONP?: number;
+    cantidadTrabajadoresAFP?: number;
+    totalRemuneracionesAFP?: number;
+    retenciones5ta?: number;
+    cantidadTrabajadores5ta?: number;
+    vidaLey?: number;
+  }): Promise<ApiResponse<DetallePlanilla>> {
+    const { data } = await api.post('/declaraciones/calcular-planilla', params);
+    return data;
+  },
+
+  /**
+   * Calcular AFP (preview sin guardar)
+   */
+  async calcularAFPPreview(params: {
+    afpNombre?: string;
+    cantidadAfiliados?: number;
+    totalRemuneraciones?: number;
+    aporteVoluntario?: number;
+  }): Promise<ApiResponse<DetalleAFP>> {
+    const { data } = await api.post('/declaraciones/calcular-afp', params);
+    return data;
+  },
+
+  /**
+   * Obtener proveedores AFP y sus tasas
+   */
+  async getAFPProviders(): Promise<ApiResponse<Record<string, { nombre: string; comision: number; primaSeguro: number }>>> {
+    const { data } = await api.get('/declaraciones/afp-providers');
     return data;
   }
 };

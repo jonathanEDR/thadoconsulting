@@ -2,8 +2,8 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Button } from '../UI';
 import MapLocationPicker, { detectarZonaIGV } from '../common/MapLocationPicker';
 import type { LocationData } from '../common/MapLocationPicker';
-import type { CreateClienteData, RegimenTributario, CategoriaRUS, ZonaIGV, CatalogoLibros, LibrosPorRegimen } from '../../types/contabilidad';
-import { REGIMEN_LABELS, ZONA_IGV_LABELS } from '../../types/contabilidad';
+import type { CreateClienteData, RegimenTributario, CategoriaRUS, ZonaIGV, CatalogoLibros, LibrosPorRegimen, AFPProvider } from '../../types/contabilidad';
+import { REGIMEN_LABELS, ZONA_IGV_LABELS, AFP_PROVIDERS_INFO } from '../../types/contabilidad';
 import { librosElectronicosApi } from '../../services/contabilidadService';
 
 interface ClienteFormModalProps {
@@ -60,7 +60,22 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
     configuracionTributaria: {
       categoriaRUS: initialData?.configuracionTributaria?.categoriaRUS || 1,
       coeficienteRenta: initialData?.configuracionTributaria?.coeficienteRenta || 0.015,
-      obligaciones: initialData?.configuracionTributaria?.obligaciones || []
+      obligaciones: initialData?.configuracionTributaria?.obligaciones || {
+        igv: true,
+        renta: true,
+        planilla: false,
+        afp: false,
+        librosElectronicos: false
+      },
+      configPlanilla: initialData?.configuracionTributaria?.configPlanilla || {
+        cantidadTrabajadores: 0,
+        tieneONP: false,
+        tiene5ta: false
+      },
+      configAFP: initialData?.configuracionTributaria?.configAFP || {
+        afpNombre: '' as AFPProvider | '',
+        cantidadAfiliados: 0
+      }
     },
     contadorAsignado: {
       nombre: initialData?.contadorAsignado?.nombre || '',
@@ -180,7 +195,10 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
         ...formData,
         configuracionTributaria: {
           ...formData.configuracionTributaria,
-          librosElectronicos: librosSeleccionados
+          librosElectronicos: librosSeleccionados,
+          obligaciones: formData.configuracionTributaria?.obligaciones,
+          configPlanilla: formData.configuracionTributaria?.configPlanilla,
+          configAFP: formData.configuracionTributaria?.configAFP
         }
       });
     } catch (err: unknown) {
@@ -521,6 +539,246 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
                     </label>
                   );
                 })}
+              </div>
+            )}
+          </fieldset>
+
+          {/* Obligaciones Laborales (Planilla & AFP) */}
+          <fieldset className="space-y-4">
+            <legend className="text-lg font-semibold text-gray-900 dark:text-white mb-2">👥 Obligaciones Laborales</legend>
+
+            {/* Checkboxes for Planilla and AFP */}
+            <div className="flex flex-wrap gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={
+                    typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+                    formData.configuracionTributaria?.obligaciones !== null &&
+                    !Array.isArray(formData.configuracionTributaria?.obligaciones)
+                      ? !!formData.configuracionTributaria.obligaciones.planilla
+                      : false
+                  }
+                  onChange={(e) => {
+                    const currentObl = typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+                      formData.configuracionTributaria?.obligaciones !== null &&
+                      !Array.isArray(formData.configuracionTributaria?.obligaciones)
+                        ? formData.configuracionTributaria.obligaciones
+                        : { igv: true, renta: true, planilla: false, afp: false, librosElectronicos: false };
+                    setFormData(prev => ({
+                      ...prev,
+                      configuracionTributaria: {
+                        ...prev.configuracionTributaria,
+                        obligaciones: { ...currentObl, planilla: e.target.checked }
+                      }
+                    }));
+                  }}
+                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">👥 Tiene Planilla (PLAME)</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={
+                    typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+                    formData.configuracionTributaria?.obligaciones !== null &&
+                    !Array.isArray(formData.configuracionTributaria?.obligaciones)
+                      ? !!formData.configuracionTributaria.obligaciones.afp
+                      : false
+                  }
+                  onChange={(e) => {
+                    const currentObl = typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+                      formData.configuracionTributaria?.obligaciones !== null &&
+                      !Array.isArray(formData.configuracionTributaria?.obligaciones)
+                        ? formData.configuracionTributaria.obligaciones
+                        : { igv: true, renta: true, planilla: false, afp: false, librosElectronicos: false };
+                    setFormData(prev => ({
+                      ...prev,
+                      configuracionTributaria: {
+                        ...prev.configuracionTributaria,
+                        obligaciones: { ...currentObl, afp: e.target.checked }
+                      }
+                    }));
+                  }}
+                  className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">🏦 Declara AFP</span>
+              </label>
+            </div>
+
+            {/* Planilla Config */}
+            {typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+             formData.configuracionTributaria?.obligaciones !== null &&
+             !Array.isArray(formData.configuracionTributaria?.obligaciones) &&
+             formData.configuracionTributaria.obligaciones.planilla && (
+              <div className="bg-teal-50 dark:bg-teal-900/10 border border-teal-200 dark:border-teal-800 rounded-xl p-4 space-y-3">
+                <h4 className="text-sm font-semibold text-teal-700 dark:text-teal-300">⚙️ Configuración de Planilla</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nº Trabajadores</label>
+                    <input
+                      type="number"
+                      value={formData.configuracionTributaria?.configPlanilla?.cantidadTrabajadores || 0}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        configuracionTributaria: {
+                          ...prev.configuracionTributaria,
+                          configPlanilla: {
+                            ...prev.configuracionTributaria?.configPlanilla,
+                            cantidadTrabajadores: parseInt(e.target.value) || 0
+                          }
+                        }
+                      }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                      min="0"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.configuracionTributaria?.configPlanilla?.tieneONP || false}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          configuracionTributaria: {
+                            ...prev.configuracionTributaria,
+                            configPlanilla: {
+                              ...prev.configuracionTributaria?.configPlanilla,
+                              tieneONP: e.target.checked
+                            }
+                          }
+                        }))}
+                        className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Tiene ONP</span>
+                    </label>
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.configuracionTributaria?.configPlanilla?.tiene5ta || false}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          configuracionTributaria: {
+                            ...prev.configuracionTributaria,
+                            configPlanilla: {
+                              ...prev.configuracionTributaria?.configPlanilla,
+                              tiene5ta: e.target.checked
+                            }
+                          }
+                        }))}
+                        className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Retenciones 5ta</span>
+                    </label>
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.configuracionTributaria?.configPlanilla?.tieneAFP || false}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          configuracionTributaria: {
+                            ...prev.configuracionTributaria,
+                            configPlanilla: {
+                              ...prev.configuracionTributaria?.configPlanilla,
+                              tieneAFP: e.target.checked,
+                              afpNombrePlanilla: e.target.checked
+                                ? (prev.configuracionTributaria?.configPlanilla?.afpNombrePlanilla || '')
+                                : ''
+                            }
+                          }
+                        }))}
+                        className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Tiene AFP (en PLAME)</span>
+                    </label>
+                  </div>
+                  {formData.configuracionTributaria?.configPlanilla?.tieneAFP && (
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">AFP de los trabajadores en PLAME</label>
+                      <select
+                        value={formData.configuracionTributaria?.configPlanilla?.afpNombrePlanilla || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          configuracionTributaria: {
+                            ...prev.configuracionTributaria,
+                            configPlanilla: {
+                              ...prev.configuracionTributaria?.configPlanilla,
+                              afpNombrePlanilla: e.target.value as AFPProvider | ''
+                            }
+                          }
+                        }))}
+                        className="w-full px-3 py-2 rounded-lg border border-amber-300 dark:border-amber-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-amber-500"
+                      >
+                        <option value="">Seleccionar AFP...</option>
+                        {(Object.keys(AFP_PROVIDERS_INFO) as AFPProvider[]).map(afp => (
+                          <option key={afp} value={afp}>{AFP_PROVIDERS_INFO[afp].nombre} (Com: {(AFP_PROVIDERS_INFO[afp].comision * 100).toFixed(2)}%)</option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                        💡 Estos trabajadores se incluyen en ESSALUD. Su aporte AFP se declara por separado en AFPnet.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* AFP Config */}
+            {typeof formData.configuracionTributaria?.obligaciones === 'object' &&
+             formData.configuracionTributaria?.obligaciones !== null &&
+             !Array.isArray(formData.configuracionTributaria?.obligaciones) &&
+             formData.configuracionTributaria.obligaciones.afp && (
+              <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4 space-y-3">
+                <h4 className="text-sm font-semibold text-amber-700 dark:text-amber-300">⚙️ Configuración AFP</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">AFP</label>
+                    <select
+                      value={formData.configuracionTributaria?.configAFP?.afpNombre || ''}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        configuracionTributaria: {
+                          ...prev.configuracionTributaria,
+                          configAFP: {
+                            ...prev.configuracionTributaria?.configAFP,
+                            afpNombre: e.target.value as AFPProvider | ''
+                          }
+                        }
+                      }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                    >
+                      <option value="">Seleccionar AFP...</option>
+                      {(Object.keys(AFP_PROVIDERS_INFO) as AFPProvider[]).map(afp => (
+                        <option key={afp} value={afp}>{AFP_PROVIDERS_INFO[afp].nombre} (Com: {(AFP_PROVIDERS_INFO[afp].comision * 100).toFixed(2)}%)</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nº Afiliados</label>
+                    <input
+                      type="number"
+                      value={formData.configuracionTributaria?.configAFP?.cantidadAfiliados || 0}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        configuracionTributaria: {
+                          ...prev.configuracionTributaria,
+                          configAFP: {
+                            ...prev.configuracionTributaria?.configAFP,
+                            cantidadAfiliados: parseInt(e.target.value) || 0
+                          }
+                        }
+                      }))}
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                      min="0"
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </fieldset>
