@@ -841,7 +841,9 @@ export default async function middleware(request: Request) {
 
   // === CASO 0: Páginas estáticas (Home, Servicios, Nosotros) ===
   if (isHomePage || isServiciosPage || isNosotrosPage) {
-    const pageName = isHomePage ? 'home' : isServiciosPage ? 'servicios' : 'nosotros';
+    // IMPORTANTE: Usar slugs del CMS (inglés), no las rutas URL (español)
+    // CMS slugs: 'home', 'services', 'about' - NO 'servicios', 'nosotros'
+    const pageName = isHomePage ? 'home' : isServiciosPage ? 'services' : 'about';
     console.log(`[Edge Middleware] Crawler detected for /${pageName}: ${userAgent.substring(0, 50)}`);
     
     // 🔄 Obtener datos SEO desde el CMS
