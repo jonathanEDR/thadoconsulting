@@ -271,6 +271,14 @@ const About = () => {
     loadPageData();
   }, []);
 
+  // 🎯 SEO dinámico desde CMS con fallback a hardcoded
+  // IMPORTANTE: Debe estar ANTES de cualquier return condicional (reglas de hooks)
+  const { SeoHelmet } = useSeo({
+    pageName: 'about',
+    fallbackTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+    fallbackDescription: 'Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Tu socio de confianza.'
+  });
+
   // 🎠 Autoplay del carrusel de valores
   useEffect(() => {
     const values = pageData?.content?.values;
@@ -326,13 +334,6 @@ const About = () => {
   };
 
   const heroStyles = getHeroStyles();
-
-  // 🎯 SEO dinámico desde CMS con fallback a hardcoded
-  const { SeoHelmet } = useSeo({
-    pageName: 'about',
-    fallbackTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
-    fallbackDescription: 'Conoce THADO Consulting: estudio contable especializado en servicios contables, tributarios y financieros para MYPES en Perú. Tu socio de confianza.'
-  });
 
   return (
     <>
