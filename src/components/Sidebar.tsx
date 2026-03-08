@@ -104,6 +104,14 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       // Todos pueden ver su perfil
     },
     {
+      name: 'Sala de Reuniones',
+      icon: '🎥',
+      menuKey: 'salaReuniones',
+      path: '/dashboard/sala-reuniones',
+      description: 'Sala de reuniones virtual',
+      // Todos los usuarios autenticados pueden acceder
+    },
+    {
       name: 'Módulo Servicios',
       icon: '🚀',
       menuKey: 'servicios',

@@ -99,6 +99,13 @@ export default function ClientSidebar({ isOpen, setIsOpen }: ClientSidebarProps)
       menuKey: 'profile',
       path: '/dashboard/profile',
       description: 'Tu información'
+    },
+    {
+      name: 'Sala de Reuniones',
+      icon: '🎥',
+      menuKey: 'salaReuniones',
+      path: '/dashboard/sala-reuniones',
+      description: 'Sala de reuniones virtual'
     }
   ];
 

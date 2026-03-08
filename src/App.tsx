@@ -117,6 +117,9 @@ const DeclaracionesCliente = lazy(() => import('./pages/admin/DeclaracionesClien
 const ProyeccionesCliente = lazy(() => import('./pages/admin/ProyeccionesCliente'));
 const MiContabilidad = lazy(() => import('./pages/client/MiContabilidad'));
 
+// 🎥 Sala de Reuniones Virtual (SERSI)
+const MeetingRoom = lazy(() => import('./pages/admin/MeetingRoom'));
+
 // ⚡ Componente de loading con logo - Usa variables CSS del tema CMS
 // Detecta el tema del CMS a través de la variable --color-background
 const LoadingSpinner = () => {
@@ -404,6 +407,7 @@ function AppContent() {
               <Route element={<AuthenticatedLayoutWrapper />}>
                 <Route path="/dashboard/profile" element={<Profile />} />
                 <Route path="/dashboard/mi-blog" element={<MyBlogHub />} />
+                <Route path="/dashboard/sala-reuniones" element={<MeetingRoom />} />
               </Route>
               
               {/* ⚡ RUTAS ADMIN + MODERATOR + SUPER_ADMIN */}
