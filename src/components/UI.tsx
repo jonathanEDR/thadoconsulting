@@ -211,7 +211,7 @@ export const truncateText = (text: string, maxLength: number) => {
 
 // Constantes de configuración
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  BASE_URL: import.meta.env.VITE_BACKEND_URL || (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, ''),
   ENDPOINTS: {
     HELLO: '/api/hello',
     INFO: '/api/info',

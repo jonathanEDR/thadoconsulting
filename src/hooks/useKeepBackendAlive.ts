@@ -9,25 +9,18 @@
  */
 
 import { useEffect, useRef } from 'react';
+import { getBackendUrl } from '../utils/apiConfig';
 
 // Configuración
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://thadoconsulting-back-98ll.onrender.com/api';
 const PING_INTERVAL_MS = 10 * 60 * 1000; // 10 minutos (Render duerme a los 15)
-const HEALTH_ENDPOINT = '/health';
-
-// Normalizar URL (quitar /api si ya está incluido)
-const getBaseUrl = () => {
-  const url = BACKEND_URL.replace(/\/api\/?$/, '');
-  return url;
-};
 
 /**
  * Hace ping silencioso al backend
  */
 async function pingBackend(): Promise<boolean> {
   try {
-    const baseUrl = getBaseUrl();
-    const response = await fetch(`${baseUrl}/api${HEALTH_ENDPOINT}`, {
+    const baseUrl = getBackendUrl();
+    const response = await fetch(`${baseUrl}/api/health`, {
       method: 'GET',
       mode: 'cors',
       cache: 'no-store',
