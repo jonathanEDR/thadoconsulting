@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { useImageLibrary } from '../hooks/cms/useImageLibrary';
 import { uploadImage } from '../services/imageService';
@@ -99,7 +100,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
       // Seleccionar la imagen recién subida
       const imageUrl = getImageUrl(result.url);
       onSelect(imageUrl);
-      onClose();
+      // onClose() no es necesario: onSelect ya cierra el modal desde PostEditor
     } catch (error) {
       console.error('Error uploading image:', error);
       
@@ -128,11 +129,17 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className={`${
-        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-      } rounded-xl border shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col`}>
+  const modalContent = (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onKeyDown={(e) => e.key === 'Escape' && onClose()}
+    >
+      <div
+        className={`${
+          darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        } rounded-xl border shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col`}
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Header */}
         <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -141,6 +148,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
               🖼️ {title}
             </h2>
             <button
+              type="button"
               onClick={onClose}
               className={`p-2 rounded-lg ${
                 darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
@@ -169,6 +177,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
                 } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
               />
               <button
+                type="button"
                 onClick={handleSearch}
                 className="px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
@@ -178,6 +187,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
 
             {/* Botón para subir nueva imagen */}
             <button
+              type="button"
               onClick={() => setShowUploadSection(!showUploadSection)}
               className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all flex items-center space-x-2"
             >
@@ -232,6 +242,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
                   Imagen actual seleccionada
                 </p>
                 <button
+                  type="button"
                   onClick={() => {
                     onSelect('');
                     onClose();
@@ -300,6 +311,7 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
         <div className={`px-6 py-4 border-t ${darkMode ? 'border-gray-700 bg-gray-750' : 'border-gray-200 bg-gray-50'}`}>
           <div className="flex justify-end space-x-3">
             <button
+              type="button"
               onClick={onClose}
               className={`px-4 py-2 rounded-lg ${
                 darkMode
@@ -314,6 +326,8 @@ const ImageSelectorModal: React.FC<ImageSelectorModalProps> = ({
       </div>
     </div>
   );
+
+  return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default ImageSelectorModal;

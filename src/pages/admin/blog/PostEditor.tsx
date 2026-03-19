@@ -527,6 +527,7 @@ export default function PostEditor() {
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <button
+              type="button"
               onClick={() => navigate('/dashboard/blog')}
               className="p-2.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all duration-200"
             >
@@ -552,6 +553,7 @@ export default function PostEditor() {
 
           <div className="flex items-center gap-3 flex-wrap">
             <button
+              type="button"
               onClick={() => setShowPreview(!showPreview)}
               className="inline-flex items-center gap-2 px-4 py-2.5 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm hover:shadow-md"
             >
@@ -560,6 +562,7 @@ export default function PostEditor() {
             </button>
 
             <button
+              type="button"
               onClick={handleSaveDraft}
               disabled={isSaving}
               className="inline-flex items-center gap-2 px-4 py-2.5 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
@@ -569,6 +572,7 @@ export default function PostEditor() {
             </button>
 
             <button
+              type="button"
               onClick={handlePublish}
               disabled={isSaving}
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium shadow-md hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
@@ -579,6 +583,7 @@ export default function PostEditor() {
 
             {/* Botón Asistente IA */}
             <button
+              type="button"
               onClick={() => setShowAISidebar(!showAISidebar)}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 font-medium shadow-md hover:shadow-xl transform hover:scale-105 ${
                 showAISidebar
@@ -681,6 +686,7 @@ export default function PostEditor() {
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2">
                   <button
+                    type="button"
                     onClick={() => setShowImageGallery(true)}
                     className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm font-medium shadow-lg"
                     title="Cambiar imagen"
@@ -688,6 +694,7 @@ export default function PostEditor() {
                     <ImageIcon className="w-4 h-4" />
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleChange('featuredImage', '')}
                     className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 text-sm font-medium shadow-lg"
                     title="Eliminar imagen"
@@ -700,6 +707,7 @@ export default function PostEditor() {
               <div className="space-y-4">
                 {/* 🖼️ OPCIÓN PRINCIPAL: Seleccionar de Galería */}
                 <button
+                  type="button"
                   onClick={() => setShowImageGallery(true)}
                   className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                 >
@@ -820,6 +828,7 @@ export default function PostEditor() {
                 className="flex-1 px-3 py-2.5 text-sm border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200"
               />
               <button
+                type="button"
                 onClick={handleAddTag}
                 className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
               >
@@ -858,6 +867,7 @@ export default function PostEditor() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
             {/* Header colapsable */}
             <button
+              type="button"
               onClick={() => setShowSEOSection(!showSEOSection)}
               className="w-full flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
             >
@@ -889,6 +899,7 @@ export default function PostEditor() {
               <div className="px-6 pb-6 space-y-5 border-t border-gray-200 dark:border-gray-700 pt-4">
                 {/* Botón Auto-generar */}
                 <button
+                  type="button"
                   onClick={handleAutoGenerateSEO}
                   className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg text-sm"
                 >
@@ -997,6 +1008,7 @@ export default function PostEditor() {
                       className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 transition-all duration-200"
                     />
                     <button
+                      type="button"
                       onClick={handleAddKeyword}
                       className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all duration-200 text-sm font-medium"
                     >
@@ -1013,6 +1025,7 @@ export default function PostEditor() {
                         >
                           {keyword}
                           <button
+                            type="button"
                             onClick={() => handleRemoveKeyword(keyword)}
                             className="text-green-500 hover:text-red-500 transition-colors"
                           >
