@@ -37,7 +37,7 @@ const ServicesPublicV2 = () => {
   // 🎯 SEO dinámico desde CMS con fallback a hardcoded
   const { SeoHelmet } = useSeo({
     pageName: 'services',
-    fallbackTitle: 'Servicios Contables y Tributarios - THADO Consulting',
+    fallbackTitle: 'Servicios Contables y Tributarios',
     fallbackDescription: 'Servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú.'
   });
 
@@ -252,8 +252,8 @@ const ServicesPublicV2 = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            "name": "Servicios Contables y Tributarios - THADO Consulting",
-            "description": "Catálogo de servicios contables, tributarios, laborales y de gestión financiera para MYPES en Perú",
+            "name": pageData?.seo?.metaTitle || 'Servicios',
+            "description": pageData?.seo?.metaDescription || 'Catálogo de servicios contables, tributarios, laborales y de gestión financiera',
             "url": "https://www.thadoconsulting.com/servicios",
             "numberOfItems": servicios?.length || 0,
             "itemListElement": servicios?.slice(0, 10).map((servicio: Servicio, index: number) => ({
@@ -358,7 +358,7 @@ const ServicesPublicV2 = () => {
                     : (pageData?.content?.hero?.styles?.light?.subtitleColor || '#4b5563')
                 }}
                 dangerouslySetInnerHTML={{ 
-                  __html: pageData?.content?.hero?.subtitle || 'Soluciones digitales de vanguardia diseñadas para impulsar tu negocio hacia el éxito'
+                  __html: pageData?.content?.hero?.subtitle || 'Servicios contables, tributarios y financieros para el éxito de tu empresa'
                 }}
               />
               {/* Descripción adicional si existe */}

@@ -67,6 +67,18 @@ interface AccordionConfig {
   featureHighlightBgGradientFromDark?: string;
   featureHighlightBgGradientToDark?: string;
   featureHighlightBgGradientDirDark?: string;
+  // Precio
+  priceColor?: string;
+  priceColorDark?: string;
+  
+  // Background de la sección
+  sectionBgGradientFrom?: string;
+  sectionBgGradientVia?: string;
+  sectionBgGradientTo?: string;
+  sectionBgGradientFromDark?: string;
+  sectionBgGradientViaDark?: string;
+  sectionBgGradientToDark?: string;
+  
   backgroundImage?: {
     light?: string;
     dark?: string;
@@ -469,6 +481,86 @@ export const ServicesAccordionConfigSection: React.FC<ServicesAccordionConfigSec
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Descripción
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.descriptionColor || '#4B5563'}
+                    onChange={(e) => handleUpdate('descriptionColor', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.descriptionColor || '#4B5563'}
+                    onChange={(e) => handleUpdate('descriptionColor', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Ícono expandir/colapsar
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.iconColor || '#8B5CF6'}
+                    onChange={(e) => handleUpdate('iconColor', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.iconColor || '#8B5CF6'}
+                    onChange={(e) => handleUpdate('iconColor', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Subtítulo
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.subtitleColor || '#4B5563'}
+                    onChange={(e) => handleUpdate('subtitleColor', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.subtitleColor || '#4B5563'}
+                    onChange={(e) => handleUpdate('subtitleColor', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Precio
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.priceColor || '#8B5CF6'}
+                    onChange={(e) => handleUpdate('priceColor', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.priceColor || '#8B5CF6'}
+                    onChange={(e) => handleUpdate('priceColor', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
             </div>
               </div>
             )}
@@ -618,6 +710,86 @@ export const ServicesAccordionConfigSection: React.FC<ServicesAccordionConfigSec
                     type="text"
                     value={config.featureIconColorDark || '#22D3EE'}
                     onChange={(e) => handleUpdate('featureIconColorDark', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Descripción
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.descriptionColorDark || '#D1D5DB'}
+                    onChange={(e) => handleUpdate('descriptionColorDark', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.descriptionColorDark || '#D1D5DB'}
+                    onChange={(e) => handleUpdate('descriptionColorDark', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Ícono expandir/colapsar
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.iconColorDark || '#A78BFA'}
+                    onChange={(e) => handleUpdate('iconColorDark', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.iconColorDark || '#A78BFA'}
+                    onChange={(e) => handleUpdate('iconColorDark', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Subtítulo
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.subtitleColorDark || '#D1D5DB'}
+                    onChange={(e) => handleUpdate('subtitleColorDark', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.subtitleColorDark || '#D1D5DB'}
+                    onChange={(e) => handleUpdate('subtitleColorDark', e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Precio
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={config.priceColorDark || '#A78BFA'}
+                    onChange={(e) => handleUpdate('priceColorDark', e.target.value)}
+                    className="w-10 h-10 rounded cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={config.priceColorDark || '#A78BFA'}
+                    onChange={(e) => handleUpdate('priceColorDark', e.target.value)}
                     className="flex-1 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
@@ -1767,6 +1939,24 @@ export const ServicesAccordionConfigSection: React.FC<ServicesAccordionConfigSec
               )}
             </div>
             
+            {/* Bordes redondeados del botón */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                Bordes redondeados: {config.buttonBorderRadius || '9999px'}
+              </label>
+              <select
+                value={config.buttonBorderRadius || '9999px'}
+                onChange={(e) => handleUpdate('buttonBorderRadius', e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                <option value="0px">Sin redondeo (0px)</option>
+                <option value="4px">Mínimo (4px)</option>
+                <option value="8px">Pequeño (8px)</option>
+                <option value="12px">Mediano (12px)</option>
+                <option value="9999px">Completo / Pill (9999px)</option>
+              </select>
+            </div>
+            
             {/* 🎨 Colores de resaltado de características */}
             <div className="mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
               <h4 className="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-4 flex items-center gap-2">
@@ -2177,6 +2367,90 @@ export const ServicesAccordionConfigSection: React.FC<ServicesAccordionConfigSec
                 </div>
               </div>
             </div>
+              </div>
+            )}
+          </div>
+
+          {/* ===== GRADIENTE DE FONDO DE SECCIÓN ===== */}
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleSection('sectionBg')}
+              className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            >
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                🎨 Gradiente de Fondo
+              </h3>
+              <svg className={`w-5 h-5 text-gray-500 transition-transform ${openSections['sectionBg'] ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            {openSections['sectionBg'] && (
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-4">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Gradiente de 3 colores (135°) que cubre toda la sección del acordeón.
+                </p>
+                
+                {/* Modo Claro */}
+                <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">☀️ Modo Claro</h4>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Inicio</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientFrom || '#0ea5e9'} onChange={(e) => handleUpdate('sectionBgGradientFrom', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientFrom || '#0ea5e9'} onChange={(e) => handleUpdate('sectionBgGradientFrom', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Centro</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientVia || '#8b5cf6'} onChange={(e) => handleUpdate('sectionBgGradientVia', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientVia || '#8b5cf6'} onChange={(e) => handleUpdate('sectionBgGradientVia', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Fin</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientTo || '#ec4899'} onChange={(e) => handleUpdate('sectionBgGradientTo', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientTo || '#ec4899'} onChange={(e) => handleUpdate('sectionBgGradientTo', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Vista previa claro */}
+                  <div className="mt-2 h-8 rounded-lg" style={{ background: `linear-gradient(135deg, ${config.sectionBgGradientFrom || '#0ea5e9'} 0%, ${config.sectionBgGradientVia || '#8b5cf6'} 50%, ${config.sectionBgGradientTo || '#ec4899'} 100%)` }} />
+                </div>
+                
+                {/* Modo Oscuro */}
+                <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">🌙 Modo Oscuro</h4>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Inicio</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientFromDark || '#0c4a6e'} onChange={(e) => handleUpdate('sectionBgGradientFromDark', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientFromDark || '#0c4a6e'} onChange={(e) => handleUpdate('sectionBgGradientFromDark', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Centro</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientViaDark || '#4c1d95'} onChange={(e) => handleUpdate('sectionBgGradientViaDark', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientViaDark || '#4c1d95'} onChange={(e) => handleUpdate('sectionBgGradientViaDark', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Fin</label>
+                      <div className="flex items-center gap-1">
+                        <input type="color" value={config.sectionBgGradientToDark || '#831843'} onChange={(e) => handleUpdate('sectionBgGradientToDark', e.target.value)} className="w-6 h-6 rounded cursor-pointer" />
+                        <input type="text" value={config.sectionBgGradientToDark || '#831843'} onChange={(e) => handleUpdate('sectionBgGradientToDark', e.target.value)} className="flex-1 px-1 py-0.5 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Vista previa oscuro */}
+                  <div className="mt-2 h-8 rounded-lg" style={{ background: `linear-gradient(135deg, ${config.sectionBgGradientFromDark || '#0c4a6e'} 0%, ${config.sectionBgGradientViaDark || '#4c1d95'} 50%, ${config.sectionBgGradientToDark || '#831843'} 100%)` }} />
+                </div>
               </div>
             )}
           </div>

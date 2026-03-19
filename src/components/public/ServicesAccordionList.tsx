@@ -87,7 +87,19 @@ interface AccordionConfig {
   featureHighlightBgGradientToDark?: string;
   featureHighlightBgGradientDirDark?: string;
   
-  // Background
+  // Precio
+  priceColor?: string;
+  priceColorDark?: string;
+  
+  // Background de la sección
+  sectionBgGradientFrom?: string;
+  sectionBgGradientVia?: string;
+  sectionBgGradientTo?: string;
+  sectionBgGradientFromDark?: string;
+  sectionBgGradientViaDark?: string;
+  sectionBgGradientToDark?: string;
+  
+  // Background image
   backgroundImage?: {
     light?: string;
     dark?: string;
@@ -437,7 +449,7 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
           <div className="flex items-center justify-between mt-4">
             {/* Precio */}
             <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold" style={{ color: iconColor }}>
+              <span className="text-lg font-semibold" style={{ color: isDark ? (config?.priceColorDark || config?.iconColorDark || '#A78BFA') : (config?.priceColor || config?.iconColor || '#8B5CF6') }}>
                 {(() => {
                       const getCurrencySymbol = (moneda?: string): string => {
                         switch (moneda?.toUpperCase()) {
@@ -481,7 +493,7 @@ const AccordionItem: React.FC<AccordionItemProps> = memo(({
             <Link
               to={'/servicios/' + (servicio.slug || servicio._id)}
               onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-              className="px-6 py-2 text-sm font-medium text-white rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              className="px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg"
               style={{
                 background: (() => {
                   // Prioridad: buttonGradient manual > nuevas propiedades de gradiente > color sólido
@@ -531,7 +543,7 @@ export const ServicesAccordionList: React.FC<ServicesAccordionListProps> = memo(
 }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Número fijo de servicios por página
+  const itemsPerPage = config?.itemsPerPage || 10;
   const sectionRef = React.useRef<HTMLElement>(null);
   
   const isDark = currentTheme === 'dark';
@@ -608,8 +620,8 @@ export const ServicesAccordionList: React.FC<ServicesAccordionListProps> = memo(
         marginLeft: 'calc(50% - 50vw)',
         marginRight: 'calc(50% - 50vw)',
         background: isDark
-          ? 'linear-gradient(135deg, #0c4a6e 0%, #4c1d95 50%, #831843 100%)'
-          : 'linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%, #ec4899 100%)'
+          ? `linear-gradient(135deg, ${config?.sectionBgGradientFromDark || '#0c4a6e'} 0%, ${config?.sectionBgGradientViaDark || '#4c1d95'} 50%, ${config?.sectionBgGradientToDark || '#831843'} 100%)`
+          : `linear-gradient(135deg, ${config?.sectionBgGradientFrom || '#0ea5e9'} 0%, ${config?.sectionBgGradientVia || '#8b5cf6'} 50%, ${config?.sectionBgGradientTo || '#ec4899'} 100%)`
       }}
     >
       {/* Patrón de fondo decorativo - Círculos y líneas de circuito */}

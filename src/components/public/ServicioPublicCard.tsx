@@ -75,7 +75,11 @@ interface CardDesignConfig {
   titleColor?: string;
   titleColorDark?: string;
   titleHoverColor?: string;
+  titleHoverColorDark?: string;
   priceColor?: string;
+  priceColorDark?: string;
+  descriptionColor?: string;
+  descriptionColorDark?: string;
   featuredBadge?: {
     text?: string;
     gradient?: string;
@@ -89,6 +93,7 @@ interface CardDesignConfig {
   buttonIconPosition?: 'left' | 'right' | 'none';
   buttonGradient?: string;
   buttonBorderRadius?: string;
+  buttonTextColor?: string;
   transparentCards?: boolean;
   // Tipografía
   titleFontFamily?: string;
@@ -138,6 +143,11 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
   // FUNCIONES AUXILIARES
   // ============================================
 
+  // Color de precio desde CMS según tema
+  const priceColor = currentTheme === 'dark'
+    ? (cardConfig?.priceColorDark || '#A78BFA')
+    : (cardConfig?.priceColor || '#8B5CF6');
+
   const formatPrice = () => {
     if (!showPrice) return null;
     
@@ -152,43 +162,43 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
     switch (servicio.tipoPrecio) {
       case 'fijo':
         return (
-          <div className="text-2xl font-bold text-purple-600">
+          <div className="text-2xl font-bold" style={{ color: priceColor }}>
             {symbol} {servicio.precio?.toLocaleString()}
           </div>
         );
       case 'desde':
         return (
-          <div className="text-2xl font-bold text-purple-600">
+          <div className="text-2xl font-bold" style={{ color: priceColor }}>
             Desde {symbol} {servicio.precio?.toLocaleString()}
           </div>
         );
       case 'rango':
         return (
-          <div className="text-lg font-semibold text-purple-600">
+          <div className="text-lg font-semibold" style={{ color: priceColor }}>
             {symbol} {servicio.precioMin?.toLocaleString()} - {symbol} {servicio.precioMax?.toLocaleString()}
           </div>
         );
       case 'paquetes':
         return (
-          <div className="text-lg font-semibold text-purple-600">
+          <div className="text-lg font-semibold" style={{ color: priceColor }}>
             Desde {symbol} {servicio.precioMin?.toLocaleString()}
           </div>
         );
       case 'suscripcion':
         return (
-          <div className="text-lg font-semibold text-purple-600">
+          <div className="text-lg font-semibold" style={{ color: priceColor }}>
             {symbol} {servicio.precio?.toLocaleString()}/mes
           </div>
         );
       case 'consultar':
         return (
-          <div className="text-lg font-semibold text-gray-600">
+          <div className="text-lg font-semibold" style={{ color: priceColor }}>
             Consultar precio
           </div>
         );
       case 'personalizado':
         return (
-          <div className="text-lg font-semibold text-gray-600">
+          <div className="text-lg font-semibold" style={{ color: priceColor }}>
             Precio personalizado
           </div>
         );
@@ -401,21 +411,24 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
 
         {/* Título - siempre visible pero con líneas configurables */}
         <h3 
-          className={`text-xl mb-3 ${getLineClampClass(titleMaxLines)} transition-colors text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400`}
+          className={`text-xl mb-3 ${getLineClampClass(titleMaxLines)} transition-colors`}
           style={{
             fontFamily: cardConfig?.titleFontFamily || 'inherit',
             fontWeight: cardConfig?.titleFontWeight || '700',
-            ...(cardConfig?.titleColor ? { color: cardConfig.titleColor } : {})
+            color: currentTheme === 'dark'
+              ? (cardConfig?.titleColorDark || '#f9fafb')
+              : (cardConfig?.titleColor || '#111827')
           }}
           onMouseEnter={(e) => {
-            if (cardConfig?.titleHoverColor) {
-              e.currentTarget.style.color = cardConfig.titleHoverColor;
-            }
+            const hoverColor = currentTheme === 'dark'
+              ? (cardConfig?.titleHoverColorDark || '#A78BFA')
+              : (cardConfig?.titleHoverColor || '#8B5CF6');
+            e.currentTarget.style.color = hoverColor;
           }}
           onMouseLeave={(e) => {
-            if (cardConfig?.titleHoverColor) {
-              e.currentTarget.style.color = cardConfig?.titleColor || '';
-            }
+            e.currentTarget.style.color = currentTheme === 'dark'
+              ? (cardConfig?.titleColorDark || '#f9fafb')
+              : (cardConfig?.titleColor || '#111827');
           }}
         >
           {servicio.titulo}
@@ -424,10 +437,13 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
         {/* Descripción corta - solo si está configurado */}
         {showDescription && (
           <p 
-            className={`text-gray-600 dark:text-gray-300 text-sm mb-4 ${getLineClampClass(descriptionMaxLines)}`}
+            className={`text-sm mb-4 ${getLineClampClass(descriptionMaxLines)}`}
             style={{
               fontFamily: cardConfig?.descriptionFontFamily || 'inherit',
-              fontWeight: cardConfig?.descriptionFontWeight || '400'
+              fontWeight: cardConfig?.descriptionFontWeight || '400',
+              color: currentTheme === 'dark'
+                ? (cardConfig?.descriptionColorDark || '#d1d5db')
+                : (cardConfig?.descriptionColor || '#4b5563')
             }}
           >
             {servicio.descripcionCorta || servicio.descripcion}
@@ -559,14 +575,15 @@ export const ServicioPublicCard: React.FC<ServicioPublicCardProps> = ({
                 window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
               }}
               className="
-                text-white px-4 py-2 font-medium
+                px-4 py-2 font-medium
                 transition-all duration-200 transform hover:scale-105
                 shadow-lg hover:shadow-xl
                 text-sm flex items-center gap-2
               "
               style={{
                 background: cardConfig?.buttonGradient || 'linear-gradient(90deg, #8B5CF6, #3B82F6)',
-                borderRadius: cardConfig?.buttonBorderRadius || '0.5rem'
+                borderRadius: cardConfig?.buttonBorderRadius || '0.5rem',
+                color: cardConfig?.buttonTextColor || '#ffffff'
               }}
             >
               {cardConfig?.buttonIconPosition === 'left' && (
