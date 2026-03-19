@@ -64,7 +64,8 @@ const BlogPostEnhanced: React.FC = () => {
 
   useEffect(() => {
     if (post) {
-      document.title = `${post.title} | Blog THADO Consulting`;
+      // Usar exactamente el metaTitle configurado en CMS, sin sufijo de marca
+      document.title = post.seo?.metaTitle || post.title;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [post]);
@@ -140,7 +141,7 @@ const BlogPostEnhanced: React.FC = () => {
       {/* SEO Head optimizado para IA externa (ChatGPT, Claude, Bard, Perplexity) */}
       <Helmet>
         {/* ✅ CORREGIDO: Usar SEO configurado por el usuario */}
-        <title>{post.seo?.metaTitle || post.title} | THADO Consulting Blog</title>
+        <title>{post.seo?.metaTitle || post.title}</title>
         <meta name="description" content={post.seo?.metaDescription || post.excerpt} />
         
         {/* ✅ Keywords: Priorizar focusKeyphrase + seo.keywords, eliminar duplicados */}

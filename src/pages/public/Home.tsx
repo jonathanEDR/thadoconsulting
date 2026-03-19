@@ -330,7 +330,8 @@ const HomeOptimized = () => {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="THADO Consulting - Servicios Contables y Tributarios para MYPES en Perú" />
+        {/* og:image:alt: usa el valor del CMS si existe, sino describe la imagen del logo */}
+        <meta property="og:image:alt" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.thadoconsulting.com/" />
         <meta property="og:site_name" content="THADO Consulting" />

@@ -38,7 +38,8 @@ export default function SEOHead({
 
     // Si es un post
     if (post) {
-      seoTitle = post.seo?.metaTitle || `${post.title} | Blog THADO Consulting`;
+      // Usar exactamente el metaTitle del CMS sin añadir sufijo de marca
+      seoTitle = post.seo?.metaTitle || post.title;
       seoDescription = post.seo?.metaDescription || post.excerpt || `Descubre ${post.title} en nuestro blog de desarrollo web y tecnología.`;
       seoImage = post.featuredImage || '/images/blog-default.jpg';
       seoType = 'article';
@@ -64,13 +65,13 @@ export default function SEOHead({
 
     // Si es una categoría
     if (category) {
-      seoTitle = `${category.name} | Blog THADO Consulting`;
+      seoTitle = category.name;
       seoDescription = category.description || `Explora todos los artículos sobre ${category.name} en nuestro blog.`;
       seoImage = category.image?.url || '/images/blog-default.jpg';
     }
 
-    // Actualizar título
-    document.title = seoTitle || 'Blog THADO Consulting';
+    // Actualizar título con el valor configurado, sin fallback de marca
+    document.title = seoTitle || title || '';
 
     // Meta tags básicos
     updateMetaTag('description', seoDescription || 'Blog de desarrollo web, diseño y tecnología');

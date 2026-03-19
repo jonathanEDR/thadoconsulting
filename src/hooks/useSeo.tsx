@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { getPageBySlug, forceReload } from '../services/cmsApi';
-import { getHardcodedSeo } from '../config/seoConfig';
 
 // 🌐 URL base del sitio para construir URLs absolutas
 const SITE_URL = 'https://www.thadoconsulting.com';
@@ -96,30 +95,17 @@ const CMS_PAGES = ['about', 'services', 'contact', 'blog'];
 const DASHBOARD_PAGES = ['dashboard', 'cms', 'profile', 'settings', 'help', 'media'];
 
 /**
- * 🎯 Hook global para manejo de SEO con sistema de prioridad
- * PRIORIDAD: 1) CMS Database → 2) Hardcoded Config → 3) Fallbacks
+ * 🎯 Hook global para manejo de SEO
+ * FUENTE ÚNICA: CMS Database → fallback mínimo si el CMS no responde
  */
 export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoOptions): UseSeoReturn {
-  // 🎯 Inicializar con configuración hardcodeada o fallback
-  const [seoData, setSeoData] = useState<SeoData>(() => {
-    const hardcodedSeo = getHardcodedSeo(pageName);
-    
-    if (hardcodedSeo) {
-      // Usar configuración hardcodeada
-      return {
-        ...hardcodedSeo,
-        _source: 'hardcoded'
-      };
-    }
-    
-    // Usar fallback genérico
-    return {
-      ...DEFAULT_SEO,
-      metaTitle: fallbackTitle || DEFAULT_SEO.metaTitle,
-      metaDescription: fallbackDescription || DEFAULT_SEO.metaDescription,
-      _source: 'fallback'
-    };
-  });
+  // Estado inicial mínimo mientras se carga el CMS
+  const [seoData, setSeoData] = useState<SeoData>(() => ({
+    ...DEFAULT_SEO,
+    metaTitle: fallbackTitle || DEFAULT_SEO.metaTitle,
+    metaDescription: fallbackDescription || DEFAULT_SEO.metaDescription,
+    _source: 'fallback'
+  }));
   
   const [isLoading, setIsLoading] = useState(true);
   
@@ -127,20 +113,15 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
   const needsCmsData = CMS_PAGES.includes(pageName);
   const isDashboardPage = DASHBOARD_PAGES.includes(pageName);
 
-  // 🔄 Efecto para cargar datos de SEO (CMS o estático)
+  // 🔄 Efecto para cargar datos de SEO
   useEffect(() => {
     const loadSeoData = async (forceRefresh = false) => {
       try {
         setIsLoading(true);
         
-        // 🎯 Si es página del dashboard, usar solo hardcoded/fallbacks (sin API)
+        // Páginas del dashboard: no necesitan API, usar fallback con títulos descriptivos
         if (isDashboardPage) {
-          const hardcodedSeo = getHardcodedSeo(pageName);
-          
-          const staticSeoData: SeoData = hardcodedSeo ? {
-            ...hardcodedSeo,
-            _source: 'hardcoded'
-          } : {
+          const staticSeoData: SeoData = {
             metaTitle: fallbackTitle || DEFAULT_SEO.metaTitle,
             metaDescription: fallbackDescription || DEFAULT_SEO.metaDescription,
             keywords: DEFAULT_SEO.keywords,
@@ -149,84 +130,46 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
             ogImage: DEFAULT_SEO.ogImage,
             _source: 'fallback'
           };
-          
           setSeoData(staticSeoData);
           document.title = staticSeoData.metaTitle;
-          
-          // 📊 Log transparente en desarrollo
-          if (import.meta.env.DEV) {
-            // console.log(`🎯 [useSeo] "${pageName}" - Origen: ${staticSeoData._source?.toUpperCase()}`);
-          }
-          
           return;
         }
         
-        // 🎯 Si es página CMS, intentar cargar datos dinámicos
+        // Páginas públicas: cargar SEO desde el CMS
         if (needsCmsData) {
           try {
             const data = forceRefresh 
               ? await forceReload(pageName)
               : await getPageBySlug(pageName, true);
             
-            // ✅ PRIORIDAD 1: Datos del CMS (si existen y tienen contenido)
+            // ✅ CMS tiene datos: usarlos directamente
             if (data && data.seo && (data.seo.metaTitle || data.seo.metaDescription)) {
-              const hardcodedSeo = getHardcodedSeo(pageName);
-              
               const cmsSeoData: SeoData = {
-                // Usar datos del CMS si existen, sino usar hardcoded, sino fallback
-                metaTitle: data.seo.metaTitle || hardcodedSeo?.metaTitle || fallbackTitle || DEFAULT_SEO.metaTitle,
-                metaDescription: data.seo.metaDescription || hardcodedSeo?.metaDescription || fallbackDescription || DEFAULT_SEO.metaDescription,
-                keywords: (data.seo.keywords && data.seo.keywords.length > 0) 
-                  ? data.seo.keywords 
-                  : (hardcodedSeo?.keywords || DEFAULT_SEO.keywords),
-                ogTitle: data.seo.ogTitle || data.seo.metaTitle || hardcodedSeo?.ogTitle || fallbackTitle || DEFAULT_SEO.ogTitle,
-                ogDescription: data.seo.ogDescription || data.seo.metaDescription || hardcodedSeo?.ogDescription || fallbackDescription || DEFAULT_SEO.ogDescription,
-                // ✅ Normalizar og:image (relativa → absoluta) y usar fallback de hardcoded
-                ogImage: normalizeOgImage(data.seo.ogImage) || normalizeOgImage(hardcodedSeo?.ogImage) || '',
-                // ✅ Mantener canonical del hardcoded (el CMS no lo provee)
-                canonical: hardcodedSeo?.canonical || (PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined),
+                metaTitle: data.seo.metaTitle || fallbackTitle || DEFAULT_SEO.metaTitle,
+                metaDescription: data.seo.metaDescription || fallbackDescription || DEFAULT_SEO.metaDescription,
+                keywords: (data.seo.keywords && data.seo.keywords.length > 0)
+                  ? data.seo.keywords
+                  : DEFAULT_SEO.keywords,
+                ogTitle: data.seo.ogTitle || data.seo.metaTitle || fallbackTitle || DEFAULT_SEO.ogTitle,
+                ogDescription: data.seo.ogDescription || data.seo.metaDescription || fallbackDescription || DEFAULT_SEO.ogDescription,
+                ogImage: normalizeOgImage(data.seo.ogImage) || '',
+                canonical: PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined,
                 _source: 'cms'
               };
-              
               setSeoData(cmsSeoData);
               document.title = cmsSeoData.metaTitle;
-              
-              // 📊 Log transparente en desarrollo
-              if (import.meta.env.DEV) {
-                // console.log(`✅ [useSeo] "${pageName}" - Origen: CMS (Database)`);
-                // console.log(`   Title: ${cmsSeoData.metaTitle}`);
-                // console.log(`   Description: ${cmsSeoData.metaDescription.substring(0, 50)}...`);
-              }
-              
               return;
             }
-            
-            // Si el CMS no tiene datos, intentar hardcoded
-            throw new Error('No SEO data in CMS');
-            
+
+            // CMS sin datos SEO configurados
+            throw new Error(`CMS sin SEO configurado para la página "${pageName}"`);
+
           } catch (cmsError) {
-            // ✅ PRIORIDAD 2: Configuración hardcodeada
-            const hardcodedSeo = getHardcodedSeo(pageName);
-            
-            if (hardcodedSeo) {
-              const hardcodedSeoData: SeoData = {
-                ...hardcodedSeo,
-                _source: 'hardcoded'
-              };
-              
-              setSeoData(hardcodedSeoData);
-              document.title = hardcodedSeoData.metaTitle;
-              
-              // 📊 Log transparente en desarrollo
-              if (import.meta.env.DEV) {
-                // console.log(`⚙️ [useSeo] "${pageName}" - Origen: HARDCODED (seoConfig.ts)`);
-                // console.log(`   Razón: CMS no disponible o sin datos`);
-              }
-              
-              return;
+            if (import.meta.env.DEV) {
+              console.warn(`⚠️ [useSeo] "${pageName}" — CMS no disponible o sin datos SEO. Usando fallback hasta que configures el SEO en /dashboard/cms/seo`);
             }
-            
-            // ✅ PRIORIDAD 3: Fallbacks genéricos
+
+            // Fallback mínimo: no bloquea el render, avisa en dev
             const fallbackSeoData: SeoData = {
               metaTitle: fallbackTitle || DEFAULT_SEO.metaTitle,
               metaDescription: fallbackDescription || DEFAULT_SEO.metaDescription,
@@ -234,22 +177,15 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
               ogTitle: fallbackTitle || DEFAULT_SEO.ogTitle,
               ogDescription: fallbackDescription || DEFAULT_SEO.ogDescription,
               ogImage: '',
+              canonical: PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined,
               _source: 'fallback'
             };
-            
             setSeoData(fallbackSeoData);
             document.title = fallbackSeoData.metaTitle;
-            
-            // 📊 Log transparente en desarrollo
-            if (import.meta.env.DEV) {
-              // console.warn(`⚠️ [useSeo] "${pageName}" - Origen: FALLBACK`);
-              // console.warn(`   Razón: Sin CMS ni configuración hardcodeada`);
-            }
           }
         }
         
       } catch (error) {
-        // 🎯 Solo loguear en desarrollo
         if (import.meta.env.DEV) {
           console.error(`❌ [useSeo] Error crítico en "${pageName}":`, error);
         }
