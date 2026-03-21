@@ -198,8 +198,8 @@ const BlogPostEnhanced: React.FC = () => {
         {post.featuredImage && <meta name="twitter:image" content={getImageUrl(post.featuredImage)} />}
         
         {/* Para GPT y otros crawlers */}
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large" />
         
         {/* ✅ CORREGIDO: canonical usa href, no content */}
         <link rel="canonical" href={`https://www.thadoconsulting.com/blog/${post.slug}`} />

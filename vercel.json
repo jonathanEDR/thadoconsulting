@@ -5,10 +5,6 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/sitemap-blog.xml",
-      "destination": "https://thadoconsulting-back-98ll.onrender.com/api/blog/sitemap.xml"
-    },
-    {
       "source": "/api/blog/(.*)",
       "destination": "https://thadoconsulting-back-98ll.onrender.com/api/blog/$1"
     },

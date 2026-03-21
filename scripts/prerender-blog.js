@@ -225,15 +225,20 @@ function generateArticleSchema(post) {
     "datePublished": formatDate(post.publishedAt || post.createdAt),
     "dateModified": formatDate(post.updatedAt || post.publishedAt || post.createdAt),
     "author": {
-      "@type": "Person",
-      "name": authorName
+      "@type": "Organization",
+      "name": "Thado Consulting",
+      "url": "https://www.thadoconsulting.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.thadoconsulting.com/FAVICON.png"
+      }
     },
     "publisher": {
       "@type": "Organization",
       "name": "THADO Consulting",
       "logo": {
         "@type": "ImageObject",
-        "url": CONFIG.defaultImage
+        "url": "https://www.thadoconsulting.com/favicon-512x512.png"
       }
     },
     "mainEntityOfPage": {
@@ -520,24 +525,24 @@ function generatePostHtml(indexHtml, post) {
     `<meta name="twitter:image" content="${imageUrl}" data-rh="true" />`
   );
 
-  // Agregar article meta tags adicionales
+  // Agregar article meta tags adicionales (con data-rh="true" para que React Helmet los gestione)
   const articleMeta = `
-    <meta property="article:published_time" content="${formatDate(post.publishedAt || post.createdAt)}" />
-    <meta property="article:modified_time" content="${formatDate(post.updatedAt)}" />
-    <meta property="article:author" content="${escapeHtml(getAuthorName(post.author))}" />
-    <meta property="article:section" content="${escapeHtml(post.category?.name || 'Blog')}" />
-    ${post.tags?.map(t => `<meta property="article:tag" content="${escapeHtml(typeof t === 'string' ? t : t.name)}" />`).join('\n    ') || ''}
+    <meta property="article:published_time" content="${formatDate(post.publishedAt || post.createdAt)}" data-rh="true" />
+    <meta property="article:modified_time" content="${formatDate(post.updatedAt)}" data-rh="true" />
+    <meta property="article:author" content="Thado Consulting" data-rh="true" />
+    <meta property="article:section" content="${escapeHtml(post.category?.name || 'Blog')}" data-rh="true" />
+    ${post.tags?.map(t => `<meta property="article:tag" content="${escapeHtml(typeof t === 'string' ? t : t.name)}" data-rh="true" />`).join('\n    ') || ''}
   `;
 
   // Insertar article meta tags antes de </head>
   html = html.replace('</head>', `${articleMeta}\n  </head>`);
 
-  // Agregar Schema.org JSON-LD para el artículo (antes del cierre de head)
+  // Agregar Schema.org JSON-LD para el artículo (con data-rh="true" para que React Helmet los reemplace)
   const schemaScript = `
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-rh="true">
     ${JSON.stringify(articleSchema, null, 2)}
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-rh="true">
     ${JSON.stringify(breadcrumbSchema, null, 2)}
     </script>
   `;

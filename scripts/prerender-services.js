@@ -646,12 +646,12 @@ function generateServiceHtml(indexHtml, servicio) {
     `<meta name="twitter:image" content="${imageUrl}" data-rh="true" />`
   );
 
-  // Agregar Schema.org JSON-LD para el servicio (antes del cierre de head)
+  // Agregar Schema.org JSON-LD para el servicio (con data-rh="true" para que React Helmet los reemplace)
   const schemaScript = `
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-rh="true">
     ${JSON.stringify(serviceSchema, null, 2)}
     </script>
-    <script type="application/ld+json">
+    <script type="application/ld+json" data-rh="true">
     ${JSON.stringify(breadcrumbSchema, null, 2)}
     </script>
   `;
