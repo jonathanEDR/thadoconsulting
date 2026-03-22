@@ -8,6 +8,7 @@
  * PRIORIDAD SEO: CMS (MongoDB) > Hardcoded (seoConfig.ts) > Fallback
  *
  * Páginas generadas:
+ * - / (homepage → sobreescribe dist/index.html con SEO del CMS)
  * - /servicios, /blog, /nosotros, /contacto, /privacidad, /terminos
  * - /404.html (página de error con noindex)
  */
@@ -127,6 +128,48 @@ function escapeHtml(text) {
 // ═══════════════════════════════════════════════════════════
 
 const routes = [
+  {
+    path: '/',
+    cmsSlug: 'home',
+    hardcodedSeo: {
+      title: 'Contador Público en Perú | Asesoría Contable para Empresas',
+      description: 'Evita multas y optimiza tus impuestos con más de 10 años de experiencia en gestión contable externa. Servicios contables, tributarios y financieros para empresas en Perú.',
+      keywords: 'asesoría contable para empresas, gestión tributaria SUNAT, outsourcing contable Perú, servicios contables Lima, estudio contable Lima, contador público para pequeñas empresas Lima, contador para emprendedores, asesoría tributaria SUNAT Lima',
+      ogTitle: 'Contador Público en Perú | Asesoría para Empresas',
+      ogDescription: 'Especialistas en contabilidad externa y gestión tributaria en Perú. Asegura la salud financiera de tu empresa y evita contingencias con SUNAT. ¡Contáctanos!',
+      ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
+      url: `${CONFIG.siteUrl}/`
+    },
+    generateContent: (seo) => `
+      <main class="page-content" style="max-width:900px;margin:0 auto;padding:2rem;font-family:Inter,-apple-system,sans-serif;">
+        <h1 style="font-size:2.5rem;font-weight:700;color:#1f2937;margin-bottom:1rem;line-height:1.2;">${escapeHtml(seo.title)}</h1>
+        <p style="font-size:1.125rem;color:#4b5563;line-height:1.8;margin-bottom:2rem;">${escapeHtml(seo.description)}</p>
+        <section>
+          <h2 style="font-size:1.5rem;color:#1f2937;margin-bottom:1rem;">Servicios de Gestión Contable y Estrategia Fiscal</h2>
+          <p style="color:#374151;line-height:1.8;margin-bottom:1rem;">Brindamos un respaldo integral diseñado para empresas que buscan solidez y transparencia. Nuestra metodología se basa en 5 pilares estratégicos.</p>
+          <ul style="list-style:none;padding:0;">
+            <li style="padding:0.5rem 0;color:#374151;">📋 Gestión Contable - Registro, libros electrónicos y estados financieros</li>
+            <li style="padding:0.5rem 0;color:#374151;">💰 Gestión y Estrategias Tributarias - Declaraciones SUNAT y optimización fiscal</li>
+            <li style="padding:0.5rem 0;color:#374151;">👥 Gestión Laboral y PLAME - Nóminas y cumplimiento laboral</li>
+            <li style="padding:0.5rem 0;color:#374151;">🏢 Costos y Presupuestos - Análisis de costos y planificación financiera</li>
+            <li style="padding:0.5rem 0;color:#374151;">🔍 Transformación Digital - Modernización de procesos contables</li>
+          </ul>
+        </section>
+        <section style="margin-top:2rem;">
+          <h2 style="font-size:1.5rem;color:#1f2937;margin-bottom:1rem;">¿Por qué elegirnos?</h2>
+          <ul style="list-style:none;padding:0;">
+            <li style="padding:0.5rem 0;color:#374151;">✅ +500 MYPES atendidas en todo el Perú</li>
+            <li style="padding:0.5rem 0;color:#374151;">✅ 10+ años de experiencia especializada</li>
+            <li style="padding:0.5rem 0;color:#374151;">✅ Enfoque integral en 5 pilares estratégicos</li>
+            <li style="padding:0.5rem 0;color:#374151;">✅ Respuesta rápida y atención personalizada</li>
+            <li style="padding:0.5rem 0;color:#374151;">✅ Garantía de cero multas y contingencias ante SUNAT</li>
+          </ul>
+        </section>
+        <div style="margin-top:2rem;">
+          <a href="/servicios" style="background:#2554a3;color:white;padding:0.75rem 2rem;border-radius:0.5rem;text-decoration:none;font-weight:600;">Solicitar Diagnóstico Contable Gratis</a>
+        </div>
+      </main>`
+  },
   {
     path: '/servicios',
     cmsSlug: 'services',
@@ -382,15 +425,22 @@ async function processRoute(route, indexHtml) {
   $('#root').html(visibleContent);
 
   // 6. Escribir archivo
-  const routePath = path.join(distPath, route.path.substring(1));
-  if (!fs.existsSync(routePath)) {
-    fs.mkdirSync(routePath, { recursive: true });
+  // HOMEPAGE ESPECIAL: '/' escribe directamente sobre dist/index.html
+  let htmlPath;
+  if (route.path === '/') {
+    htmlPath = path.join(distPath, 'index.html');
+  } else {
+    const routePath = path.join(distPath, route.path.substring(1));
+    if (!fs.existsSync(routePath)) {
+      fs.mkdirSync(routePath, { recursive: true });
+    }
+    htmlPath = path.join(routePath, 'index.html');
   }
 
-  const htmlPath = path.join(routePath, 'index.html');
   fs.writeFileSync(htmlPath, $.html());
 
-  console.log(`   ✅ ${route.path}/index.html`);
+  const displayPath = route.path === '/' ? '/ (homepage → dist/index.html)' : `${route.path}/index.html`;
+  console.log(`   ✅ ${displayPath}`);
   console.log(`   📄 Title: ${seoData.title}`);
   console.log(`   🔗 Source: ${seoData === route.hardcodedSeo ? 'HARDCODED' : 'CMS'}`);
 }

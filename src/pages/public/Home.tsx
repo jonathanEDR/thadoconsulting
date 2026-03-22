@@ -21,11 +21,11 @@ import type { DefaultFeaturedBlogConfig } from '../../utils/defaultConfig';
 // SEO fallback mínimo (el contenido real viene del CMS)
 // ⚠️ SYNC: ogImage debe existir en /public/ — usar FAVICON.png (verificado)
 const SEO_FALLBACK = {
-  metaTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
-  metaDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú. Evita multas SUNAT, ordena tu contabilidad y crece con confianza.',
-  keywords: ['contador Perú', 'estudio contable Lima', 'servicios contables Perú', 'asesoría tributaria SUNAT'],
-  ogTitle: 'THADO Consulting | Contador para MYPES y Emprendedores en Perú',
-  ogDescription: 'Servicios contables y asesoría tributaria para MYPES en todo Perú.',
+  metaTitle: 'Contador Público en Perú | Asesoría Contable para Empresas',
+  metaDescription: 'Evita multas y optimiza tus impuestos con más de 10 años de experiencia en gestión contable externa. Servicios contables, tributarios y financieros para empresas en Perú.',
+  keywords: ['asesoría contable para empresas', 'gestión tributaria SUNAT', 'outsourcing contable Perú', 'servicios contables Lima', 'estudio contable Lima', 'contador público para pequeñas empresas Lima', 'contador para emprendedores', 'asesoría tributaria SUNAT Lima'],
+  ogTitle: 'Contador Público en Perú | Asesoría para Empresas',
+  ogDescription: 'Especialistas en contabilidad externa y gestión tributaria en Perú. Asegura la salud financiera de tu empresa y evita contingencias con SUNAT. ¡Contáctanos!',
   ogImage: 'https://www.thadoconsulting.com/FAVICON.png',
 };
 
