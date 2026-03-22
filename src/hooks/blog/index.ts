@@ -21,6 +21,7 @@ export {
   useBlogPost,
   usePostInteractions,
 } from './useBlogPost';
+export type { ErrorType } from './useBlogPost';
 
 // Post content processing
 export { usePostContent } from './usePostContent';

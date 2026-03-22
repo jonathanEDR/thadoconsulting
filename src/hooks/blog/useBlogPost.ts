@@ -4,9 +4,11 @@
  * ✅ Optimizado con cache para evitar recargas innecesarias
  * ✅ Ahora expone relatedPosts del backend para evitar llamadas extra
  * ✅ Compatible con pre-renderizado SEO (no muestra error durante build)
+ * ✅ Retry automático para errores de red (cold starts de Render.com)
+ * ✅ Distingue entre "post no existe" (404) y "API no disponible" (network error)
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { blogPostApi } from '../../services/blog';
 import blogCache from '../../utils/blogCache';
 import type { BlogPost } from '../../types/blog';
@@ -35,12 +37,38 @@ const isPrerendering = (): boolean => {
   return false;
 };
 
+/**
+ * 🤖 Detecta si el navegador es un crawler/bot de búsqueda
+ * Los bots no deben ver "Artículo no encontrado" por errores de red temporales
+ */
+const isCrawler = (): boolean => {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return /Googlebot|bingbot|Baiduspider|yandex|DuckDuckBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp/i.test(ua);
+};
+
+/**
+ * Determina si un error es de tipo "no encontrado" (404) vs error de red
+ */
+const isNotFoundError = (error: any): boolean => {
+  const msg = (error?.message || '').toLowerCase();
+  return msg.includes('no encontrado') || 
+         msg.includes('not found') || 
+         msg.includes('404');
+};
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
+
+export type ErrorType = 'not-found' | 'network' | null;
+
 interface UseBlogPostReturn {
   post: BlogPost | null;
-  relatedPosts: BlogPost[];  // ✅ Ahora se exponen los posts relacionados
+  relatedPosts: BlogPost[];
   loading: boolean;
   error: string | null;
-  isPrerendering: boolean; // ✅ Nuevo: indica si estamos en modo pre-renderizado
+  errorType: ErrorType;
+  isPrerendering: boolean;
   refetch: () => Promise<void>;
   updateLocalPost: (updatedPost: BlogPost) => void;
 }
@@ -57,9 +85,11 @@ export function useBlogPost(slug: string | undefined): UseBlogPostReturn {
   
   const [post, setPost] = useState<BlogPost | null>(initialCached?.post || null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialCached?.relatedPosts || []);
-  const [loading, setLoading] = useState(!initialCached && !!slug); // ✅ No loading si hay caché
+  const [loading, setLoading] = useState(!initialCached && !!slug);
   const [error, setError] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<ErrorType>(null);
   const prerenderMode = isPrerendering();
+  const retryCountRef = useRef(0);
 
   const fetchPost = useCallback(async () => {
     if (!slug) {
@@ -70,17 +100,16 @@ export function useBlogPost(slug: string | undefined): UseBlogPostReturn {
     }
 
     // 🔍 En modo pre-renderizado, solo marcar como no-loading sin error
-    // El contenido estático ya fue generado por prerender-blog.js
     if (prerenderMode) {
       console.log('[useBlogPost] Modo pre-renderizado detectado, omitiendo fetch API');
       setLoading(false);
-      // No setear error - dejar que el HTML estático pre-renderizado sea visible
       return;
     }
 
     try {
       setLoading(true);
       setError(null);
+      setErrorType(null);
       
       // ✅ Intentar obtener del cache primero
       const cached = blogCache.get<{ post: BlogPost; relatedPosts: BlogPost[] }>('POST_DETAIL', slug);
@@ -89,27 +118,71 @@ export function useBlogPost(slug: string | undefined): UseBlogPostReturn {
         setPost(cached.post);
         setRelatedPosts(cached.relatedPosts || []);
         setLoading(false);
+        retryCountRef.current = 0;
         return;
       }
       
-      // Si no está en cache, hacer petición al servidor
-      const response = await blogPostApi.getPostBySlug(slug);
+      // ✅ Fetch con retry automático (cold starts de Render.com pueden tomar 30-60s)
+      let lastError: any = null;
       
-      if (response.success && response.data) {
-        // El backend devuelve { success: true, data: { post, relatedPosts } }
-        const responseData = response.data as any;
-        setPost(responseData.post);
-        setRelatedPosts(responseData.relatedPosts || []);
-        
-        // ✅ Guardar en cache
-        blogCache.set('POST_DETAIL', slug, responseData);
-      } else {
-        throw new Error('Post no encontrado');
+      for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          if (attempt > 0) {
+            console.log(`[useBlogPost] Reintento ${attempt}/${MAX_RETRIES} para "${slug}"`);
+            await new Promise(r => setTimeout(r, RETRY_DELAY_MS * attempt));
+          }
+          
+          const response = await blogPostApi.getPostBySlug(slug);
+          
+          if (response.success && response.data) {
+            const responseData = response.data as any;
+            setPost(responseData.post);
+            setRelatedPosts(responseData.relatedPosts || []);
+            blogCache.set('POST_DETAIL', slug, responseData);
+            retryCountRef.current = 0;
+            return;
+          } else {
+            lastError = new Error('Post no encontrado');
+            break; // API respondió pero el post no existe - no reintentar
+          }
+        } catch (err: any) {
+          lastError = err;
+          if (isNotFoundError(err)) break; // 404 explícito, no reintentar
+        }
+      }
+      
+      // Todos los intentos fallaron
+      if (lastError && !prerenderMode) {
+        if (isNotFoundError(lastError)) {
+          setErrorType('not-found');
+          setError('Artículo no encontrado');
+          setPost(null);
+          setRelatedPosts([]);
+        } else {
+          // Error de red: si es un crawler, NO mostrar error
+          // para preservar el HTML pre-renderizado
+          if (isCrawler()) {
+            console.log('[useBlogPost] Crawler detectado + error de red, omitiendo estado de error');
+            setLoading(false);
+            return;
+          }
+          setErrorType('network');
+          setError('No se pudo conectar con el servidor');
+        }
       }
     } catch (err: any) {
-      // ✅ No mostrar error si estamos en pre-renderizado (el contenido estático existe)
       if (!prerenderMode) {
-        setError(err.message || 'Error al cargar el post');
+        if (isNotFoundError(err)) {
+          setErrorType('not-found');
+          setError('Artículo no encontrado');
+        } else {
+          if (isCrawler()) {
+            setLoading(false);
+            return;
+          }
+          setErrorType('network');
+          setError('Error al cargar el post');
+        }
         setPost(null);
         setRelatedPosts([]);
       }
@@ -119,10 +192,10 @@ export function useBlogPost(slug: string | undefined): UseBlogPostReturn {
   }, [slug, prerenderMode]);
 
   useEffect(() => {
+    retryCountRef.current = 0;
     fetchPost();
   }, [fetchPost]);
 
-  // Función para actualizar el post localmente sin hacer otra petición
   const updateLocalPost = useCallback((updatedPost: BlogPost) => {
     setPost(updatedPost);
   }, []);
@@ -132,6 +205,7 @@ export function useBlogPost(slug: string | undefined): UseBlogPostReturn {
     relatedPosts,
     loading,
     error,
+    errorType,
     isPrerendering: prerenderMode,
     refetch: fetchPost,
     updateLocalPost,

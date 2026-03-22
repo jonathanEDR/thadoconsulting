@@ -37,7 +37,7 @@ import PublicHeader from '../../../components/public/PublicHeader';
 
 const BlogPostEnhanced: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { post, relatedPosts, loading, error, isPrerendering } = useBlogPost(slug || '');
+  const { post, relatedPosts, loading, errorType, isPrerendering } = useBlogPost(slug || '');
   const { theme } = useTheme();
   
   // ✅ Obtener configuración del CMS para blog-post-detail
@@ -74,12 +74,15 @@ const BlogPostEnhanced: React.FC = () => {
     return <PageLoader fullScreen message="Cargando artículo..." size="lg" />;
   }
 
-  // ✅ SEO FIX: Durante pre-renderizado, NO mostrar "Artículo no encontrado"
-  // El contenido estático ya fue generado por prerender-blog.js y está en el HTML
-  // Si mostramos el error, Google verá "Artículo no encontrado" en lugar del contenido real
-  if ((error || !post) && !isPrerendering) {
+  // ✅ SOLO mostrar "Artículo no encontrado" cuando la API confirma 404
+  // NO para errores de red/timeout (cold starts de Render.com)
+  if (errorType === 'not-found' && !isPrerendering) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+        <Helmet>
+          <meta name="robots" content="noindex" />
+          <title>Artículo no encontrado | THADO Consulting</title>
+        </Helmet>
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-12 text-center">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Artículo no encontrado</h2>
@@ -88,6 +91,31 @@ const BlogPostEnhanced: React.FC = () => {
               <ArrowLeft size={20} />
               Volver al blog
             </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ Error de red sin datos: NO mostrar "no encontrado" para que
+  // Google vea el HTML pre-renderizado (generado por prerender-blog.js)
+  // Los usuarios reales verán un mensaje de reintento
+  if (errorType === 'network' && !post) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+        <Helmet>
+          <meta name="robots" content="noindex" />
+        </Helmet>
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-12 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Error de conexión</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">No pudimos cargar el artículo. Por favor, verifica tu conexión e intenta nuevamente.</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center gap-2 bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
+            >
+              Reintentar
+            </button>
           </div>
         </div>
       </div>
