@@ -11,12 +11,12 @@ const TermsOfService = () => {
   return (
     <>
       <Helmet>
-        <title>Terminos y Condiciones - THADO Consulting</title>
+        <title>Terminos y Condiciones</title>
         <meta name="description" content="Lee nuestros terminos y condiciones de uso de servicios de THADO Consulting." />
         <meta name="keywords" content="terminos y condiciones, terminos de servicio, THADO Consulting, condiciones de uso" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Terminos y Condiciones - THADO Consulting" />
+        <meta property="og:title" content="Terminos y Condiciones" />
         <meta property="og:description" content="Lee nuestros terminos y condiciones de uso de servicios" />
         <meta property="og:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta property="og:image:width" content="1200" />
@@ -29,7 +29,7 @@ const TermsOfService = () => {
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Terminos y Condiciones - THADO Consulting" />
+        <meta name="twitter:title" content="Terminos y Condiciones" />
         <meta name="twitter:description" content="Lee nuestros terminos y condiciones" />
         <meta name="twitter:image" content="https://www.thadoconsulting.com/logohorizontalconfondo.jpg" />
         <meta name="twitter:image:alt" content="THADO Consulting - Términos y Condiciones" />

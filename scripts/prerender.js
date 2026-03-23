@@ -95,9 +95,11 @@ async function fetchCmsSeo(slug) {
         title: seo.metaTitle,
         description: seo.metaDescription,
         keywords: Array.isArray(seo.keywords) ? seo.keywords.join(', ') : (seo.keywords || ''),
-        ogTitle: seo.ogTitle || seo.metaTitle,
+        // ogTitle siempre igual a metaTitle para consistencia SEO (evita conflicto CMS ogTitle vs title)
+        ogTitle: seo.metaTitle || seo.ogTitle,
         ogDescription: seo.ogDescription || seo.metaDescription,
-        ogImage: seo.ogImage || '',
+        // Normalizar ogImage a URL absoluta (el CMS puede guardar rutas relativas)
+        ogImage: normalizeImageUrl(seo.ogImage),
         url: null // Se establece en processRoute con el path real
       };
     }
@@ -106,6 +108,15 @@ async function fetchCmsSeo(slug) {
     console.warn(`   ⚠️ No se pudo obtener CMS SEO para "${slug}": ${error.message}`);
     return null;
   }
+}
+
+/**
+ * Normalizar URL de imagen: convierte rutas relativas a absolutas
+ */
+function normalizeImageUrl(url) {
+  if (!url) return `${CONFIG.siteUrl}/FAVICON.png`;
+  if (url.startsWith('/')) return `${CONFIG.siteUrl}${url}`;
+  return url;
 }
 
 /**
@@ -174,10 +185,10 @@ const routes = [
     path: '/servicios',
     cmsSlug: 'services',
     hardcodedSeo: {
-      title: 'Servicios Contables y Tributarios en Perú - THADO Consulting',
+      title: 'Servicios Contables y Tributarios en Perú',
       description: 'Servicios de contabilidad, asesoría tributaria SUNAT, planillas PLAME, constitución de empresas y facturación electrónica para MYPES en todo Perú.',
       keywords: 'servicios contables Perú, asesoría tributaria SUNAT, contador para MYPE, planillas PLAME, constitución de empresas, facturación electrónica, outsourcing contable Lima',
-      ogTitle: 'Servicios Contables y Tributarios - THADO Consulting',
+      ogTitle: 'Servicios Contables y Tributarios en Perú',
       ogDescription: 'Servicios contables profesionales para MYPES y emprendedores en Perú',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/servicios`
@@ -209,10 +220,10 @@ const routes = [
     path: '/blog',
     cmsSlug: 'blog',
     hardcodedSeo: {
-      title: 'Blog THADO Consulting - Guías Contables y Tributarias para MYPES',
+      title: 'Guías Contables y Tributarias para MYPES',
       description: 'Artículos sobre contabilidad, tributación SUNAT, planillas y gestión empresarial. Guías prácticas para MYPES y emprendedores en Perú.',
       keywords: 'blog contabilidad, guías tributarias SUNAT, contabilidad MYPES, declaraciones SUNAT, régimen tributario Perú, planillas PLAME, facturación electrónica',
-      ogTitle: 'Blog THADO Consulting - Contabilidad y Tributación',
+      ogTitle: 'Blog de Contabilidad y Tributación',
       ogDescription: 'Guías y artículos sobre contabilidad y tributación para MYPES en Perú',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/blog`
@@ -241,10 +252,10 @@ const routes = [
     path: '/nosotros',
     cmsSlug: 'about',
     hardcodedSeo: {
-      title: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+      title: 'Sobre Nosotros | Estudio Contable en Perú',
       description: 'Conoce a THADO Consulting: estudio contable especializado en MYPES y emprendedores. Más de 10 años de experiencia en contabilidad y tributación en Perú.',
       keywords: 'THADO Consulting, estudio contable Perú, contador Lima, contadores colegiados, experiencia tributaria, asesoría contable MYPES',
-      ogTitle: 'Sobre Nosotros - THADO Consulting | Estudio Contable en Perú',
+      ogTitle: 'Sobre Nosotros | Estudio Contable en Perú',
       ogDescription: 'Conoce quiénes somos y cómo ayudamos a MYPES a cumplir con SUNAT',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/nosotros`
@@ -276,10 +287,10 @@ const routes = [
     path: '/contacto',
     cmsSlug: 'contact',
     hardcodedSeo: {
-      title: 'Contacto - THADO Consulting | Consultoría Contable Gratuita',
+      title: 'Contacto | Consultoría Contable Gratuita',
       description: 'Contáctanos para asesoría contable y tributaria. Primera consultoría gratuita para MYPES y emprendedores en todo Perú. Respuesta en 24 horas.',
       keywords: 'contacto THADO, consultoría contable Perú, asesoría tributaria gratuita, contador Lima contacto, solicitar servicio contable, presupuesto contabilidad',
-      ogTitle: 'Contacto - THADO Consulting | Hablemos de tu Negocio',
+      ogTitle: 'Contacto | Hablemos de tu Negocio',
       ogDescription: 'Agenda una consultoría gratuita y ordena tu contabilidad',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/contacto`
@@ -307,10 +318,10 @@ const routes = [
     path: '/privacidad',
     cmsSlug: 'privacidad',
     hardcodedSeo: {
-      title: 'Política de Privacidad - THADO Consulting',
+      title: 'Política de Privacidad',
       description: 'Conoce nuestra política de privacidad y cómo protegemos tus datos personales. THADO Consulting cumple con la Ley de Protección de Datos Personales del Perú.',
       keywords: 'política de privacidad, protección de datos, THADO Consulting, datos personales, Ley 29733',
-      ogTitle: 'Política de Privacidad - THADO Consulting',
+      ogTitle: 'Política de Privacidad',
       ogDescription: 'Conoce cómo protegemos tus datos personales',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/privacidad`
@@ -336,10 +347,10 @@ const routes = [
     path: '/terminos',
     cmsSlug: 'terminos',
     hardcodedSeo: {
-      title: 'Términos y Condiciones - THADO Consulting',
+      title: 'Términos y Condiciones',
       description: 'Lee nuestros términos y condiciones de uso de los servicios de THADO Consulting. Regulaciones aplicables a la contratación de servicios contables y tributarios.',
       keywords: 'términos y condiciones, condiciones de servicio, THADO Consulting, servicios contables, contrato de servicios',
-      ogTitle: 'Términos y Condiciones - THADO Consulting',
+      ogTitle: 'Términos y Condiciones',
       ogDescription: 'Términos y condiciones de uso de nuestros servicios contables',
       ogImage: `${CONFIG.siteUrl}/FAVICON.png`,
       url: `${CONFIG.siteUrl}/terminos`
@@ -386,6 +397,7 @@ function applySeoTags($, seo) {
   $('meta[property="og:url"]').attr('content', seo.url).attr('data-rh', 'true');
   if (seo.ogImage) {
     $('meta[property="og:image"]').attr('content', seo.ogImage).attr('data-rh', 'true');
+    $('meta[property="og:image:alt"]').attr('content', seo.ogTitle || seo.title).attr('data-rh', 'true');
   }
 
   // Twitter Card

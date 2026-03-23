@@ -150,7 +150,8 @@ export function useSeo({ pageName, fallbackTitle, fallbackDescription }: UseSeoO
                 keywords: (data.seo.keywords && data.seo.keywords.length > 0)
                   ? data.seo.keywords
                   : DEFAULT_SEO.keywords,
-                ogTitle: data.seo.ogTitle || data.seo.metaTitle || fallbackTitle || DEFAULT_SEO.ogTitle,
+                // ogTitle siempre igual a metaTitle para consistencia SEO
+                ogTitle: data.seo.metaTitle || data.seo.ogTitle || fallbackTitle || DEFAULT_SEO.ogTitle,
                 ogDescription: data.seo.ogDescription || data.seo.metaDescription || fallbackDescription || DEFAULT_SEO.ogDescription,
                 ogImage: normalizeOgImage(data.seo.ogImage) || '',
                 canonical: PAGE_ROUTES[pageName] ? `${SITE_URL}${PAGE_ROUTES[pageName]}` : undefined,

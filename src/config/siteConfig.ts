@@ -152,7 +152,8 @@ export const SITE_CONFIG: SiteConfig = {
   // SEO
   // ─────────────────────────────────────────
   seo: {
-    titleSuffix: ' - THADO Consulting',
+    titleSuffix: '',
+    // titleSuffix removed: brand name appended to titles looks unprofessional in Google
     defaultKeywords: [
       'contador Perú',
       'estudio contable Lima',

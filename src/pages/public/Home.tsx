@@ -324,14 +324,14 @@ const HomeOptimized = () => {
         <meta name="description" content={seo?.metaDescription || SEO_FALLBACK.metaDescription} />
         <meta name="keywords" content={(seo?.keywords || SEO_FALLBACK.keywords).join(', ')} />
 
-        {/* Open Graph */}
-        <meta property="og:title" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
+        {/* Open Graph - ogTitle siempre igual a metaTitle para consistencia SEO */}
+        <meta property="og:title" content={seo?.metaTitle || seo?.ogTitle || SEO_FALLBACK.ogTitle} />
         <meta property="og:description" content={seo?.ogDescription || seo?.metaDescription || SEO_FALLBACK.ogDescription} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         {/* og:image:alt: usa el valor del CMS si existe, sino describe la imagen del logo */}
-        <meta property="og:image:alt" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
+        <meta property="og:image:alt" content={seo?.metaTitle || seo?.ogTitle || SEO_FALLBACK.ogTitle} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.thadoconsulting.com/" />
         <meta property="og:site_name" content="THADO Consulting" />
@@ -339,7 +339,7 @@ const HomeOptimized = () => {
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seo?.ogTitle || seo?.metaTitle || SEO_FALLBACK.ogTitle} />
+        <meta name="twitter:title" content={seo?.metaTitle || seo?.ogTitle || SEO_FALLBACK.ogTitle} />
         <meta name="twitter:description" content={seo?.ogDescription || seo?.metaDescription || SEO_FALLBACK.ogDescription} />
         <meta name="twitter:image" content={ogImage} />
 
