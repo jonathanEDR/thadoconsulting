@@ -47,6 +47,19 @@
   ],
   "headers": [
     {
+      "source": "/servicios/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=86400"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
       "source": "/blog/(.*)",
       "headers": [
         {

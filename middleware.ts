@@ -966,68 +966,18 @@ export default async function middleware(request: Request) {
   }
 
   // === CASO 2: Servicio individual (detalle) ===
+  // ✅ FIX: No interceptar service detail pages para crawlers.
+  // prerender-services.js genera dist/servicios/{slug}/index.html con:
+  //   - Meta tags SEO completos (title, og:*, twitter:*, canonical)
+  //   - Schema.org JSON-LD (Service + BreadcrumbList)
+  //   - Contenido visible completo en <article>
+  // El rewrite de vercel.json sirve ese archivo directamente.
+  // Interceptar aquí causaba que crawlers recibieran el HTML del homepage
+  // (body incorrecto) con solo meta tags del servicio → contenido thin/mismatch.
   if (servicioDetailMatch) {
     const servicioSlug = servicioDetailMatch[1];
-    
-    // No procesar archivos estáticos
-    if (servicioSlug.includes('.') || servicioSlug === 'index') {
-      return next();
-    }
-
-    console.log(`[Edge Middleware] Crawler detected for /servicios/${servicioSlug}: ${userAgent.substring(0, 50)}`);
-
-    // Obtener datos del servicio
-    const servicio = await getServicioData(servicioSlug);
-
-    if (!servicio) {
-      console.log(`[Edge Middleware] Servicio not found: ${servicioSlug}`);
-      return next();
-    }
-
-    // Obtener el HTML original desde /index.html
-    const indexUrl = new URL('/', request.url);
-    const response = await fetch(indexUrl.toString(), {
-      headers: {
-        'Accept': 'text/html',
-        'User-Agent': 'Vercel-Edge-Middleware-Internal'
-      }
-    });
-    
-    if (!response.ok) {
-      console.log(`[Edge Middleware] Failed to fetch index.html: ${response.status}`);
-      return next();
-    }
-    
-    let html = await response.text();
-
-    // Generar meta tags del servicio
-    const metaTags = generateServicioDetailMetaTags(servicio);
-
-    // Reemplazar el contenido del <head>
-    html = html.replace(/<title[^>]*>.*?<\/title>/gi, '');
-    html = html.replace(/<meta[^>]*property="og:[^"]*"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="twitter:[^"]*"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="description"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="keywords"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="canonical"[^>]*>/gi, '');
-    // Limpiar favicons existentes para evitar duplicados
-    html = html.replace(/<link[^>]*rel="icon"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="shortcut icon"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="apple-touch-icon"[^>]*>/gi, '');
-
-    // Insertar los nuevos meta tags después de <head>
-    html = html.replace(/<head[^>]*>/i, `<head>\n${metaTags}`);
-
-    // Retornar el HTML modificado
-    return new Response(html, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-        'X-Robots-Tag': 'index, follow',
-        'X-Edge-Middleware': 'servicio-detail-seo'
-      }
-    });
+    console.log(`[Edge Middleware] Serving prerendered HTML for /servicios/${servicioSlug}`);
+    return next();
   }
 
   // === CASO 3: Post individual del blog ===

@@ -565,9 +565,9 @@ function generateServiceHtml(indexHtml, servicio) {
   const imageUrl = getImageUrl(servicio.imagenPrincipal);
   
   // ✅ PRIORIZAR campos SEO configurados sobre los genéricos
-  const seoTitle = servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo} - ${CONFIG.siteName}`;
+  const seoTitle = servicio.seo?.titulo || servicio.metaTitle || servicio.titulo;
   const seoDescription = servicio.seo?.descripcion || servicio.metaDescription || servicio.descripcionCorta || truncate(stripHtml(servicio.descripcion), 160);
-  const seoKeywords = servicio.seo?.palabrasClave || servicio.etiquetas?.join(', ') || `${servicio.titulo}, servicios, ${getCategoryName(servicio.categoria)}, THADO Consulting`;
+  const seoKeywords = servicio.seo?.palabrasClave || servicio.etiquetas?.join(', ') || `${servicio.titulo}, servicios, ${getCategoryName(servicio.categoria)}`;
   
   const title = escapeHtml(seoTitle);
   const description = escapeHtml(seoDescription);
@@ -626,6 +626,10 @@ function generateServiceHtml(indexHtml, servicio) {
   html = html.replace(
     /<meta property="og:image"[^>]*>/,
     `<meta property="og:image" content="${imageUrl}" data-rh="true" />`
+  );
+  html = html.replace(
+    /<meta property="og:image:alt"[^>]*>/,
+    `<meta property="og:image:alt" content="${title} - Servicio de ${escapeHtml(CONFIG.siteName)}" data-rh="true" />`
   );
   html = html.replace(
     /<meta property="og:type"[^>]*>/,
@@ -733,7 +737,7 @@ async function main() {
       fs.writeFileSync(htmlPath, serviceHtml);
 
       // ✅ Log detallado del SEO usado
-      const usedSeoTitle = servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo} - THADO Consulting`;
+      const usedSeoTitle = servicio.seo?.titulo || servicio.metaTitle || servicio.titulo;
       const usedSeoDesc = (servicio.seo?.descripcion || servicio.metaDescription || servicio.descripcionCorta || '').substring(0, 60);
       console.log(`   ✅ /servicios/${slug}/index.html`);
       console.log(`      📄 SEO: "${usedSeoTitle.substring(0, 50)}${usedSeoTitle.length > 50 ? '...' : ''}"`);
