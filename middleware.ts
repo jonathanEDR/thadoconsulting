@@ -839,12 +839,26 @@ export default async function middleware(request: Request) {
     return next();
   }
 
-  // === CASO 0: Páginas estáticas (Home, Servicios, Nosotros) ===
-  if (isHomePage || isServiciosPage || isNosotrosPage) {
-    // IMPORTANTE: Usar slugs del CMS (inglés), no las rutas URL (español)
-    // CMS slugs: 'home', 'services', 'about' - NO 'servicios', 'nosotros'
-    const pageName = isHomePage ? 'home' : isServiciosPage ? 'services' : 'about';
-    console.log(`[Edge Middleware] Crawler detected for /${pageName}: ${userAgent.substring(0, 50)}`);
+  // === CASO 0: Páginas estáticas con HTML pre-renderizado ===
+  // ✅ FIX: No interceptar /servicios, /nosotros, /blog para crawlers.
+  // prerender.js genera dist/{page}/index.html con:
+  //   - Meta tags SEO del CMS (title, og:*, twitter:*, canonical) con data-rh="true"
+  //   - Schema.org JSON-LD
+  //   - Contenido visible relevante para la página
+  // Vercel rewrites sirven los archivos estáticos directamente.
+  // Interceptar aquí causaba: (1) body del homepage en vez del de la página,
+  // (2) meta tags duplicados (middleware sin data-rh + React Helmet con data-rh),
+  // (3) Google veía señales conflictivas → indexación incorrecta.
+  if (isServiciosPage || isNosotrosPage) {
+    const pageName = isServiciosPage ? 'servicios' : 'nosotros';
+    console.log(`[Edge Middleware] Serving prerendered HTML for /${pageName}`);
+    return next();
+  }
+
+  // Homepage: mantener middleware porque fetch('/') devuelve el body correcto
+  if (isHomePage) {
+    const pageName = 'home';
+    console.log(`[Edge Middleware] Crawler detected for /: ${userAgent.substring(0, 50)}`);
     
     // 🔄 Obtener datos SEO desde el CMS
     const cmsData = await getCmsPageData(pageName);
@@ -872,13 +886,7 @@ export default async function middleware(request: Request) {
 
     // Generar meta tags según la página - PASANDO DATOS DEL CMS
     let metaTags: string;
-    if (isHomePage) {
-      metaTags = generateHomeMetaTags(cmsData);
-    } else if (isServiciosPage) {
-      metaTags = generateServiciosMetaTags(cmsData);
-    } else {
-      metaTags = generateNosotrosMetaTags(cmsData);
-    }
+    metaTags = generateHomeMetaTags(cmsData);
 
     // Reemplazar el contenido del <head>
     html = html.replace(/<title[^>]*>.*?<\/title>/gi, '');
@@ -908,61 +916,10 @@ export default async function middleware(request: Request) {
   }
 
   // === CASO 1: Página del listado del blog ===
+  // ✅ FIX: Bypass middleware — prerender.js genera dist/blog/index.html
   if (isBlogListPage) {
-    console.log(`[Edge Middleware] Crawler detected for /blog: ${userAgent.substring(0, 50)}`);
-    
-    // 🔄 Obtener datos SEO desde el CMS
-    const cmsData = await getCmsPageData('blog');
-    if (cmsData) {
-      console.log(`[Edge Middleware] CMS SEO data loaded for blog`);
-    } else {
-      console.log(`[Edge Middleware] Using fallback SEO for blog (CMS data not available)`);
-    }
-    
-    // Obtener el HTML original desde /index.html
-    const indexUrl = new URL('/', request.url);
-    const response = await fetch(indexUrl.toString(), {
-      headers: {
-        'Accept': 'text/html',
-        'User-Agent': 'Vercel-Edge-Middleware-Internal'
-      }
-    });
-    
-    if (!response.ok) {
-      console.log(`[Edge Middleware] Failed to fetch index.html: ${response.status}`);
-      return next();
-    }
-    
-    let html = await response.text();
-
-    // Generar meta tags para el listado del blog - PASANDO DATOS DEL CMS
-    const metaTags = generateBlogListMetaTags(cmsData);
-
-    // Reemplazar el contenido del <head>
-    html = html.replace(/<title[^>]*>.*?<\/title>/gi, '');
-    html = html.replace(/<meta[^>]*property="og:[^"]*"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="twitter:[^"]*"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="description"[^>]*>/gi, '');
-    html = html.replace(/<meta[^>]*name="keywords"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="canonical"[^>]*>/gi, '');
-    // Limpiar favicons existentes para evitar duplicados
-    html = html.replace(/<link[^>]*rel="icon"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="shortcut icon"[^>]*>/gi, '');
-    html = html.replace(/<link[^>]*rel="apple-touch-icon"[^>]*>/gi, '');
-
-    // Insertar los nuevos meta tags después de <head>
-    html = html.replace(/<head[^>]*>/i, `<head>\n${metaTags}`);
-
-    // Retornar el HTML modificado
-    return new Response(html, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-        'X-Robots-Tag': 'index, follow',
-        'X-Edge-Middleware': 'blog-list-seo'
-      }
-    });
+    console.log(`[Edge Middleware] Serving prerendered HTML for /blog`);
+    return next();
   }
 
   // === CASO 2: Servicio individual (detalle) ===

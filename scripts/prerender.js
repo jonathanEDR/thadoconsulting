@@ -392,7 +392,8 @@ function applySeoTags($, seo) {
   $('link[rel="canonical"]').attr('href', seo.url).attr('data-rh', 'true');
 
   // Open Graph
-  $('meta[property="og:title"]').attr('content', seo.ogTitle || seo.title).attr('data-rh', 'true');
+  // Open Graph - usar metaTitle (title) como ogTitle principal para consistencia
+  $('meta[property="og:title"]').attr('content', seo.title || seo.ogTitle).attr('data-rh', 'true');
   $('meta[property="og:description"]').attr('content', seo.ogDescription || seo.description).attr('data-rh', 'true');
   $('meta[property="og:url"]').attr('content', seo.url).attr('data-rh', 'true');
   if (seo.ogImage) {
@@ -401,7 +402,8 @@ function applySeoTags($, seo) {
   }
 
   // Twitter Card
-  $('meta[name="twitter:title"]').attr('content', seo.ogTitle || seo.title).attr('data-rh', 'true');
+  // Twitter Card - usar metaTitle (title) como principal para consistencia
+  $('meta[name="twitter:title"]').attr('content', seo.title || seo.ogTitle).attr('data-rh', 'true');
   $('meta[name="twitter:description"]').attr('content', seo.ogDescription || seo.description).attr('data-rh', 'true');
   if (seo.ogImage) {
     $('meta[name="twitter:image"]').attr('content', seo.ogImage).attr('data-rh', 'true');
