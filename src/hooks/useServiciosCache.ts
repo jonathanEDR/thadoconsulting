@@ -35,6 +35,7 @@ const isPrerendering = (): boolean => {
 
 interface UseServiciosCacheOptions {
   enabled?: boolean;
+  initialData?: any; // Datos pre-cargados (ej: desde prerender-services.js)
   onSuccess?: (data: any, fromCache?: boolean) => void;
   onError?: (error: Error) => void;
 }
@@ -59,13 +60,22 @@ export function useServiciosCache<T>(
   fetchFn: () => Promise<T>,
   options: UseServiciosCacheOptions = {}
 ): UseServiciosCacheReturn<T> {
-  const { enabled = true, onSuccess, onError } = options;
+  const { enabled = true, initialData, onSuccess, onError } = options;
   const prerenderMode = isPrerendering();
 
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(false);
+  // ✅ Inicializar con datos pre-cargados o cache existente para evitar flash de loading
+  const [data, setData] = useState<T | null>(() => {
+    if (initialData) return initialData as T;
+    if (!enabled || prerenderMode) return null;
+    return serviciosCache.get<T>(cacheKey, identifier) ?? null;
+  });
+  const [loading, setLoading] = useState(() => {
+    if (initialData) return false;
+    if (!enabled || prerenderMode) return false;
+    return !serviciosCache.get<T>(cacheKey, identifier);
+  });
   const [error, setError] = useState<string | null>(null);
-  const [isFromCache, setIsFromCache] = useState(false);
+  const [isFromCache, setIsFromCache] = useState(!!initialData);
 
   // Referencia para evitar race conditions
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -202,7 +212,12 @@ export function useServiciosCache<T>(
   }, [cacheKey, identifier]);
 
   // Efecto para cargar datos iniciales
+  // Si ya tenemos initialData, guardarlo en cache y no hacer fetch
   useEffect(() => {
+    if (initialData) {
+      serviciosCache.set(cacheKey, identifier, initialData);
+      return;
+    }
     loadData();
   }, [loadData]);
 
@@ -291,11 +306,32 @@ export function useServiciosList(
 /**
  * Hook especializado para detalle de servicio
  * 🔥 OPTIMIZADO: Usa endpoint directo por slug/ID en lugar de cargar todos
+ * ✅ SEO FIX: Lee datos pre-cargados de prerender-services.js para evitar Soft 404
  */
 export function useServicioDetail(
   slug: string,
   options: UseServiciosCacheOptions = {}
 ) {
+  // ✅ Leer datos pre-cargados inyectados por prerender-services.js
+  // Esto evita que React muestre un loading spinner en el primer render,
+  // lo cual Google WRS interpretaría como Soft 404.
+  const [preloadedData] = useState<Servicio | null>(() => {
+    if (typeof document === 'undefined') return null;
+    try {
+      const el = document.getElementById('__PRELOADED_SERVICE__');
+      if (el?.textContent) {
+        const data = JSON.parse(el.textContent);
+        if (data?.slug === slug) {
+          el.remove(); // Limpiar del DOM
+          return data as Servicio;
+        }
+      }
+    } catch (e) {
+      // Silenciar errores de parsing
+    }
+    return null;
+  });
+
   const fetchFn = useCallback(async () => {
     const { serviciosApi } = await import('../services/serviciosApi');
     
@@ -318,7 +354,10 @@ export function useServicioDetail(
     'SERVICIO_DETAIL',
     slug,
     fetchFn,
-    options
+    {
+      ...options,
+      ...(preloadedData ? { initialData: preloadedData } : {})
+    }
   );
 }
 

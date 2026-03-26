@@ -667,6 +667,14 @@ function generateServiceHtml(indexHtml, servicio) {
   // Usar cheerio en vez de regex para evitar truncar HTML anidado
   const $ = cheerio.load(html, { decodeEntities: false });
   $('#root').html(visibleContent);
+
+  // ✅ PRELOADED DATA: Inyectar datos del servicio como JSON para que React
+  // los use inmediatamente en el primer render, evitando el estado de "loading"
+  // que Google WRS interpreta como Soft 404.
+  // type="application/json" evita ejecución como JS (seguridad XSS).
+  const safeJson = JSON.stringify(servicio).replace(/<\//g, '<\\/');
+  $('body').append(`<script id="__PRELOADED_SERVICE__" type="application/json">${safeJson}</script>`);
+
   html = $.html();
 
   return html;

@@ -477,8 +477,40 @@ export const ServicioDetail: React.FC = () => {
     return `⏱️ Duración: ${valor} ${unidad}`;
   };
 
+  // ✅ SEO FIX: No usar fullScreen overlay durante loading.
+  // Google WRS ejecuta JS y ve el fullScreen loader como "Soft 404".
+  // Con datos pre-cargados (prerender-services.js), loading=false desde el inicio.
+  // Este fallback solo aplica si no hay datos pre-cargados (navegación SPA normal).
   if (loading) {
-    return <PageLoader fullScreen message="Cargando servicio..." size="lg" />;
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
+        <PublicHeader />
+        <div className="pt-20 pb-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav className="mb-8">
+              <ol className="flex items-center space-x-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                <li><Link to="/" style={{ color: 'inherit' }}>Inicio</Link></li>
+                <li>&gt;</li>
+                <li><Link to="/servicios" style={{ color: 'inherit' }}>Servicios</Link></li>
+                <li>&gt;</li>
+                <li className="animate-pulse" style={{ color: 'var(--color-text)' }}>Cargando...</li>
+              </ol>
+            </nav>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="h-8 w-32 rounded-full animate-pulse mb-4" style={{ backgroundColor: 'var(--color-border)' }} />
+                <div className="h-12 w-3/4 rounded-lg animate-pulse mb-6" style={{ backgroundColor: 'var(--color-border)' }} />
+                <div className="h-6 w-full rounded animate-pulse mb-2" style={{ backgroundColor: 'var(--color-border)' }} />
+                <div className="h-6 w-2/3 rounded animate-pulse mb-8" style={{ backgroundColor: 'var(--color-border)' }} />
+                <div className="h-20 w-48 rounded-lg animate-pulse" style={{ backgroundColor: 'var(--color-border)' }} />
+              </div>
+              <div className="h-96 rounded-2xl animate-pulse" style={{ backgroundColor: 'var(--color-border)' }} />
+            </div>
+          </div>
+        </div>
+        <PublicFooter />
+      </div>
+    );
   }
 
   // ✅ IMPORTANTE: Mostrar error SOLO si hay un error explícito, no solo porque servicio sea null
