@@ -222,7 +222,7 @@ function formatPrice(servicio) {
  */
 function generateServiceSchema(servicio) {
   const serviceUrl = `${CONFIG.siteUrl}/servicios/${servicio.slug}`;
-  const imageUrl = getImageUrl(servicio.imagenPrincipal);
+  const imageUrl = getImageUrl(servicio.imagenPrincipal || servicio.imagen);
   const categoryName = getCategoryName(servicio.categoria);
 
   const schema = {
@@ -324,7 +324,7 @@ function generateBreadcrumbSchema(servicio) {
  * Esto es lo que Googlebot verá antes de que JavaScript cargue
  */
 function generateVisibleContent(servicio) {
-  const imageUrl = getImageUrl(servicio.imagenPrincipal);
+  const imageUrl = getImageUrl(servicio.imagenPrincipal || servicio.imagen);
   const categoryName = getCategoryName(servicio.categoria);
   const price = formatPrice(servicio);
 
@@ -371,7 +371,7 @@ function generateVisibleContent(servicio) {
         </div>
       </header>
 
-      ${servicio.imagenPrincipal ? `
+      ${(servicio.imagenPrincipal || servicio.imagen) ? `
         <figure class="service-image">
           <img
             itemprop="image"
@@ -562,7 +562,7 @@ function generateVisibleContent(servicio) {
  */
 function generateServiceHtml(indexHtml, servicio) {
   const serviceUrl = `${CONFIG.siteUrl}/servicios/${servicio.slug}`;
-  const imageUrl = getImageUrl(servicio.imagenPrincipal);
+  const imageUrl = getImageUrl(servicio.imagenPrincipal || servicio.imagen);
   
   // ✅ PRIORIZAR campos SEO configurados sobre los genéricos
   const seoTitle = servicio.seo?.titulo || servicio.metaTitle || servicio.titulo;

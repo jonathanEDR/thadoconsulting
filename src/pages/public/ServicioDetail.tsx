@@ -570,16 +570,15 @@ export const ServicioDetail: React.FC = () => {
     );
   }
 
-  // ✅ Detectar si ya hay meta tags pre-renderizados (para evitar duplicación)
-  const isPrerendered = typeof window !== 'undefined' && 
-    document.querySelector('meta[name="description"][data-rh="true"]') !== null;
+  // ✅ React Helmet gestiona meta tags con data-rh="true":
+  // encuentra tags existentes (del prerender) y los actualiza con data fresca.
+  // NO crear duplicados. Siempre ejecutar Helmet para corregir cualquier
+  // tag prerendeado que esté desactualizado (ej: og:image de fallback).
 
   return (
     <div className="min-h-screen animate-fade-in" style={{ backgroundColor: 'var(--color-background)' }}>
-      {/* ✅ SEO directo del servicio - Prioriza campos SEO configurados */}
-      {/* ⚠️ Solo actualiza meta tags si NO están pre-renderizados (evita duplicación) */}
-      {!isPrerendered && (
-        <Helmet>
+      {/* ✅ SEO directo del servicio - Siempre actualizar con datos frescos */}
+      <Helmet>
           <title>{servicio.seo?.titulo || servicio.metaTitle || `${servicio.titulo}${config.seo.titleSuffix}`}</title>
           <meta name="description" content={servicio.seo?.descripcion || servicio.metaDescription || servicio.descripcionCorta || servicio.descripcion || `Servicio de ${servicio.titulo}${config.seo.titleSuffix}`} />
           <meta name="keywords" content={servicio.seo?.palabrasClave || servicio.etiquetas?.join(', ') || `${servicio.titulo}, servicio, desarrollo, tecnología`} />
@@ -628,7 +627,6 @@ export const ServicioDetail: React.FC = () => {
             ]))}
           </script>
         </Helmet>
-      )}
 
       <PublicHeader />
       
