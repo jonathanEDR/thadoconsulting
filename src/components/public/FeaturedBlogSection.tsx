@@ -89,9 +89,55 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
 
   const isDarkMode = theme === 'dark';
 
-  // Obtener estilos según el tema actual
-  const currentStyles = isDarkMode ? data.styles?.dark : data.styles?.light;
-  const currentCardsDesign = isDarkMode ? data.cardsDesign?.dark : data.cardsDesign?.light;
+  // Obtener estilos de texto con validación (patrón de ClientLogosSection)
+  const getTextStyles = () => {
+    const defaults = {
+      titleColor: isDarkMode ? '#FFFFFF' : '#1F2937',
+      subtitleColor: isDarkMode ? '#D1D5DB' : '#4B5563',
+      descriptionColor: isDarkMode ? '#9CA3AF' : '#6B7280',
+    };
+
+    const cmsStyles = isDarkMode ? data.styles?.dark : data.styles?.light;
+    if (!cmsStyles) return defaults;
+
+    return {
+      titleColor: cmsStyles.titleColor?.trim() ? cmsStyles.titleColor : defaults.titleColor,
+      subtitleColor: cmsStyles.subtitleColor?.trim() ? cmsStyles.subtitleColor : defaults.subtitleColor,
+      descriptionColor: cmsStyles.descriptionColor?.trim() ? cmsStyles.descriptionColor : defaults.descriptionColor,
+    };
+  };
+
+  // Obtener estilos de tarjetas con validación
+  const getCardsDesign = () => {
+    const cmsCards = isDarkMode ? data.cardsDesign?.dark : data.cardsDesign?.light;
+    if (!cmsCards) {
+      return {
+        background: isDarkMode ? '#1F2937' : '#FFFFFF',
+        border: isDarkMode ? '#374151' : '#E5E7EB',
+        borderWidth: '1px',
+        shadow: isDarkMode ? '0 4px 6px rgba(0,0,0,0.3)' : '0 4px 6px rgba(0,0,0,0.1)',
+        hoverBackground: undefined,
+        hoverShadow: undefined,
+        titleColor: isDarkMode ? '#FFFFFF' : '#1F2937',
+        excerptColor: isDarkMode ? '#D1D5DB' : '#4B5563',
+        metaColor: isDarkMode ? '#9CA3AF' : '#6B7280',
+        badgeBackground: 'linear-gradient(135deg, #8B5CF6, #06B6D4)',
+        badgeTextColor: '#FFFFFF',
+        ctaColor: isDarkMode ? '#A78BFA' : '#8B5CF6',
+        ctaHoverColor: undefined,
+      };
+    }
+    return {
+      ...cmsCards,
+      titleColor: cmsCards.titleColor?.trim() ? cmsCards.titleColor : (isDarkMode ? '#FFFFFF' : '#1F2937'),
+      excerptColor: cmsCards.excerptColor?.trim() ? cmsCards.excerptColor : (isDarkMode ? '#D1D5DB' : '#4B5563'),
+      metaColor: cmsCards.metaColor?.trim() ? cmsCards.metaColor : (isDarkMode ? '#9CA3AF' : '#6B7280'),
+      ctaColor: cmsCards.ctaColor?.trim() ? cmsCards.ctaColor : (isDarkMode ? '#A78BFA' : '#8B5CF6'),
+    };
+  };
+
+  const currentStyles = getTextStyles();
+  const currentCardsDesign = getCardsDesign();
   const currentBackgroundImage = isDarkMode ? data.backgroundImage?.dark : data.backgroundImage?.light;
 
   // 🆕 Obtener configuración del botón del tema
@@ -168,7 +214,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
             <h2 
               className="text-3xl md:text-4xl font-bold"
               style={{ 
-                color: currentStyles?.titleColor || undefined,
+                color: currentStyles.titleColor,
                 fontFamily: data.fontFamily || 'Montserrat'
               }}
             >
@@ -178,7 +224,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
           <p 
             className="text-lg max-w-2xl mx-auto"
             style={{ 
-              color: currentStyles?.subtitleColor || undefined,
+              color: currentStyles.subtitleColor,
               fontFamily: data.fontFamily || 'Montserrat'
             }}
           >
@@ -188,7 +234,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
             <p 
               className="text-base max-w-2xl mx-auto mt-2"
               style={{ 
-                color: currentStyles?.descriptionColor || undefined,
+                color: currentStyles.descriptionColor,
                 fontFamily: data.fontFamily || 'Montserrat'
               }}
               dangerouslySetInnerHTML={{ __html: data.description }}
@@ -204,23 +250,23 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
               to={`/blog/${post.slug}`}
               className="group rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 flex flex-col"
               style={{
-                background: currentCardsDesign?.background || undefined,
-                border: `${currentCardsDesign?.borderWidth || '1px'} solid ${currentCardsDesign?.border || 'transparent'}`,
-                boxShadow: currentCardsDesign?.shadow || undefined
+                background: currentCardsDesign.background,
+                border: `${currentCardsDesign.borderWidth || '1px'} solid ${currentCardsDesign.border || 'transparent'}`,
+                boxShadow: currentCardsDesign.shadow || undefined
               }}
               onMouseEnter={(e) => {
-                if (currentCardsDesign?.hoverBackground) {
+                if (currentCardsDesign.hoverBackground) {
                   e.currentTarget.style.background = currentCardsDesign.hoverBackground;
                 }
-                if (currentCardsDesign?.hoverShadow) {
+                if (currentCardsDesign.hoverShadow) {
                   e.currentTarget.style.boxShadow = currentCardsDesign.hoverShadow;
                 }
               }}
               onMouseLeave={(e) => {
-                if (currentCardsDesign?.background) {
+                if (currentCardsDesign.background) {
                   e.currentTarget.style.background = currentCardsDesign.background;
                 }
-                if (currentCardsDesign?.shadow) {
+                if (currentCardsDesign.shadow) {
                   e.currentTarget.style.boxShadow = currentCardsDesign.shadow;
                 }
               }}
@@ -247,8 +293,8 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
                     style={{
                       background: post.category.color 
                         ? `linear-gradient(135deg, ${post.category.color}, ${post.category.color}dd)`
-                        : (currentCardsDesign?.badgeBackground || 'linear-gradient(135deg, #8B5CF6, #06B6D4)'),
-                      color: currentCardsDesign?.badgeTextColor || '#ffffff'
+                        : (currentCardsDesign.badgeBackground || 'linear-gradient(135deg, #8B5CF6, #06B6D4)'),
+                      color: currentCardsDesign.badgeTextColor || '#ffffff'
                     }}
                   >
                     {post.category.name}
@@ -268,7 +314,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
                 {/* Meta Information */}
                 <div 
                   className="flex items-center flex-wrap gap-4 text-xs mb-3"
-                  style={{ color: currentCardsDesign?.metaColor || undefined }}
+                  style={{ color: currentCardsDesign.metaColor }}
                 >
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-3.5 h-3.5" />
@@ -295,7 +341,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
                 {/* Title */}
                 <h3 
                   className="text-xl font-bold mb-3 transition-colors line-clamp-2 leading-snug"
-                  style={{ color: currentCardsDesign?.titleColor || undefined }}
+                  style={{ color: currentCardsDesign.titleColor }}
                 >
                   {post.title}
                 </h3>
@@ -303,7 +349,7 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
                 {/* Excerpt */}
                 <p 
                   className="text-sm mb-4 line-clamp-3 flex-grow leading-relaxed"
-                  style={{ color: currentCardsDesign?.excerptColor || undefined }}
+                  style={{ color: currentCardsDesign.excerptColor }}
                 >
                   {post.excerpt}
                 </p>
@@ -312,13 +358,13 @@ const FeaturedBlogSection = ({ data, themeConfig }: FeaturedBlogSectionProps) =>
                 <div className="flex items-center justify-between pt-4 border-t theme-border">
                   <span 
                     className="text-sm font-medium transition-colors"
-                    style={{ color: currentCardsDesign?.ctaColor || undefined }}
+                    style={{ color: currentCardsDesign.ctaColor }}
                   >
                     Leer artículo
                   </span>
                   <div 
                     className="flex items-center space-x-1 group-hover:space-x-2 transition-all"
-                    style={{ color: currentCardsDesign?.ctaColor || undefined }}
+                    style={{ color: currentCardsDesign.ctaColor }}
                   >
                     <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
                   </div>
