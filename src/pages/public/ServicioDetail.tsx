@@ -12,7 +12,6 @@ import PublicHeader from '../../components/public/PublicHeader';
 import PublicFooter from '../../components/public/PublicFooter';
 import FloatingChatWidget from '../../components/floating-chat/FloatingChatWidget';
 import ContactModal from '../../components/public/ContactModal';
-import PageLoader from '../../components/common/PageLoader';
 import { useServicioDetail } from '../../hooks/useServiciosCache';
 import { useCmsData } from '../../hooks/cms/useCmsData';
 import { useTheme } from '../../contexts/ThemeContext';
