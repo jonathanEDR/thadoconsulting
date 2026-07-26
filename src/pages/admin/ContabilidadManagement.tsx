@@ -40,6 +40,7 @@ const ContabilidadManagement: React.FC = () => {
     createCliente,
     darDeBaja,
     reactivar,
+    eliminarCliente,
     loadSemaforo,
     loadEstadisticas,
     refresh
@@ -98,6 +99,24 @@ const ContabilidadManagement: React.FC = () => {
     if (!window.confirm(`¿Reactivar a "${cliente.razonSocial}"?`)) return;
     try {
       await reactivar(cliente._id);
+    } catch {
+      // Error manejado en el hook
+    }
+  };
+
+  const handleEliminarCliente = async (cliente: ClienteContable) => {
+    const confirmacion = window.prompt(
+      `Esta acción es IRREVERSIBLE y borrará todos los datos de "${cliente.razonSocial}" (declaraciones, notas, documentos).\n\nPara confirmar, escribe el RUC del cliente: ${cliente.ruc}`
+    );
+    if (confirmacion !== cliente.ruc) {
+      if (confirmacion !== null) {
+        window.alert('El RUC no coincide. Eliminación cancelada.');
+      }
+      return;
+    }
+
+    try {
+      await eliminarCliente(cliente._id);
     } catch {
       // Error manejado en el hook
     }
@@ -344,6 +363,12 @@ const ContabilidadManagement: React.FC = () => {
                           ♻️ Reactivar
                         </button>
                       ) : null}
+                      <button
+                        onClick={() => handleEliminarCliente(cliente)}
+                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-700 text-xs"
+                      >
+                        🗑️ Eliminar
+                      </button>
                     </div>
                   </div>
                 ))
@@ -461,6 +486,13 @@ const ContabilidadManagement: React.FC = () => {
                                   ♻️
                                 </button>
                               ) : null}
+                              <button
+                                onClick={() => handleEliminarCliente(cliente)}
+                                className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-700 transition-colors"
+                                title="Eliminar permanentemente"
+                              >
+                                🗑️
+                              </button>
                             </div>
                           </td>
                         </tr>

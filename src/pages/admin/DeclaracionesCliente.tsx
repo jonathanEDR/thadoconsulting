@@ -34,6 +34,7 @@ const DeclaracionesCliente: React.FC = () => {
   const [editingDeclaracion, setEditingDeclaracion] = useState<DeclaracionMensual | null>(null);
   const [anioFiltro, setAnioFiltro] = useState<number>(new Date().getFullYear());
   const [tipoModalNueva, setTipoModalNueva] = useState<TipoDeclaracion>('IGV_RENTA');
+  const [periodoModalNueva, setPeriodoModalNueva] = useState<string | undefined>();
 
   // Libros Electrónicos
   const [libros, setLibros] = useState<PresentacionLibro[]>([]);
@@ -185,9 +186,15 @@ const DeclaracionesCliente: React.FC = () => {
   const tienePlanilla = typeof obligaciones === 'object' && obligaciones !== null && !Array.isArray(obligaciones) && !!obligaciones.planilla;
   const tieneAFP = typeof obligaciones === 'object' && obligaciones !== null && !Array.isArray(obligaciones) && !!obligaciones.afp;
 
-  // Abrir modal para tipo específico
-  const openCreateModal = (tipo: TipoDeclaracion = 'IGV_RENTA') => {
+  // Abrir modal para tipo específico. Si se indica mesIdx (tarjeta de un mes puntual),
+  // el periodo se precompleta con ese mes/año en vez de la fecha real del sistema.
+  const openCreateModal = (tipo: TipoDeclaracion = 'IGV_RENTA', mesIdx?: number) => {
     setTipoModalNueva(tipo);
+    setPeriodoModalNueva(
+      mesIdx !== undefined
+        ? `${anioFiltro}-${String(mesIdx + 1).padStart(2, '0')}`
+        : `${anioFiltro}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
+    );
     setShowCreateModal(true);
   };
 
@@ -336,7 +343,7 @@ const DeclaracionesCliente: React.FC = () => {
                 {/* ── IGV / Renta Row ── */}
                 <div 
                   className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-lg p-1.5 -mx-1.5 transition-colors"
-                  onClick={() => declIGV ? setEditingDeclaracion(declIGV) : openCreateModal('IGV_RENTA')}
+                  onClick={() => declIGV ? setEditingDeclaracion(declIGV) : openCreateModal('IGV_RENTA', idx)}
                 >
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">📊 IGV/Renta</span>
@@ -360,6 +367,12 @@ const DeclaracionesCliente: React.FC = () => {
                         <span>Total</span>
                         <span className="font-mono">S/ {(declIGV.totalAPagar || 0).toFixed(2)}</span>
                       </div>
+                      {(declIGV.detalleIGV?.saldoFavorSiguiente || 0) > 0 && (
+                        <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                          <span>💰 Saldo a favor →</span>
+                          <span className="font-mono">S/ {(declIGV.detalleIGV?.saldoFavorSiguiente || 0).toFixed(2)}</span>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="text-xs text-gray-400 dark:text-gray-500 italic">Sin declaración</div>
@@ -401,7 +414,7 @@ const DeclaracionesCliente: React.FC = () => {
                   <>
                   <div 
                     className="cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-lg p-1.5 -mx-1.5 mt-1 border-t border-gray-100 dark:border-gray-700 transition-colors"
-                    onClick={() => declPlanilla ? setEditingDeclaracion(declPlanilla) : openCreateModal('PLANILLA')}
+                    onClick={() => declPlanilla ? setEditingDeclaracion(declPlanilla) : openCreateModal('PLANILLA', idx)}
                   >
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span className="text-[10px] font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">👥 Planilla</span>
@@ -446,7 +459,7 @@ const DeclaracionesCliente: React.FC = () => {
                   <>
                   <div 
                     className="cursor-pointer hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg p-1.5 -mx-1.5 mt-1 border-t border-gray-100 dark:border-gray-700 transition-colors"
-                    onClick={() => declAFP ? setEditingDeclaracion(declAFP) : openCreateModal('AFP')}
+                    onClick={() => declAFP ? setEditingDeclaracion(declAFP) : openCreateModal('AFP', idx)}
                   >
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">🏦 AFP</span>
@@ -562,9 +575,11 @@ const DeclaracionesCliente: React.FC = () => {
             cliente={cliente}
             declaracion={editingDeclaracion || undefined}
             tipoInicial={tipoModalNueva}
+            periodoInicial={periodoModalNueva}
             onClose={() => {
               setShowCreateModal(false);
               setEditingDeclaracion(null);
+              setPeriodoModalNueva(undefined);
             }}
             onSubmit={editingDeclaracion ? handleActualizar : handleRegistrar}
           />

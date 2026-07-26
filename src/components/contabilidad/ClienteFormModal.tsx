@@ -60,6 +60,7 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
     configuracionTributaria: {
       categoriaRUS: initialData?.configuracionTributaria?.categoriaRUS || 1,
       coeficienteRenta: initialData?.configuracionTributaria?.coeficienteRenta || 0.015,
+      tasaIGVEspecialCompras: initialData?.configuracionTributaria?.tasaIGVEspecialCompras ?? 0.10,
       obligaciones: initialData?.configuracionTributaria?.obligaciones || {
         igv: true,
         renta: true,
@@ -470,6 +471,23 @@ const ClienteFormModal: React.FC<ClienteFormModalProps> = ({
                   placeholder="https://drive.google.com/..."
                   className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Tasa IGV Especial en Compras (%)
+                </label>
+                <input
+                  type="number"
+                  value={(formData.configuracionTributaria?.tasaIGVEspecialCompras ?? 0.10) * 100}
+                  onChange={(e) => handleChange('configuracionTributaria.tasaIGVEspecialCompras', (parseFloat(e.target.value) || 0) / 100)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  step="0.1"
+                  min="0"
+                  max="100"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Para compras con tasa reducida (ej. restaurantes/hospedaje - Ley 31556). Editable por si SUNAT cambia el %.
+                </p>
               </div>
             </div>
           </fieldset>

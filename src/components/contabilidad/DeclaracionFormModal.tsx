@@ -18,6 +18,7 @@ interface DeclaracionFormModalProps {
   cliente: ClienteContable;
   declaracion?: DeclaracionMensual;
   tipoInicial?: TipoDeclaracion;
+  periodoInicial?: string;
   onClose: () => void;
   onSubmit: (data: RegistrarDeclaracionData) => Promise<void>;
 }
@@ -30,6 +31,7 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   cliente,
   declaracion,
   tipoInicial,
+  periodoInicial,
   onClose,
   onSubmit
 }) => {
@@ -37,14 +39,15 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [calculating, setCalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Tipo de declaración
   const [tipo, setTipo] = useState<TipoDeclaracion>(declaracion?.tipo || tipoInicial || 'IGV_RENTA');
-  
+
   // Periodo y estado común
+  // Prioridad: periodo de la declaración editada > periodo del mes/año en el que se abrió el modal > fecha actual
   const currentDate = new Date();
   const defaultPeriodo = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-  const [periodo, setPeriodo] = useState(declaracion?.periodo || defaultPeriodo);
+  const [periodo, setPeriodo] = useState(declaracion?.periodo || periodoInicial || defaultPeriodo);
   const [estado, setEstado] = useState<EstadoDeclaracion>(declaracion?.estado || 'PENDIENTE');
   const [esRectificatoria, setEsRectificatoria] = useState(declaracion?.esRectificatoria || false);
   const [numeroOrden, setNumeroOrden] = useState(declaracion?.numeroOrden || '');
@@ -54,7 +57,9 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   const [calculo, setCalculo] = useState<CalculoImpuestosResult | null>(null);
   const [ventasGravadas, setVentasGravadas] = useState(declaracion?.detalleIGV?.ventasGravadas || 0);
   const [comprasGravadas, setComprasGravadas] = useState(declaracion?.detalleIGV?.comprasGravadas || 0);
-  const [saldoFavor, setSaldoFavor] = useState(declaracion?.detalleIGV?.saldoFavorAnterior || 0);
+  // Compras con tasa reducida de IGV (ej. restaurantes/hospedaje - Ley 31556); el % es configurable por cliente
+  const [comprasGravadasEspecial, setComprasGravadasEspecial] = useState(declaracion?.detalleIGV?.comprasGravadasEspecial || 0);
+  const tasaIGVEspecial = cliente.configuracionTributaria?.tasaIGVEspecialCompras ?? 0.10;
   
   // ── Planilla State ──
   // ONP workers within PLAME
@@ -73,9 +78,10 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   // Totales y cálculo local (sin llamada al backend)
   const plTotalTrabajadores = plCantONP + plCantAFP;
   const plTotalRemuneraciones = plTotalRemuONP + plTotalRemuAFP;
-  const plONPCalculado = Math.round(plTotalRemuONP * 0.13 * 100) / 100;
-  const plTotalPlanillaLocal = Math.round((plESSALUD + plSIS + plONPCalculado + plRetenciones5ta + plVidaLey) * 100) / 100;
-  const plReferESSALUD = Math.round(plTotalRemuneraciones * 0.09 * 100) / 100;
+  // SUNAT declara los montos de PLAME en soles enteros, sin decimales
+  const plONPCalculado = Math.round(plTotalRemuONP * 0.13);
+  const plTotalPlanillaLocal = Math.round(plESSALUD + plSIS + plONPCalculado + plRetenciones5ta + plVidaLey);
+  const plReferESSALUD = Math.round(plTotalRemuneraciones * 0.09);
   
   // ── AFP State ──
   const [calculoAFP, setCalculoAFP] = useState<DetalleAFP | null>(declaracion?.detalleAFP || null);
@@ -85,19 +91,21 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
   const [afpAporteVoluntario, setAfpAporteVoluntario] = useState(declaracion?.detalleAFP?.aporteVoluntario || 0);
 
   // ── Auto-cálculo IGV/Renta ──
+  // Se ejecuta siempre (incluso con campos en 0) para mostrar el saldo a favor
+  // arrastrado del mes anterior, que el backend calcula automáticamente.
   useEffect(() => {
     if (tipo !== 'IGV_RENTA') return;
     const timer = setTimeout(async () => {
-      if (!ventasGravadas && !comprasGravadas && cliente.regimenTributario !== 'RUS') return;
       setCalculating(true);
       try {
-        const creditoFiscal = Math.round(comprasGravadas * 0.18 * 100) / 100;
+        // SUNAT declara el PDT 621 en soles enteros, sin decimales.
+        // Crédito fiscal = compras a tasa general (18%) + compras a tasa especial (configurable por cliente)
+        const creditoFiscal = Math.round(comprasGravadas * 0.18) + Math.round(comprasGravadasEspecial * tasaIGVEspecial);
         const response = await declaracionesApi.calcularPreview({
           clienteId: cliente._id,
           periodo,
           ventasGravadas,
-          creditoFiscal,
-          saldoFavorAnterior: saldoFavor
+          creditoFiscal
         });
         if (response.success) setCalculo(response.data);
       } catch { /* silent */ }
@@ -105,7 +113,7 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
     }, 500);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ventasGravadas, comprasGravadas, saldoFavor, periodo, tipo]);
+  }, [ventasGravadas, comprasGravadas, comprasGravadasEspecial, periodo, tipo]);
 
   // ── Auto-cálculo AFP ──
   useEffect(() => {
@@ -146,11 +154,13 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
       };
 
       if (tipo === 'IGV_RENTA') {
-        const creditoFiscalValue = calculo?.detalleIGV?.creditoFiscal ?? Math.round(comprasGravadas * 0.18 * 100) / 100;
+        const creditoFiscalValue = calculo?.detalleIGV?.creditoFiscal
+          ?? (Math.round(comprasGravadas * 0.18) + Math.round(comprasGravadasEspecial * tasaIGVEspecial));
         data.ventasGravadas = ventasGravadas;
+        data.comprasGravadas = comprasGravadas;
+        data.comprasGravadasEspecial = comprasGravadasEspecial;
         data.creditoFiscal = creditoFiscalValue;
-        data.saldoFavorAnterior = saldoFavor;
-        data.detalleIGV = calculo?.detalleIGV || { ventasGravadas, comprasGravadas, saldoFavorAnterior: saldoFavor };
+        data.detalleIGV = calculo?.detalleIGV || { ventasGravadas, comprasGravadas, comprasGravadasEspecial };
         data.detalleRenta = calculo?.detalleRenta;
         data.formulario = cliente.regimenTributario === 'RUS' ? 'NRUS' : 'PDT621';
       } else if (tipo === 'PLANILLA') {
@@ -285,21 +295,40 @@ const DeclaracionFormModal: React.FC<DeclaracionFormModalProps> = ({
               {cliente.regimenTributario !== 'RUS' ? (
                 <fieldset className="space-y-4">
                   <legend className="text-md font-semibold text-gray-900 dark:text-white">💰 Datos del Periodo</legend>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ventas Gravadas (S/)</label>
                       <input type="number" value={ventasGravadas} onChange={(e) => setVentasGravadas(parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono" step="0.01" min="0" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Compras Gravadas (S/)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Compras Gravadas 18% (S/)</label>
                       <input type="number" value={comprasGravadas} onChange={(e) => setComprasGravadas(parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono" step="0.01" min="0" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Saldo a Favor (S/)</label>
-                      <input type="number" value={saldoFavor} onChange={(e) => setSaldoFavor(parseFloat(e.target.value) || 0)}
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Compras Gravadas {(tasaIGVEspecial * 100).toFixed(0)}% (S/)
+                      </label>
+                      <input type="number" value={comprasGravadasEspecial} onChange={(e) => setComprasGravadasEspecial(parseFloat(e.target.value) || 0)}
                         className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono" step="0.01" min="0" />
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+                        Tasa reducida (ej. restaurantes). Configurable en el cliente.
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Saldo a Favor Arrastrado (S/)
+                      </label>
+                      <div
+                        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 font-mono cursor-not-allowed"
+                        title="Se calcula automáticamente a partir del mes anterior. No es editable."
+                      >
+                        {calculating ? '...' : `S/ ${(calculo?.detalleIGV?.saldoFavorAnterior || 0).toFixed(2)}`}
+                      </div>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+                        🔒 Automático — arrastrado del mes anterior
+                      </p>
                     </div>
                   </div>
                 </fieldset>

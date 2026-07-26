@@ -112,6 +112,8 @@ export interface Ubicacion {
 export interface ConfiguracionTributaria {
   categoriaRUS?: CategoriaRUS;
   coeficienteRenta?: number;
+  // Tasa especial de IGV para compras beneficiadas (ej. restaurantes/hospedaje - Ley 31556)
+  tasaIGVEspecialCompras?: number;
   obligaciones?: {
     igv?: boolean;
     renta?: boolean;
@@ -231,10 +233,14 @@ export interface DetalleIGV {
   ventasGravadas: number;
   debitoFiscal: number;
   comprasGravadas: number;
+  // Compras a la tasa especial configurada en el cliente (ej. restaurantes - Ley 31556)
+  comprasGravadasEspecial?: number;
   creditoFiscal: number;
   igvResultante: number;
   saldoFavorAnterior?: number;
   igvAPagar: number;
+  // Crédito fiscal que queda sin aplicar y se arrastra automáticamente al siguiente periodo
+  saldoFavorSiguiente?: number;
 }
 
 export interface DetalleRenta {
@@ -321,6 +327,8 @@ export interface RegistrarDeclaracionData {
   tipo?: TipoDeclaracion;
   // Flat fields used by backend for recalculation
   ventasGravadas?: number;
+  comprasGravadas?: number;
+  comprasGravadasEspecial?: number;
   creditoFiscal?: number;
   saldoFavorAnterior?: number;
   coeficiente?: number;

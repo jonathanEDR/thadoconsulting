@@ -136,6 +136,21 @@ export const useContabilidad = () => {
     }
   }, [loadClientes]);
 
+  // Eliminar permanentemente (hard delete)
+  const eliminarCliente = useCallback(async (id: string) => {
+    try {
+      const response = await clientesContablesApi.eliminarPermanente(id);
+      if (response.success) {
+        await loadClientes();
+      }
+      return response;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al eliminar cliente';
+      setError(message);
+      throw err;
+    }
+  }, [loadClientes]);
+
   // Cargar semáforo
   const loadSemaforo = useCallback(async () => {
     try {
@@ -184,6 +199,7 @@ export const useContabilidad = () => {
     updateCliente,
     darDeBaja,
     reactivar,
+    eliminarCliente,
     // Refreshers
     loadClientes,
     loadSemaforo,

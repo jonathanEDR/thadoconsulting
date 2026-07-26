@@ -165,6 +165,14 @@ export const clientesContablesApi = {
   },
 
   /**
+   * Eliminar un cliente contable de forma permanente e irreversible (hard delete)
+   */
+  async eliminarPermanente(id: string): Promise<ApiResponse<null>> {
+    const { data } = await api.delete(`/clientes/${id}/permanente`);
+    return data;
+  },
+
+  /**
    * Vincular un usuario del sistema al cliente contable
    */
   async vincularUsuario(id: string, userId: string): Promise<ApiResponse<ClienteContable>> {
