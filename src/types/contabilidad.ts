@@ -321,6 +321,82 @@ export interface DeclaracionMensual {
   periodoFormateado?: string;
 }
 
+// ============================================
+// 📅 DECLARACIÓN JURADA ANUAL DE RENTA (Formulario 710)
+// Aplica solo a régimen MYPE Tributario y Régimen General
+// ============================================
+
+export interface TramosRentaAnual {
+  tramo1Base: number;
+  tramo1Tasa: number;
+  tramo1Impuesto: number;
+  tramo2Base: number;
+  tramo2Tasa: number;
+  tramo2Impuesto: number;
+}
+
+export interface DeclaracionAnual {
+  _id: string;
+  clienteId: string | ClienteContable;
+  anio: number;
+  regimenAplicado: 'MYPE' | 'GENERAL';
+  rentaNetaAnual: number;
+  rentaNetaAnualSugerida: number;
+  mesesDeclaradosConsiderados: number;
+  uitAplicada: number;
+  tramos: TramosRentaAnual;
+  impuestoCalculado: number;
+  totalPagosACuenta: number;
+  saldoAPagar: number;
+  saldoAFavor: number;
+  formulario?: string;
+  numeroOrden?: string;
+  pago: PagoDeclaracion;
+  fechaPresentacion?: string;
+  fechaVencimiento?: string;
+  estado: EstadoDeclaracion;
+  esRectificatoria: boolean;
+  observaciones?: string;
+  registradoPor: {
+    clerkId: string;
+    nombre: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SugerenciaRentaAnual {
+  rentaNetaAnualSugerida: number;
+  totalPagosACuenta: number;
+  mesesDeclaradosConsiderados: number;
+}
+
+export interface CalculoRentaAnualResult {
+  regimen: 'MYPE' | 'GENERAL';
+  rentaNetaAnual: number;
+  rentaNetaAnualSugerida: number;
+  mesesDeclaradosConsiderados: number;
+  uitAplicada: number;
+  tramos: TramosRentaAnual;
+  impuestoCalculado: number;
+  totalPagosACuenta: number;
+  saldoAPagar: number;
+  saldoAFavor: number;
+}
+
+export interface RegistrarDeclaracionAnualData {
+  clienteId: string;
+  anio: number;
+  rentaNetaAnual?: number;
+  formulario?: string;
+  numeroOrden?: string;
+  pago?: Partial<PagoDeclaracion>;
+  estado?: EstadoDeclaracion;
+  fechaPresentacion?: string;
+  fechaVencimiento?: string;
+  observaciones?: string;
+}
+
 export interface RegistrarDeclaracionData {
   clienteId: string;
   periodo: string;

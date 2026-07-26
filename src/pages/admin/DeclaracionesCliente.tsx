@@ -203,6 +203,10 @@ const DeclaracionesCliente: React.FC = () => {
     (acc, d) => ({
       totalIGV: acc.totalIGV + (d.tipo === 'IGV_RENTA' ? (d.detalleIGV?.igvAPagar || 0) : 0),
       totalRenta: acc.totalRenta + (d.tipo === 'IGV_RENTA' ? (d.detalleRenta?.rentaAPagar || 0) : 0),
+      totalVentas: acc.totalVentas + (d.tipo === 'IGV_RENTA' ? (d.detalleIGV?.ventasGravadas || 0) : 0),
+      totalCompras: acc.totalCompras + (d.tipo === 'IGV_RENTA'
+        ? ((d.detalleIGV?.comprasGravadas || 0) + (d.detalleIGV?.comprasGravadasEspecial || 0))
+        : 0),
       totalPlanilla: acc.totalPlanilla + (d.tipo === 'PLANILLA' ? (d.totalAPagar || 0) : 0),
       totalAFP: acc.totalAFP + (d.tipo === 'AFP' ? (d.totalAPagar || 0) : 0),
       totalGeneral: acc.totalGeneral + (d.totalAPagar || 0),
@@ -210,8 +214,15 @@ const DeclaracionesCliente: React.FC = () => {
       pendientes: acc.pendientes + (d.estado === 'PENDIENTE' ? 1 : 0),
       vencidas: acc.vencidas + (d.estado === 'VENCIDO' ? 1 : 0)
     }),
-    { totalIGV: 0, totalRenta: 0, totalPlanilla: 0, totalAFP: 0, totalGeneral: 0, pagadas: 0, pendientes: 0, vencidas: 0 }
+    { totalIGV: 0, totalRenta: 0, totalVentas: 0, totalCompras: 0, totalPlanilla: 0, totalAFP: 0, totalGeneral: 0, pagadas: 0, pendientes: 0, vencidas: 0 }
   );
+
+  // Saldo a favor de IGV vigente: no es una suma (arrastra mes a mes), es el
+  // saldoFavorSiguiente de la declaración IGV/Renta activa más reciente del año.
+  const saldoFavorVigente = declaraciones
+    .filter(d => d.tipo === 'IGV_RENTA' && d.detalleIGV)
+    .reduce((masReciente, d) => (!masReciente || d.periodo > masReciente.periodo ? d : masReciente), null as DeclaracionMensual | null)
+    ?.detalleIGV?.saldoFavorSiguiente || 0;
 
   if (loading && !cliente) return <PageLoader />;
 
@@ -261,7 +272,7 @@ const DeclaracionesCliente: React.FC = () => {
         </Card>
 
         {/* Resumen anual */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
           <Card className="p-3 text-center">
             <div className="text-lg font-bold text-blue-600">S/ {resumen.totalIGV.toFixed(2)}</div>
             <div className="text-xs text-gray-500">IGV Total</div>
@@ -269,6 +280,18 @@ const DeclaracionesCliente: React.FC = () => {
           <Card className="p-3 text-center">
             <div className="text-lg font-bold text-purple-600">S/ {resumen.totalRenta.toFixed(2)}</div>
             <div className="text-xs text-gray-500">Renta Total</div>
+          </Card>
+          <Card className="p-3 text-center">
+            <div className="text-lg font-bold text-emerald-600">S/ {saldoFavorVigente.toFixed(2)}</div>
+            <div className="text-xs text-gray-500">Saldo a Favor IGV</div>
+          </Card>
+          <Card className="p-3 text-center">
+            <div className="text-lg font-bold text-cyan-600">S/ {resumen.totalVentas.toFixed(2)}</div>
+            <div className="text-xs text-gray-500">Ventas Total</div>
+          </Card>
+          <Card className="p-3 text-center">
+            <div className="text-lg font-bold text-orange-600">S/ {resumen.totalCompras.toFixed(2)}</div>
+            <div className="text-xs text-gray-500">Compras Total</div>
           </Card>
           {tienePlanilla && (
             <Card className="p-3 text-center">

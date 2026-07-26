@@ -3,20 +3,23 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, Card } from '../../components/UI';
 import PageLoader from '../../components/common/PageLoader';
 import { clientesContablesApi } from '../../services/contabilidadService';
-import { declaracionesApi } from '../../services/contabilidadService';
+import { declaracionesApi, declaracionesAnualesApi } from '../../services/contabilidadService';
 import ClienteFormModal from '../../components/contabilidad/ClienteFormModal';
 import VincularUsuarioModal from '../../components/contabilidad/VincularUsuarioModal';
-import type { 
-  ClienteContable, 
-  CreateClienteData, 
+import DeclaracionAnualFormModal from '../../components/contabilidad/DeclaracionAnualFormModal';
+import type {
+  ClienteContable,
+  CreateClienteData,
   DeclaracionMensual,
+  DeclaracionAnual,
+  RegistrarDeclaracionAnualData,
   TipoNota,
   TipoDocumento
 } from '../../types/contabilidad';
-import { 
-  REGIMEN_LABELS, 
-  REGIMEN_COLORS, 
-  ESTADO_CLIENTE_CONFIG, 
+import {
+  REGIMEN_LABELS,
+  REGIMEN_COLORS,
+  ESTADO_CLIENTE_CONFIG,
   ESTADO_DECLARACION_CONFIG,
   TIPO_DECLARACION_CONFIG,
   ZONA_IGV_LABELS,
@@ -33,11 +36,18 @@ const FichaCliente: React.FC = () => {
 
   const [cliente, setCliente] = useState<ClienteContable | null>(null);
   const [declaraciones, setDeclaraciones] = useState<DeclaracionMensual[]>([]);
+  const [anioFiltroDeclaraciones, setAnioFiltroDeclaraciones] = useState<number>(new Date().getFullYear());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showVincularModal, setShowVincularModal] = useState(false);
-  const [tabActiva, setTabActiva] = useState<'info' | 'declaraciones' | 'notas' | 'documentos'>('info');
+  const [tabActiva, setTabActiva] = useState<'info' | 'declaraciones' | 'anual' | 'notas' | 'documentos'>('info');
+
+  // Estado para Declaración Anual (DJ 710) — solo MYPE/GENERAL
+  const [declaracionesAnuales, setDeclaracionesAnuales] = useState<DeclaracionAnual[]>([]);
+  const [showAnualModal, setShowAnualModal] = useState(false);
+  const [editingAnual, setEditingAnual] = useState<DeclaracionAnual | null>(null);
+  const [anioNuevaAnual, setAnioNuevaAnual] = useState(new Date().getFullYear());
 
   // Estado para notas
   const [notaTipo, setNotaTipo] = useState<TipoNota>('nota');
@@ -74,19 +84,35 @@ const FichaCliente: React.FC = () => {
   const loadDeclaraciones = useCallback(async () => {
     if (!id) return;
     try {
-      const response = await declaracionesApi.getHistorial(id);
+      const response = await declaracionesApi.getHistorial(id, anioFiltroDeclaraciones);
       if (response.success) {
         setDeclaraciones(response.data);
       }
     } catch (err) {
       console.error('Error cargando declaraciones:', err);
     }
+  }, [id, anioFiltroDeclaraciones]);
+
+  // Años disponibles para el filtro (últimos 5 años)
+  const aniosDisponiblesDeclaraciones = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+
+  const loadDeclaracionesAnuales = useCallback(async () => {
+    if (!id) return;
+    try {
+      const response = await declaracionesAnualesApi.getHistorial(id);
+      if (response.success) {
+        setDeclaracionesAnuales(response.data);
+      }
+    } catch (err) {
+      console.error('Error cargando declaraciones anuales:', err);
+    }
   }, [id]);
 
   useEffect(() => {
     loadCliente();
     loadDeclaraciones();
-  }, [loadCliente, loadDeclaraciones]);
+    loadDeclaracionesAnuales();
+  }, [loadCliente, loadDeclaraciones, loadDeclaracionesAnuales]);
 
   const handleEditSubmit = async (data: CreateClienteData) => {
     if (!id) return;
@@ -126,6 +152,47 @@ const FichaCliente: React.FC = () => {
       console.error('Error desvinculando usuario:', err);
     }
   };
+
+  // Declaración Anual (DJ 710)
+  const openNuevaAnualModal = (anio: number) => {
+    setAnioNuevaAnual(anio);
+    setEditingAnual(null);
+    setShowAnualModal(true);
+  };
+
+  const handleRegistrarAnual = async (data: RegistrarDeclaracionAnualData) => {
+    const response = await declaracionesAnualesApi.registrar(data);
+    if (response.success) {
+      setShowAnualModal(false);
+      await loadDeclaracionesAnuales();
+    }
+  };
+
+  const handleActualizarAnual = async (data: RegistrarDeclaracionAnualData) => {
+    if (!editingAnual) return;
+    const response = await declaracionesAnualesApi.actualizar(editingAnual._id, data);
+    if (response.success) {
+      setEditingAnual(null);
+      await loadDeclaracionesAnuales();
+    }
+  };
+
+  const handleEliminarAnual = async (dj: DeclaracionAnual) => {
+    if (!window.confirm(`¿Eliminar la Declaración Anual ${dj.anio}?\n\nEsta acción es irreversible.`)) return;
+    try {
+      await declaracionesAnualesApi.eliminar(dj._id, 'Eliminada manualmente');
+      await loadDeclaracionesAnuales();
+    } catch (err) {
+      console.error('Error eliminando declaración anual:', err);
+      window.alert('No se pudo eliminar la Declaración Anual.');
+    }
+  };
+
+  // Años sin Declaración Anual registrada todavía (últimos 5 años, excluyendo el actual en curso)
+  const aplicaDeclaracionAnual = cliente?.regimenTributario === 'MYPE' || cliente?.regimenTributario === 'GENERAL';
+  const aniosConAnual = new Set(declaracionesAnuales.map(d => d.anio));
+  const aniosDisponiblesAnual = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 1 - i)
+    .filter(a => !aniosConAnual.has(a));
 
   if (loading) return <PageLoader />;
   if (error || !cliente) {
@@ -197,18 +264,25 @@ const FichaCliente: React.FC = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
-          {(['info', 'declaraciones', 'notas', 'documentos'] as const).map(tab => (
+          {([
+            'info',
+            'declaraciones',
+            ...(aplicaDeclaracionAnual ? ['anual'] as const : []),
+            'notas',
+            'documentos'
+          ] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setTabActiva(tab)}
               className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tabActiva === tab 
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' 
+                tabActiva === tab
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
               {tab === 'info' && '📋 Información'}
               {tab === 'declaraciones' && `📄 Declaraciones (${declaraciones.length})`}
+              {tab === 'anual' && `📅 Declaración Anual (${declaracionesAnuales.length})`}
               {tab === 'notas' && `📝 Notas (${cliente.notas?.length || 0})`}
               {tab === 'documentos' && `📎 Documentos (${cliente.documentos?.length || 0})`}
             </button>
@@ -327,13 +401,16 @@ const FichaCliente: React.FC = () => {
         {tabActiva === 'declaraciones' && (
           <Card className="overflow-hidden">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900 dark:text-white">📄 Últimas Declaraciones</h3>
-              <Button 
-                size="sm" 
-                onClick={() => navigate(`/dashboard/contabilidad/clientes/${cliente._id}/declaraciones`)}
+              <h3 className="font-semibold text-gray-900 dark:text-white">📄 Declaraciones {anioFiltroDeclaraciones}</h3>
+              <select
+                value={anioFiltroDeclaraciones}
+                onChange={(e) => setAnioFiltroDeclaraciones(parseInt(e.target.value))}
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
-                Ver todas →
-              </Button>
+                {aniosDisponiblesDeclaraciones.map(a => (
+                  <option key={a} value={a}>{a}</option>
+                ))}
+              </select>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -342,7 +419,9 @@ const FichaCliente: React.FC = () => {
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Periodo</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Tipo</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estado</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Detalle</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">IGV (S/)</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Renta (S/)</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Saldo a Favor (S/)</th>
                     <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Total</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Vencimiento</th>
                   </tr>
@@ -350,12 +429,12 @@ const FichaCliente: React.FC = () => {
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {declaraciones.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
-                        Sin declaraciones registradas
+                      <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
+                        Sin declaraciones registradas en {anioFiltroDeclaraciones}
                       </td>
                     </tr>
                   ) : (
-                    declaraciones.slice(0, 12).map((dec) => {
+                    declaraciones.map((dec) => {
                       const tipoConf = TIPO_DECLARACION_CONFIG[dec.tipo] || TIPO_DECLARACION_CONFIG.IGV_RENTA;
                       return (
                         <tr key={dec._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
@@ -366,44 +445,44 @@ const FichaCliente: React.FC = () => {
                             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${tipoConf.color}`}>
                               {tipoConf.icon} {tipoConf.label}
                             </span>
+                            {dec.tipo === 'PLANILLA' && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {dec.detallePlanilla?.cantidadTrabajadores || 0} trabajadores · ESSALUD: S/ {(dec.detallePlanilla?.essalud || 0).toFixed(2)}
+                                {(dec.detallePlanilla?.sis || 0) > 0 && ` · SIS: S/ ${(dec.detallePlanilla?.sis || 0).toFixed(2)}`}
+                                {' · '}ONP: S/ {(dec.detallePlanilla?.onp || 0).toFixed(2)}
+                              </div>
+                            )}
+                            {dec.tipo === 'AFP' && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                {dec.detalleAFP?.afpNombre || 'AFP'} · {dec.detalleAFP?.cantidadAfiliados || 0} afiliados
+                                {' · '}Aporte: S/ {(dec.detalleAFP?.aporteObligatorio || 0).toFixed(2)}
+                                {' · '}Comisión: S/ {(dec.detalleAFP?.comisionAFP || 0).toFixed(2)}
+                              </div>
+                            )}
                           </td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${ESTADO_DECLARACION_CONFIG[dec.estado]?.color}`}>
                               {ESTADO_DECLARACION_CONFIG[dec.estado]?.icon} {ESTADO_DECLARACION_CONFIG[dec.estado]?.label}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
-                            {dec.tipo === 'IGV_RENTA' && (
-                              <div className="flex flex-col gap-0.5">
-                                <span>IGV: <span className="font-mono font-medium">S/ {(dec.detalleIGV?.igvAPagar || 0).toFixed(2)}</span></span>
-                                <span>Renta: <span className="font-mono font-medium">S/ {(dec.detalleRenta?.rentaAPagar || 0).toFixed(2)}</span></span>
-                              </div>
-                            )}
-                            {dec.tipo === 'PLANILLA' && (
-                              <div className="flex flex-col gap-0.5">
-                                <span>{dec.detallePlanilla?.cantidadTrabajadores || 0} trabajadores</span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  ESSALUD: S/ {(dec.detallePlanilla?.essalud || 0).toFixed(2)}
-                                  {(dec.detallePlanilla?.sis || 0) > 0 && ` · SIS: S/ ${(dec.detallePlanilla?.sis || 0).toFixed(2)}`}
-                                  {' · '}ONP: S/ {(dec.detallePlanilla?.onp || 0).toFixed(2)}
-                                </span>
-                              </div>
-                            )}
-                            {dec.tipo === 'AFP' && (
-                              <div className="flex flex-col gap-0.5">
-                                <span>{dec.detalleAFP?.afpNombre || 'AFP'} · {dec.detalleAFP?.cantidadAfiliados || 0} afiliados</span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  Aporte: S/ {(dec.detalleAFP?.aporteObligatorio || 0).toFixed(2)}
-                                  {' · '}Comisión: S/ {(dec.detalleAFP?.comisionAFP || 0).toFixed(2)}
-                                </span>
-                              </div>
-                            )}
+                          <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">
+                            {dec.tipo === 'IGV_RENTA' ? `S/ ${(dec.detalleIGV?.igvAPagar || 0).toFixed(2)}` : '—'}
+                          </td>
+                          <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">
+                            {dec.tipo === 'IGV_RENTA' ? `S/ ${(dec.detalleRenta?.rentaAPagar || 0).toFixed(2)}` : '—'}
+                          </td>
+                          <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">
+                            {dec.tipo === 'IGV_RENTA' && (dec.detalleIGV?.saldoFavorSiguiente || 0) > 0 ? (
+                              <span className="text-emerald-600 dark:text-emerald-400">
+                                S/ {(dec.detalleIGV?.saldoFavorSiguiente || 0).toFixed(2)}
+                              </span>
+                            ) : '—'}
                           </td>
                           <td className="px-4 py-3 text-right text-sm font-mono font-bold whitespace-nowrap">
                             S/ {(dec.totalAPagar || 0).toFixed(2)}
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                            {dec.fechaVencimiento 
+                            {dec.fechaVencimiento
                               ? new Date(dec.fechaVencimiento).toLocaleDateString('es-PE')
                               : '-'
                             }
@@ -416,6 +495,107 @@ const FichaCliente: React.FC = () => {
               </table>
             </div>
           </Card>
+        )}
+
+        {/* Tab: Declaración Anual (DJ 710) */}
+        {tabActiva === 'anual' && aplicaDeclaracionAnual && (
+          <Card className="overflow-hidden">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white">📅 Declaración Jurada Anual de Renta</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Formulario Virtual 710 — regularización anual del Impuesto a la Renta</p>
+              </div>
+              {aniosDisponiblesAnual.length > 0 && (
+                <select
+                  value=""
+                  onChange={(e) => e.target.value && openNuevaAnualModal(parseInt(e.target.value))}
+                  className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="">➕ Nueva Declaración Anual...</option>
+                  {aniosDisponiblesAnual.map(a => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-800/50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Año</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estado</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Renta Neta (S/)</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Impuesto (S/)</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Pagos a Cuenta (S/)</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Resultado</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {declaracionesAnuales.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                        Sin Declaraciones Anuales registradas
+                      </td>
+                    </tr>
+                  ) : (
+                    declaracionesAnuales.map((dj) => (
+                      <tr key={dj._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                        <td className="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">{dj.anio}</td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${ESTADO_DECLARACION_CONFIG[dj.estado]?.color}`}>
+                            {ESTADO_DECLARACION_CONFIG[dj.estado]?.icon} {ESTADO_DECLARACION_CONFIG[dj.estado]?.label}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">S/ {dj.rentaNetaAnual.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">S/ {dj.impuestoCalculado.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-right text-sm font-mono whitespace-nowrap">S/ {dj.totalPagosACuenta.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-right text-sm font-mono font-bold whitespace-nowrap">
+                          {dj.saldoAPagar > 0 ? (
+                            <span className="text-red-600 dark:text-red-400">A pagar: S/ {dj.saldoAPagar.toFixed(2)}</span>
+                          ) : (
+                            <span className="text-emerald-600 dark:text-emerald-400">A favor: S/ {dj.saldoAFavor.toFixed(2)}</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-right whitespace-nowrap">
+                          <button
+                            onClick={() => setEditingAnual(dj)}
+                            className="p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600"
+                            title="Editar"
+                          >
+                            ✏️
+                          </button>
+                          {dj.estado !== 'PAGADO' && (
+                            <button
+                              onClick={() => handleEliminarAnual(dj)}
+                              className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                              title="Eliminar"
+                            >
+                              🗑️
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
+
+        {/* Modal Declaración Anual */}
+        {(showAnualModal || editingAnual) && cliente && (
+          <DeclaracionAnualFormModal
+            cliente={cliente}
+            declaracion={editingAnual || undefined}
+            anioInicial={anioNuevaAnual}
+            onClose={() => {
+              setShowAnualModal(false);
+              setEditingAnual(null);
+            }}
+            onSubmit={editingAnual ? handleActualizarAnual : handleRegistrarAnual}
+          />
         )}
 
         {/* Tab: Notas */}

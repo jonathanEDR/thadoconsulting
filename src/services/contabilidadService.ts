@@ -27,7 +27,11 @@ import type {
   CatalogoLibros,
   LibrosPorRegimen,
   DetallePlanilla,
-  DetalleAFP
+  DetalleAFP,
+  DeclaracionAnual,
+  SugerenciaRentaAnual,
+  CalculoRentaAnualResult,
+  RegistrarDeclaracionAnualData
 } from '../types/contabilidad';
 
 // Declaración de tipo para Clerk en window
@@ -384,6 +388,60 @@ export const declaracionesApi = {
    */
   async getAFPProviders(): Promise<ApiResponse<Record<string, { nombre: string; comision: number; primaSeguro: number }>>> {
     const { data } = await api.get('/declaraciones/afp-providers');
+    return data;
+  }
+};
+
+// ============================================
+// 📅 DECLARACIÓN JURADA ANUAL DE RENTA (Formulario 710)
+// ============================================
+
+export const declaracionesAnualesApi = {
+  /**
+   * Sugerencia de renta neta anual y pagos a cuenta, a partir de las declaraciones mensuales
+   */
+  async getSugerencia(clienteId: string, anio: number): Promise<ApiResponse<SugerenciaRentaAnual>> {
+    const { data } = await api.get(`/declaraciones-anuales/sugerencia?clienteId=${clienteId}&anio=${anio}`);
+    return data;
+  },
+
+  /**
+   * Calcular la Declaración Anual (preview sin guardar)
+   */
+  async calcularPreview(params: { clienteId: string; anio: number; rentaNetaAnual?: number }): Promise<ApiResponse<CalculoRentaAnualResult>> {
+    const { data } = await api.post('/declaraciones-anuales/calcular', params);
+    return data;
+  },
+
+  /**
+   * Registrar la Declaración Anual de un cliente para un año
+   */
+  async registrar(declaracionData: RegistrarDeclaracionAnualData): Promise<ApiResponse<DeclaracionAnual>> {
+    const { data } = await api.post('/declaraciones-anuales', declaracionData);
+    return data;
+  },
+
+  /**
+   * Obtener historial de Declaraciones Anuales de un cliente
+   */
+  async getHistorial(clienteId: string): Promise<ApiResponse<DeclaracionAnual[]>> {
+    const { data } = await api.get(`/declaraciones-anuales/cliente/${clienteId}`);
+    return data;
+  },
+
+  /**
+   * Actualizar una Declaración Anual
+   */
+  async actualizar(id: string, updateData: Partial<RegistrarDeclaracionAnualData>): Promise<ApiResponse<DeclaracionAnual>> {
+    const { data } = await api.put(`/declaraciones-anuales/${id}`, updateData);
+    return data;
+  },
+
+  /**
+   * Eliminar una Declaración Anual (soft delete)
+   */
+  async eliminar(id: string, motivo?: string): Promise<ApiResponse<void>> {
+    const { data } = await api.delete(`/declaraciones-anuales/${id}`, { data: { motivo } });
     return data;
   }
 };
